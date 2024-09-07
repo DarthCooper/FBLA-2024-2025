@@ -11,3 +11,13 @@ public struct PlayerMoveSpeed : IComponentData
 {
     public float2 Value;
 }
+
+public struct PlayerJumpInput : IComponentData
+{
+    public bool Value;
+}
+
+public struct PlayerJumpForce : IComponentData
+{
+    public float Value;
+}

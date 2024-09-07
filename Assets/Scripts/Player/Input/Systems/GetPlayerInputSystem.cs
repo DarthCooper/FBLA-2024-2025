@@ -1,5 +1,9 @@
 using UnityEngine;
 using Unity.Entities;
+using Unity.Collections;
+using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Transforms;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
 partial class GetPlayerInputSystem : SystemBase
@@ -25,10 +29,16 @@ partial class GetPlayerInputSystem : SystemBase
     protected override void OnUpdate()
     {
         var curMoveInput = playerActions.Player.Move.ReadValue<Vector2>();
+        var curJumpInput = playerActions.Player.Jump.WasPressedThisFrame();
 
         SystemAPI.SetSingleton(new PlayerMoveInput
         {
             Value = curMoveInput,
+        });
+
+        SystemAPI.SetSingleton(new PlayerJumpInput
+        {
+            Value = curJumpInput,
         });
     }
 
