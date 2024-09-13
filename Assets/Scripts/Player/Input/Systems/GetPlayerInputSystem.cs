@@ -29,17 +29,24 @@ partial class GetPlayerInputSystem : SystemBase
     protected override void OnUpdate()
     {
         var curMoveInput = playerActions.Player.Move.ReadValue<Vector2>();
+        var curSprintInput = playerActions.Player.Sprint.IsPressed();
         var curJumpInput = playerActions.Player.Jump.WasPressedThisFrame();
 
         SystemAPI.SetSingleton(new PlayerMoveInput
         {
-            Value = curMoveInput,
+            Value = curMoveInput
+        });
+
+        SystemAPI.SetSingleton(new PlayerSprintInput
+        {
+            Value = curSprintInput
         });
 
         SystemAPI.SetSingleton(new PlayerJumpInput
         {
-            Value = curJumpInput,
+            Value = curJumpInput
         });
+
     }
 
     protected override void OnStopRunning()

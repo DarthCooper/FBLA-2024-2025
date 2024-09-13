@@ -5,6 +5,7 @@ public enum CollisionLayer
 {
     Solid = 1 << 0,
     Character = 1 << 1,
+    Enemy = 1 << 2,
     Interactable = 1 << 4,
     InteractableTrigger = 1 << 5,
 }
@@ -21,6 +22,11 @@ public class CollisionFilters
         {
             BelongsTo = (uint)(CollisionLayer.Character),
             CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable)
+        },
+        filterEnemy = new CollisionFilter()
+        {
+            BelongsTo = (uint)(CollisionLayer.Enemy),
+            CollidesWith = (uint)(CollisionLayer.Solid)
         },
         filterInteractable = new CollisionFilter()
         {
@@ -41,6 +47,8 @@ public class CollisionFilters
                 return filterSolid;
             case CollisionLayer.Character:
                 return filterCharacter;
+            case CollisionLayer.Enemy:
+                return filterEnemy;
             case CollisionLayer.Interactable:
                 return filterInteractable;
             case CollisionLayer.InteractableTrigger:

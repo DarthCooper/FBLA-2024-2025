@@ -49,10 +49,11 @@ partial struct PlayerMoveSystem : ISystem
 
     public void SetPlayerMovement(ref SystemState state)
     {
-        foreach (var (velocity, moveInput, jumpInput, moveSpeed, jumpForce, entity) in SystemAPI.Query<RefRW<PhysicsVelocity>, PlayerMoveInput, PlayerJumpInput, PlayerMoveSpeed, PlayerJumpForce>().WithEntityAccess())
+        foreach (var (velocity, moveInput, jumpInput, sprintInput, moveSpeed, sprintSpeed ,jumpForce, entity) in SystemAPI.Query<RefRW<PhysicsVelocity>, PlayerMoveInput, PlayerJumpInput, PlayerSprintInput, PlayerMoveSpeed, PlayerSprintSpeed, PlayerJumpForce>().WithEntityAccess())
         {
             float3 curVel = velocity.ValueRO.Linear;
-            float2 moveVector = moveInput.Value * moveSpeed.Value;
+            float2 speed = sprintInput.Value ? sprintSpeed.Value : moveSpeed.Value;
+            float2 moveVector = moveInput.Value * speed;
             float jumpSpeed = jumpInput.Value ? jumpForce.Value : curVel.y;
             velocity.ValueRW.Linear = new float3(moveVector.x, jumpSpeed, moveVector.y);
         }
