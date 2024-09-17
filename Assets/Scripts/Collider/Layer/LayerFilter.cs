@@ -16,7 +16,7 @@ public class CollisionFilters
         filterSolid = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Solid),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid),
         },
         filterCharacter = new CollisionFilter()
         {

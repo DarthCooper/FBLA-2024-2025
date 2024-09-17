@@ -60,6 +60,7 @@ public class Grid
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
+        Debug.Log(new Vector2(x, y));
         SetValue(x, y, value);
     }
 
