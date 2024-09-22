@@ -9,6 +9,7 @@ public class GridTester : MonoBehaviour
     private Grid grid;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /*
     void Start()
     {
         grid = new Grid(4, 2, 5f, new Vector3(0, 0));
@@ -45,4 +46,5 @@ public class GridTester : MonoBehaviour
             }
         }
     }
+    */
 }

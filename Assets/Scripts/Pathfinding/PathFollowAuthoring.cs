@@ -13,7 +13,7 @@ class PathFollowAuthoringBaker : Baker<PathFollowAuthoring>
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent(entity, new PathFollow
         {
-            pathIndex = 0
+            pathIndex = -1
         });
     }
 }

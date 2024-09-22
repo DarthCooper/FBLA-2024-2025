@@ -7,11 +7,13 @@ using UnityEngine;
 
 partial class GridSystem : SystemBase
 {
-    public Grid grid;
+    public static GridSystem instance;
+    public Grid<GridNode> grid;
 
     [BurstCompile]
     protected override void OnCreate()
     {
+        instance = this;
         RequireForUpdate<GridData>();
     }
 
@@ -34,7 +36,7 @@ partial class GridSystem : SystemBase
     {
         foreach ((GridData data, Entity enitity) in SystemAPI.Query<GridData>().WithEntityAccess())
         {
-            grid = new Grid((int)data.size.x, (int)data.size.z, data.cellSize, data.origin);
+            grid = new Grid<GridNode>((int)data.size.x, (int)data.size.z, data.cellSize, data.origin, (Grid<GridNode> grid, int x, int y) => new GridNode(grid, x, y));
         }
 
         SetGrid();
@@ -73,11 +75,12 @@ partial class GridSystem : SystemBase
                         if(SystemAPI.HasComponent<IsWalkable>(hit))
                         {
                             RefRO<IsWalkable> type = SystemAPI.GetComponentRO<IsWalkable>(hit);
+                            GridNode node = grid.GetGridObject(x, y);
                             switch (type.ValueRO.Value)
                             {
                                 case WalkableTypes.nonWalkable:
                                     Debug.Log("Disabling " + x + "" + y);
-                                    grid.SetValue(x, y, 1);
+                                    node.SetIsWalkable(false);
                                     break;
                                 case WalkableTypes.walkable:
                                     break;
