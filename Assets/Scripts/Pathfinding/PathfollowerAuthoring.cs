@@ -34,6 +34,16 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
         {
             Value = false
         });
+
+        AddComponent(entity, new PathFollowerPreviousTarget
+        {
+            Value = Entity.Null
+        });
+        AddComponent(entity, new PathFollowerPreviousTargetDistance
+        {
+            Value = 1f
+        });
+
         if (authoring.startingTarget != null)
         {
             AddComponent(entity, new PathFollowTarget

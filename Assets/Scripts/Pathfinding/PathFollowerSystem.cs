@@ -4,6 +4,8 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 partial class PathFollowerSystem : SystemBase
 {
@@ -20,7 +22,7 @@ partial class PathFollowerSystem : SystemBase
     protected override void OnUpdate()
     {
         ecb = new EntityCommandBuffer(Allocator.TempJob);
-        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, LocalTransform>().WithEntityAccess())
+        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithEntityAccess())
         {
             if(target.Value.Equals(Entity.Null)) { following.ValueRW.Value = false; continue; }
             if(!following.ValueRO.Value) { following.ValueRW.Value = true; }
@@ -30,20 +32,81 @@ partial class PathFollowerSystem : SystemBase
             if(dist < targetDistance.Value)
             {
                 following.ValueRW.Value = false;
+                if(EntityManager.HasComponent<Retreating>(entity))
+                {
+                    ecb.DestroyEntity(target.Value);
+                    ecb.RemoveComponent<Retreating>(entity);
+                    ChangeTarget(entity, Entity.Null, lastTarget.Value, 1f, EntityManager.GetComponentData<PathFollowerPreviousTargetDistance>(entity).Value);
+                }
             }
-            if(!EntityManager.HasComponent<PathFollowRetreatDistances>(entity)) { continue; }
-            PathFollowRetreatDistances retreatDistances = EntityManager.GetComponentData<PathFollowRetreatDistances>(entity);
-            if(dist <= retreatDistances.Trigger)
-            {
-                float retreatDistance = UnityEngine.Random.Range(retreatDistances.Min, retreatDistances.Max);
-            }
+            CheckRetreating(dist, entity, transform, target);
         }
         ecb.Playback(EntityManager);
+    }
+
+    public void CheckRetreating(float dist, Entity entity, LocalTransform transform, PathFollowTarget target)
+    {
+        if (!EntityManager.HasComponent<PathFollowRetreatDistances>(entity)) { return; }
+        PathFollowRetreatDistances retreatDistances = EntityManager.GetComponentData<PathFollowRetreatDistances>(entity);
+        if (dist <= retreatDistances.Trigger && !EntityManager.HasComponent<Retreating>(entity))
+        {
+            Grid<GridNode> grid = GridSystem.instance.grid;
+            if (grid == null) { return; }
+
+            float3 targetPos = EntityManager.GetComponentData<LocalTransform>(target.Value).Position;
+
+            float retreatDistance = UnityEngine.Random.Range(retreatDistances.Min, retreatDistances.Max);
+            float3 retreatDir = transform.Position - targetPos;
+            Entity retreatEntity = EntityManager.CreateEntity();
+
+            float3 targetGoal = Vector3.Normalize(retreatDir) * retreatDistance;
+
+            float3 convertedTargetPos = new float3 { x = targetGoal.x, y = targetGoal.z, z = 0 };
+
+            grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out int endX, out int endY);
+            ValidateGridPosition(ref endX, ref endY, grid);
+
+            ecb.AddComponent(retreatEntity, new LocalTransform
+            {
+                Position = grid.GetWorldPosition(endX, endY),
+                Rotation = Quaternion.identity,
+                Scale = 1
+            });
+
+            ecb.SetComponent(entity, new PathFollowTargetDistance
+            {
+                Value = 1
+            });
+
+            ChangeTarget(entity, target.Value, retreatEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
+            ecb.AddComponent<Retreating>(entity);
+        }
     }
 
     [BurstCompile]
     protected override void OnDestroy()
     {
+    }
+
+    public void ChangeTarget(Entity entity, Entity target, Entity newTarget, float oldDistance, float newDistance)
+    {
+        ecb.SetComponent(entity, new PathFollowerPreviousTarget
+        {
+            Value = target
+        });
+        ecb.SetComponent(entity, new PathFollowTarget
+        {
+            Value = newTarget,
+        });
+
+        ecb.SetComponent(entity, new PathFollowTargetDistance
+        {
+            Value = newDistance,
+        });
+        ecb.SetComponent(entity, new PathFollowerPreviousTargetDistance
+        {
+            Value = oldDistance,
+        });
     }
 
     public void SetTarget(LocalTransform transform, PathFollowTarget target, Entity entity)

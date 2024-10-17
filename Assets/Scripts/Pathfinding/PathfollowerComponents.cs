@@ -28,3 +28,15 @@ public struct PathFollowRetreatDistances : IComponentData
     public float Trigger;
 }
 
+public struct PathFollowerPreviousTarget : IComponentData
+{
+    public Entity Value;
+}
+
+public struct PathFollowerPreviousTargetDistance : IComponentData
+{
+    public float Value;
+}
+
+public struct Retreating : IComponentData { }
+

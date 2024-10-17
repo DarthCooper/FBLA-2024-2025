@@ -51,6 +51,10 @@ partial class PathFollowSystem : SystemBase
                     pathfindingParams.startPosition = pathPosition;
                 }
             }
+            while(pathFollow.pathIndex >= pathPositionBuffer.Length)
+            {
+                pathFollow.pathIndex -= 1;
+            }
         }).Run();
     }
 
