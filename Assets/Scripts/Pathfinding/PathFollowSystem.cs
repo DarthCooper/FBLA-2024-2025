@@ -1,36 +1,57 @@
 using System.Net;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Physics.Extensions;
 using Unity.Transforms;
 using UnityEngine;
 
 partial class PathFollowSystem : SystemBase
 {
+    NativeList<int2> enemyPositions = new NativeList<int2>(Allocator.Persistent);
+
     protected override void OnUpdate()
     {
-        Entities.ForEach((Entity entity, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingParams pathfindingParams,ref LocalTransform transform, ref PathFollow pathFollow) =>
+        Grid<GridNode> grid = GridSystem.instance.grid;
+
+        Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingParams pathfindingParams,ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
         {
+            if(!EntityManager.GetComponentData<IsFollowing>(entity).Value) { return; }
             if(pathFollow.pathIndex == -1)
             {
                 //reached destination
             }
-            if(pathFollow.pathIndex >= 0 && pathPositionBuffer.Length > 0)
+            if (pathFollow.pathIndex >= 0 && pathFollow.pathIndex < pathPositionBuffer.Length && pathPositionBuffer.Length > 0)
             {
                 int2 pathPosition = pathPositionBuffer[pathFollow.pathIndex].position;
 
+                //grid.GetGridObject(pathPosition.x, pathPosition.y).SetIsWalkable(false);
+               // enemyPositions.Add(pathPosition);
+
                 float3 targetPosition = new float3(pathPosition.x, 0, pathPosition.y);
                 float3 moveDir = math.normalizesafe(targetPosition - transform.Position);
-                float moveSpeed = 5f;
+                float moveSpeed = speed.Value;
 
-                transform.Position += moveDir * moveSpeed * SystemAPI.Time.DeltaTime;
+                //transform.Position += moveDir * moveSpeed * SystemAPI.Time.DeltaTime;
+                velocity.Linear = moveDir * moveSpeed;
 
+                # if UNITY_EDITOR
+                for (int i = pathFollow.pathIndex + 1; i < pathPositionBuffer.Length; i++)
+                {
+                    Vector3 startPos = new Vector3(pathPositionBuffer[i - 1].position.x, 0, pathPositionBuffer[i - 1].position.y);
+                    Vector3 endPos = new Vector3(pathPositionBuffer[i].position.x, 0, pathPositionBuffer[i].position.y);
+
+                    Debug.DrawLine(startPos, endPos, Color.green, 1f);
+                }
+                #endif
                 if (math.distance(transform.Position, targetPosition) < .1f)
                 {
                     pathFollow.pathIndex -= 1;
                     pathfindingParams.startPosition = pathPosition;
                 }
             }
-        }).Schedule();
+        }).Run();
     }
 
     private static void ValidateGridPosition(ref int x, ref int y, int width, int height)

@@ -85,6 +85,7 @@ public partial class Pathfinding : SystemBase
                 pathNode.gCost = int.MaxValue;
 
                 pathNode.isWalkable = grid.GetGridObject(x, y).IsWalkable();
+                pathNode.allowedEntity = grid.GetGridObject(x, y).GetAllowedEntity();
                 pathNode.cameFromNodeIndex = -1;
 
                 pathNodeArray[pathNode.index] = pathNode;
@@ -227,7 +228,7 @@ public partial class Pathfinding : SystemBase
                     }
 
                     PathNode neighbourNode = pathNodeArray[neighbourNodeIndex];
-                    if (!neighbourNode.isWalkable)
+                    if (!neighbourNode.isWalkable && neighbourNode.allowedEntity != entity)
                     {
                         continue;
                     }
@@ -318,6 +319,8 @@ public partial class Pathfinding : SystemBase
         public int fCost;
 
         public bool isWalkable;
+
+        public Entity allowedEntity;
 
         public int cameFromNodeIndex;
 

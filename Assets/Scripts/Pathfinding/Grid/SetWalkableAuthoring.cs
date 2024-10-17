@@ -9,7 +9,8 @@ class SetWalkableAuthoring : MonoBehaviour
 public enum WalkableTypes
 {
     walkable,
-    nonWalkable
+    nonWalkable,
+    nonWalkableAllower,
 }
 
 class SetWalkableAuthoringBaker : Baker<SetWalkableAuthoring>
