@@ -90,6 +90,21 @@ partial class GridSystem : SystemBase
         }
     }
 
+    public bool CheckTakenCells(int2 pos)
+    {
+        foreach ((DynamicBuffer<TakenCells> takenCells, Entity entity) in SystemAPI.Query<DynamicBuffer<TakenCells>>().WithEntityAccess())
+        {
+            foreach (TakenCells takenCell in takenCells)
+            {
+                if(takenCell.position.Equals(pos))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void CheckMovingObstacles()
     {
         foreach ((LocalToWorld transform, DynamicBuffer<TakenCells> takenCells, Entity entity) in SystemAPI.Query<LocalToWorld, DynamicBuffer<TakenCells>>().WithAll<MovingObstacleTag>().WithEntityAccess())

@@ -55,7 +55,7 @@ partial class PathFollowerSystem : SystemBase
 
             float3 targetPos = EntityManager.GetComponentData<LocalTransform>(target.Value).Position;
 
-            float retreatDistance = UnityEngine.Random.Range(retreatDistances.Min, retreatDistances.Max);
+            int retreatDistance = (int)UnityEngine.Random.Range(retreatDistances.Min, retreatDistances.Max);
             float3 retreatDir = transform.Position - targetPos;
             Entity retreatEntity = EntityManager.CreateEntity();
 
@@ -65,6 +65,16 @@ partial class PathFollowerSystem : SystemBase
 
             grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out int endX, out int endY);
             ValidateGridPosition(ref endX, ref endY, grid);
+
+            while(!GridSystem.instance.CheckTakenCells(new int2 { x = endX, y = endY }) && retreatDistance > 0)
+            {
+                targetGoal = Vector3.Normalize(retreatDir) * (retreatDistance - 1);
+
+                convertedTargetPos = new float3 { x = targetGoal.x, y = targetGoal.z, z = 0 };
+
+                grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out endX, out endY);
+                ValidateGridPosition(ref endX, ref endY, grid);
+            }
 
             ecb.AddComponent(retreatEntity, new LocalTransform
             {
@@ -81,11 +91,6 @@ partial class PathFollowerSystem : SystemBase
             ChangeTarget(entity, target.Value, retreatEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
             ecb.AddComponent<Retreating>(entity);
         }
-    }
-
-    [BurstCompile]
-    protected override void OnDestroy()
-    {
     }
 
     public void ChangeTarget(Entity entity, Entity target, Entity newTarget, float oldDistance, float newDistance)
@@ -138,5 +143,10 @@ partial class PathFollowerSystem : SystemBase
     {
         x = math.clamp(x, 0, grid.GetWidth() - 1);
         y = math.clamp(y, 0, grid.GetHeight() - 1);
+    }
+
+    [BurstCompile]
+    protected override void OnDestroy()
+    {
     }
 }
