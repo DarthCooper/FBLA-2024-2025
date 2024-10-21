@@ -1,6 +1,7 @@
 using System.Net;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Extensions;
@@ -18,9 +19,14 @@ partial class PathFollowSystem : SystemBase
         Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingParams pathfindingParams,ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
         {
             if(!EntityManager.GetComponentData<IsFollowing>(entity).Value) { return; }
-            if(pathFollow.pathIndex == -1)
+            if(pathFollow.pathIndex != pathPositionBuffer.Length - 2)
             {
-                //reached destination
+                pathFollow.pathIndex = pathPositionBuffer.Length - 2;
+            }
+            if (pathFollow.pathIndex <= -1)
+            {
+                pathFollow.pathIndex = -1;
+                return;
             }
             if (pathFollow.pathIndex >= 0 && pathFollow.pathIndex < pathPositionBuffer.Length && pathPositionBuffer.Length > 0)
             {
@@ -33,27 +39,22 @@ partial class PathFollowSystem : SystemBase
                 float3 moveDir = math.normalizesafe(targetPosition - transform.Position);
                 float moveSpeed = speed.Value;
 
-                //transform.Position += moveDir * moveSpeed * SystemAPI.Time.DeltaTime;
                 velocity.Linear = moveDir * moveSpeed;
 
-                # if UNITY_EDITOR
+                #if UNITY_EDITOR
                 for (int i = pathFollow.pathIndex + 1; i < pathPositionBuffer.Length; i++)
                 {
                     Vector3 startPos = new Vector3(pathPositionBuffer[i - 1].position.x, 0, pathPositionBuffer[i - 1].position.y);
                     Vector3 endPos = new Vector3(pathPositionBuffer[i].position.x, 0, pathPositionBuffer[i].position.y);
 
-                    Debug.DrawLine(startPos, endPos, Color.green, 1f);
+                    Debug.DrawLine(startPos, endPos, Color.green, 60 / FPSCounter.m_lastFramerate);
                 }
                 #endif
                 if (math.distance(transform.Position, targetPosition) < .1f)
                 {
-                    pathFollow.pathIndex -= 1;
+                    pathPositionBuffer.RemoveAt(pathFollow.pathIndex);
                     pathfindingParams.startPosition = pathPosition;
                 }
-            }
-            while(pathFollow.pathIndex >= pathPositionBuffer.Length)
-            {
-                pathFollow.pathIndex -= 1;
             }
         }).Run();
     }

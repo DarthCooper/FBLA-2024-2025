@@ -4,8 +4,9 @@ using UnityEngine;
 public enum CollisionLayer
 {
     Solid = 1 << 0,
-    Character = 1 << 1,
-    Enemy = 1 << 2,
+    Obstacle = 1 << 1,
+    Character = 1 << 2,
+    Enemy = 1 << 3,
     Interactable = 1 << 4,
     InteractableTrigger = 1 << 5,
 }
@@ -16,17 +17,22 @@ public class CollisionFilters
         filterSolid = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Solid),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle),
+        },
+        filterObstacle = new CollisionFilter()
+        {
+            BelongsTo = (uint)CollisionLayer.Obstacle,
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Obstacle),
         },
         filterCharacter = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Character),
-            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable)
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle)
         },
         filterEnemy = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Enemy),
-            CollidesWith = (uint)(CollisionLayer.Solid)
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy)
         },
         filterInteractable = new CollisionFilter()
         {
@@ -45,6 +51,8 @@ public class CollisionFilters
         {
             case CollisionLayer.Solid:
                 return filterSolid;
+            case CollisionLayer.Obstacle:
+                return filterObstacle;
             case CollisionLayer.Character:
                 return filterCharacter;
             case CollisionLayer.Enemy:

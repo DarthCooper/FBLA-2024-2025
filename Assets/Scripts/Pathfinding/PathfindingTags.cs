@@ -13,6 +13,11 @@ public struct TakenCells : IBufferElementData
     public GridNodeStyle style;
 }
 
+public struct Aura : IComponentData
+{
+    public int3 Value;
+}
+
 public enum GridNodeStyle
 {
     Permanant,

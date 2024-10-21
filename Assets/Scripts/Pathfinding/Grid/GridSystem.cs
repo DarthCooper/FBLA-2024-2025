@@ -10,6 +10,7 @@ partial class GridSystem : SystemBase
 {
     public static GridSystem instance;
     public Grid<GridNode> grid;
+    public GridNode[,] gridArray;
 
     [BurstCompile]
     protected override void OnCreate()
@@ -48,6 +49,7 @@ partial class GridSystem : SystemBase
         foreach ((GridData data, Entity enitity) in SystemAPI.Query<GridData>().WithEntityAccess())
         {
             grid = new Grid<GridNode>((int)data.size.x, (int)data.size.z, data.cellSize, data.origin, (Grid<GridNode> grid, int x, int y) => new GridNode(grid, x, y));
+            gridArray = grid.GetGridArray();
         }
     }
 
@@ -169,17 +171,17 @@ partial class GridSystem : SystemBase
 
     public void CheckStaticObstacles()
     {
-        foreach ((LocalToWorld transform, DynamicBuffer<TakenCells> takenCells, Entity entity) in SystemAPI.Query<LocalToWorld, DynamicBuffer<TakenCells>>().WithAll<StaticObstacleTag>().WithEntityAccess())
+        foreach ((LocalToWorld transform, DynamicBuffer<TakenCells> takenCells, Aura aura, Entity entity) in SystemAPI.Query<LocalToWorld, DynamicBuffer<TakenCells>, Aura>().WithAll<StaticObstacleTag>().WithEntityAccess())
         {
             float cellSize = grid.GetCellSize();
             float3 origin = new float3
             {
-                x = transform.Position.x - (transform.Value.Scale().x / 2),
+                x = transform.Position.x - (transform.Value.Scale().x / 2) - aura.Value.x,
                 y = 0,
-                z = transform.Position.z - (transform.Value.Scale().z / 2)
+                z = transform.Position.z - (transform.Value.Scale().z / 2) - aura.Value.z
             };
-            int width = (int)System.Math.Ceiling(transform.Value.Scale().x / cellSize);
-            int height = (int)System.Math.Ceiling(transform.Value.Scale().z / cellSize);
+            int width = (int)System.Math.Ceiling(transform.Value.Scale().x / cellSize) + (2 * aura.Value.x);
+            int height = (int)System.Math.Ceiling(transform.Value.Scale().z / cellSize) + (2 * aura.Value.z);
 
             for (int x = 0; x < width; x++)
             {

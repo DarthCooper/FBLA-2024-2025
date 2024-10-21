@@ -353,7 +353,6 @@ public partial class Pathfinding : SystemBase
                 pathPositionBuffer.Add(new PathPosition { position = new int2(cameFromNode.x, cameFromNode.y) });
                 currentNode = cameFromNode;
             }
-
             //pathPositionBuffer.Reverse();
         }
     }

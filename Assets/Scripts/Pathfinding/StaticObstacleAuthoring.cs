@@ -1,9 +1,10 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 class StaticObstacleAuthoring : MonoBehaviour
 {
-    
+    public int3 Aura;
 }
 
 class StaticObstacleAuthoringBaker : Baker<StaticObstacleAuthoring>
@@ -13,6 +14,10 @@ class StaticObstacleAuthoringBaker : Baker<StaticObstacleAuthoring>
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
 
         AddComponent<StaticObstacleTag>(entity);
+        AddComponent(entity, new Aura
+        {
+            Value = authoring.Aura
+        });
         AddBuffer<TakenCells>(entity);
     }
 }

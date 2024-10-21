@@ -8,11 +8,17 @@ class PathfollowerAuthoring : MonoBehaviour
     public float moveSpeed;
     public float targetDistance;
 
+    [Header("Scouting")]
+    public bool scouts = true;
+    public float maxScoutDistance;
+    public float minScoutDistance;
+
     [Header("Retreats - via distance")]
     public bool retreats;
     public float maxRetreatDistance;
     public float minRetreatDistance;
     public float triggerDistance;
+
 
 }
 
@@ -64,6 +70,14 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
                 Max = authoring.maxRetreatDistance,
                 Min = authoring.minRetreatDistance,
                 Trigger = authoring.triggerDistance
+            });
+        }
+        if(authoring.scouts)
+        {
+            AddComponent(entity, new PathFollowerScoutingDistances
+            {
+                Max = authoring.maxScoutDistance,
+                Min = authoring.minScoutDistance
             });
         }
     }
