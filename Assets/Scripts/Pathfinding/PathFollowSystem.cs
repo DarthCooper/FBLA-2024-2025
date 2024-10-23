@@ -16,7 +16,7 @@ partial class PathFollowSystem : SystemBase
     {
         Grid<GridNode> grid = GridSystem.instance.grid;
 
-        Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingParams pathfindingParams,ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
+        Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
         {
             if(!EntityManager.GetComponentData<IsFollowing>(entity).Value) { return; }
             if(pathFollow.pathIndex != pathPositionBuffer.Length - 2)
@@ -26,6 +26,7 @@ partial class PathFollowSystem : SystemBase
             if (pathFollow.pathIndex <= -1)
             {
                 pathFollow.pathIndex = -1;
+                velocity.Linear = 0;
                 return;
             }
             if (pathFollow.pathIndex >= 0 && pathFollow.pathIndex < pathPositionBuffer.Length && pathPositionBuffer.Length > 0)
@@ -36,24 +37,24 @@ partial class PathFollowSystem : SystemBase
                // enemyPositions.Add(pathPosition);
 
                 float3 targetPosition = new float3(pathPosition.x, 0, pathPosition.y);
-                float3 moveDir = math.normalizesafe(targetPosition - transform.Position);
+                float3 moveDir = math.normalize(targetPosition - transform.Position);
                 float moveSpeed = speed.Value;
 
                 velocity.Linear = moveDir * moveSpeed;
 
                 #if UNITY_EDITOR
-                for (int i = pathFollow.pathIndex + 1; i < pathPositionBuffer.Length; i++)
+                for (int i = pathPositionBuffer.Length - 1; i > 0; i--)
                 {
-                    Vector3 startPos = new Vector3(pathPositionBuffer[i - 1].position.x, 0, pathPositionBuffer[i - 1].position.y);
-                    Vector3 endPos = new Vector3(pathPositionBuffer[i].position.x, 0, pathPositionBuffer[i].position.y);
+                    Vector3 startPos = new Vector3(pathPositionBuffer[i].position.x, 0, pathPositionBuffer[i].position.y);
+                    Vector3 endPos = new Vector3(pathPositionBuffer[i - 1].position.x, 0, pathPositionBuffer[i - 1].position.y);
 
-                    Debug.DrawLine(startPos, endPos, Color.green, 60 / FPSCounter.m_lastFramerate);
+                    Debug.DrawLine(startPos, endPos, Color.green, 0.01f);
                 }
                 #endif
-                if (math.distance(transform.Position, targetPosition) < .1f)
+                if (math.distance(transform.Position, targetPosition) < 1f)
                 {
+                    //transform.Position = new float3(targetPosition.x, transform.Position.y, targetPosition.z);
                     pathPositionBuffer.RemoveAt(pathFollow.pathIndex);
-                    pathfindingParams.startPosition = pathPosition;
                 }
             }
         }).Run();

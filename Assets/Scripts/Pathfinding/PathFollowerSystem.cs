@@ -5,8 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 partial class PathFollowerSystem : SystemBase
 {
@@ -27,12 +25,17 @@ partial class PathFollowerSystem : SystemBase
         {
             if(target.Value.Equals(Entity.Null)) { CheckScouting(entity, transform, target); continue; }
             if(!following.ValueRO.Value) { following.ValueRW.Value = true; }
-            SetTarget(transform, target, entity);
+            if(!EntityManager.HasComponent<PathStartedTag>(entity))
+            {
+                SetTarget(transform, target, entity);
+                ecb.AddComponent<PathStartedTag>(entity);
+            }
             LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(target.Value);
             float dist = Vector3.Distance(transform.Position, targetTransform.Position);
             CheckRetreating(dist, entity, transform, target);
             if (dist < targetDistance.Value || EntityManager.GetComponentData<PathFollow>(entity).pathIndex == -1)
             {
+                SetTarget(transform, target, entity);
                 following.ValueRW.Value = false;
                 if(EntityManager.HasComponent<Retreating>(entity))
                 {
@@ -119,12 +122,10 @@ partial class PathFollowerSystem : SystemBase
 
         grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out int endX, out int endY);
         ValidateGridPosition(ref endX, ref endY, grid);
-        /*
         if(!GridSystem.instance.CheckTakenCells(new int2 { x = endX, y = endY}))
         {
             CheckScouting(entity, transform, target);
         }
-        */
 
         ecb.AddComponent(scoutEntity, new LocalTransform
         {

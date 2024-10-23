@@ -10,6 +10,12 @@ public struct PathFollowTarget : IComponentData
     public Entity Value;
 }
 
+public struct UpdateDelay : IComponentData
+{
+    public float Value;
+    public float maxValue;
+}
+
 public struct PathFollowSpeed : IComponentData
 {
     public float Value;
@@ -19,6 +25,8 @@ public struct PathFollowTargetDistance : IComponentData
 {
     public float Value; 
 }
+
+public struct PathStartedTag : IComponentData { }
 
 public struct PathFollowRetreatDistances : IComponentData
 {

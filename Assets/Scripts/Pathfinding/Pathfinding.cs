@@ -45,7 +45,7 @@ public partial class Pathfinding : SystemBase
             findPathJobList.Add(findPathJob);
             jobHandleList.Add(findPathJob.Schedule());
 
-            //ecb.RemoveComponent<PathfindingParams>(entity);
+            ecb.RemoveComponent<PathfindingParams>(entity);
         }
 
         JobHandle.CompleteAll(jobHandleList.ToArray(Allocator.Temp));
