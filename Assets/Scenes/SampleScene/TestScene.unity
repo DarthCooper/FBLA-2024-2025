@@ -1153,11 +1153,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511225490}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &759000542 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9185191735185370972, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
-  m_PrefabInstance: {fileID: 516710437217689589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &930073647
 GameObject:
   m_ObjectHideFlags: 0
@@ -3715,7 +3710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 950364805155410782, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.67
+      value: 31.04
       objectReference: {fileID: 0}
     - target: {fileID: 950364805155410782, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3748,6 +3743,22 @@ PrefabInstance:
     - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: updateDelay
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
+      propertyPath: targetDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
+      propertyPath: triggerDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
+      propertyPath: maxRetreatDistance
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
+      propertyPath: minRetreatDistance
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3806973015836085860, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: m_Name
@@ -3809,6 +3820,22 @@ PrefabInstance:
     - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: updateDelay
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+      propertyPath: targetDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+      propertyPath: triggerDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+      propertyPath: maxRetreatDistance
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+      propertyPath: minRetreatDistance
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6327667424098537992, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: m_Name
@@ -3874,7 +3901,7 @@ PrefabInstance:
     - target: {fileID: 686741096674734208, guid: 98f04d642a34ec94bb990664863eca53, type: 3}
       propertyPath: startingTarget
       value: 
-      objectReference: {fileID: 759000542}
+      objectReference: {fileID: 0}
     - target: {fileID: 700070333288536856, guid: 98f04d642a34ec94bb990664863eca53, type: 3}
       propertyPath: m_Name
       value: Enemy-Melee

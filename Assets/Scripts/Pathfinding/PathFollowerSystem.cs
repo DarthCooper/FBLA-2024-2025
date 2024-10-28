@@ -27,20 +27,21 @@ partial class PathFollowerSystem : SystemBase
             if(!following.ValueRO.Value) { following.ValueRW.Value = true; }
             if(!EntityManager.HasComponent<PathStartedTag>(entity))
             {
-                SetTarget(transform, target, entity);
                 ecb.AddComponent<PathStartedTag>(entity);
             }
+            SetTarget(transform, target, entity, EntityManager.GetBuffer<PathPosition>(entity));
             LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(target.Value);
             float dist = Vector3.Distance(transform.Position, targetTransform.Position);
             CheckRetreating(dist, entity, transform, target);
             if (dist < targetDistance.Value || EntityManager.GetComponentData<PathFollow>(entity).pathIndex == -1)
             {
-                SetTarget(transform, target, entity);
+                SetTarget(transform, target, entity, EntityManager.GetBuffer<PathPosition>(entity));
                 following.ValueRW.Value = false;
                 if(EntityManager.HasComponent<Retreating>(entity))
                 {
                     ecb.DestroyEntity(target.Value);
                     ecb.RemoveComponent<Retreating>(entity);
+                    ecb.AddComponent<Hunting>(entity);
                     ChangeTarget(entity, Entity.Null, lastTarget.Value, 1f, EntityManager.GetComponentData<PathFollowerPreviousTargetDistance>(entity).Value);
                 }
                 if(EntityManager.HasComponent<Scouting>(entity))
@@ -57,7 +58,7 @@ partial class PathFollowerSystem : SystemBase
         ecb.Playback(EntityManager);
     }
 
-    public void CheckRetreating(float dist, Entity entity, LocalTransform transform, PathFollowTarget target)
+    public void CheckRetreating(float dist, Entity entity, LocalTransform transform, PathFollowTarget target, float subtractor = 0)
     {
         if(!EntityManager.HasComponent<PathFollowRetreatDistances>(entity)) { return; }
         if(EntityManager.HasComponent<Scouting>(entity)) { return; }
@@ -69,7 +70,7 @@ partial class PathFollowerSystem : SystemBase
 
             float3 targetPos = EntityManager.GetComponentData<LocalTransform>(target.Value).Position;
 
-            int retreatDistance = (int)UnityEngine.Random.Range(retreatDistances.Min, retreatDistances.Max);
+            int retreatDistance = (int)UnityEngine.Random.Range(retreatDistances.Min - subtractor, retreatDistances.Max - subtractor);
             float3 retreatDir = transform.Position - targetPos;
             Entity retreatEntity = EntityManager.CreateEntity();
 
@@ -80,19 +81,7 @@ partial class PathFollowerSystem : SystemBase
             grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out int endX, out int endY);
             ValidateGridPosition(ref endX, ref endY, grid);
 
-            while(Raycast(transform.Position, grid.GetWorldPosition(endX, endY)) != Entity.Null) {
-                retreatDistance = retreatDistance - 1;
-                if(retreatDistance < 0)
-                {
-                    break;
-                }
-                targetGoal = Vector3.Normalize(retreatDir) * retreatDistance;
-                convertedTargetPos = new float3 { x = targetGoal.x, y = targetGoal.z, z = 0 };
-
-                grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out endX, out endY);
-                ValidateGridPosition(ref endX, ref endY, grid);
-            }
-
+            Debug.Log(grid.GetWorldPosition(endX, endY));
             ecb.AddComponent(retreatEntity, new LocalTransform
             {
                 Position = grid.GetWorldPosition(endX, endY),
@@ -102,14 +91,23 @@ partial class PathFollowerSystem : SystemBase
 
             ChangeTarget(entity, target.Value, retreatEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
             ecb.AddComponent<Retreating>(entity);
+            if(EntityManager.HasComponent<Hunting>(entity))
+            {
+                ecb.RemoveComponent<Hunting>(entity);
+            }
+            if(EntityManager.HasComponent<Scouting>(entity))
+            {
+                ecb.RemoveComponent<Scouting>(entity);
+            }
         }
     }
 
     public void CheckScouting(Entity entity, LocalTransform transform, PathFollowTarget target)
     {
         if (!EntityManager.HasComponent<PathFollowerScoutingDistances>(entity)) { return; }
+        if(EntityManager.HasComponent<Retreating>(entity)) { return; }
+        if (EntityManager.HasComponent<Hunting>(entity)) { return; }
         PathFollowerScoutingDistances scoutDistances = EntityManager.GetComponentData<PathFollowerScoutingDistances>(entity);
-        if(EntityManager.HasComponent<Scouting>(entity)) { return; }
         Grid<GridNode> grid = GridSystem.instance.grid;
         if (grid == null) { return; }
         int scoutDistanceX = (int)UnityEngine.Random.Range(scoutDistances.Min, scoutDistances.Max);
@@ -136,6 +134,14 @@ partial class PathFollowerSystem : SystemBase
 
         ChangeTarget(entity, target.Value, scoutEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
         ecb.AddComponent<Scouting>(entity);
+        if (EntityManager.HasComponent<Hunting>(entity))
+        {
+            ecb.RemoveComponent<Hunting>(entity);
+        }
+        if(EntityManager.HasComponent<Retreating>(entity))
+        {
+            ecb.RemoveComponent<Retreating>(entity);
+        }
     }
 
     public void ChangeTarget(Entity entity, Entity target, Entity newTarget, float oldDistance, float newDistance)
@@ -159,9 +165,10 @@ partial class PathFollowerSystem : SystemBase
         });
     }
 
-    public void SetTarget(LocalTransform transform, PathFollowTarget target, Entity entity)
+    public void SetTarget(LocalTransform transform, PathFollowTarget target, Entity entity, DynamicBuffer<PathPosition> pathPositions)
     {
         if(target.Value == Entity.Null) { return; }
+        pathPositions.Clear();
         float3 pos = new float3 { x = transform.Position.x, y = transform.Position.z, z = 0 };
         Grid<GridNode> grid = GridSystem.instance.grid;
 

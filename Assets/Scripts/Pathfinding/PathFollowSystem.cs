@@ -15,6 +15,7 @@ partial class PathFollowSystem : SystemBase
     protected override void OnUpdate()
     {
         Grid<GridNode> grid = GridSystem.instance.grid;
+        EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
         Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
         {
@@ -40,6 +41,7 @@ partial class PathFollowSystem : SystemBase
                 float3 moveDir = math.normalize(targetPosition - transform.Position);
                 float moveSpeed = speed.Value;
 
+                ecb.SetComponent(entity, new Direction { Value =  moveDir });
                 velocity.Linear = moveDir * moveSpeed;
 
                 #if UNITY_EDITOR
@@ -58,6 +60,8 @@ partial class PathFollowSystem : SystemBase
                 }
             }
         }).Run();
+
+        ecb.Playback(EntityManager);
     }
 
     private static void ValidateGridPosition(ref int x, ref int y, int width, int height)

@@ -40,6 +40,7 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
         {
             Value = false
         });
+        AddComponent<Direction>(entity);
 
         AddComponent(entity, new PathFollowerPreviousTarget
         {

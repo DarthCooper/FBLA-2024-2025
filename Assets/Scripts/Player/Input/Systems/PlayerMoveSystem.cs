@@ -71,7 +71,7 @@ partial struct PlayerMoveSystem : ISystem
                     z = transform.Position.z
                 }
             },
-            0.25f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.25f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
 
             checks.ValueRW.leftWallCheck = (PlayerRayChecks.LeftWallCheck(new LocalTransform
             {
@@ -82,7 +82,7 @@ partial struct PlayerMoveSystem : ISystem
                     z = transform.Position.z
                 }
             },
-            0.25f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.25f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
 
             checks.ValueRW.rightWallCheck = (PlayerRayChecks.RightWallCheck(new LocalTransform
             {
@@ -93,7 +93,7 @@ partial struct PlayerMoveSystem : ISystem
                     z = transform.Position.z
                 }
             },
-            0.25f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.25f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
 
             checks.ValueRW.ceilingCheck = (PlayerRayChecks.CeilingCheck(new LocalTransform
             {
@@ -104,19 +104,19 @@ partial struct PlayerMoveSystem : ISystem
                     z = transform.Position.z
                 }
             },
-            0.25f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.25f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
 
             checks.ValueRW.forwardCheck = (PlayerRayChecks.FrontCheck(new LocalTransform
             {
                 Position = transform.Position
             },
-            0.35f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.35f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
 
             checks.ValueRW.backCheck = (PlayerRayChecks.BackCheck(new LocalTransform
             {
                 Position = transform.Position
             },
-            0.35f, CollisionFilters.filterCharacter) != Entity.Null);
+            0.35f, CollisionFilters.filterPlayerTrigger) != Entity.Null);
         }
     }
 

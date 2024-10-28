@@ -10,6 +10,7 @@ public enum CollisionLayer
     Interactable = 1 << 4,
     InteractableTrigger = 1 << 5,
     EnemyTrigger = 1 << 6,
+    PlayerTrigger = 1 << 7,
 }
 
 public class CollisionFilters
@@ -18,7 +19,7 @@ public class CollisionFilters
         filterSolid = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Solid),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.PlayerTrigger),
         },
         filterObstacle = new CollisionFilter()
         {
@@ -33,7 +34,7 @@ public class CollisionFilters
         filterEnemy = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Enemy),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy)
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid)
         },
         filterInteractable = new CollisionFilter()
         {
@@ -48,7 +49,12 @@ public class CollisionFilters
         filterEnemyTrigger = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.EnemyTrigger),
-            CollidesWith = (uint)(CollisionLayer.Character)
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Solid | CollisionLayer.Obstacle)
+        },
+        filterPlayerTrigger = new CollisionFilter()
+        {
+            BelongsTo = (uint)(CollisionLayer.PlayerTrigger),
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle)
         };
 
     public static CollisionFilter getCollisionFilter(CollisionLayer layer)
@@ -69,6 +75,8 @@ public class CollisionFilters
                 return filterInteractableTrigger;
             case CollisionLayer.EnemyTrigger:
                 return filterEnemyTrigger;
+            case CollisionLayer.PlayerTrigger:
+                return filterPlayerTrigger;
             default:
                 return filterSolid;
         }

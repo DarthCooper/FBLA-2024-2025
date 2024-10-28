@@ -1,8 +1,14 @@
 using Unity.Entities;
+using Unity.Mathematics;
 
 public struct IsFollowing : IComponentData
 {
     public bool Value;
+}
+
+public struct Direction : IComponentData
+{
+    public float3 Value;
 }
 
 public struct PathFollowTarget : IComponentData

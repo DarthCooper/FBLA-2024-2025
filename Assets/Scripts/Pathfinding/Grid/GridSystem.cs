@@ -30,12 +30,14 @@ partial class GridSystem : SystemBase
         CheckTakenCells();
 
         CheckMovingObstacles();
+        /*
         # if UNITY_EDITOR
             if(FPSCounter.m_lastFramerate > 60)
             {
                 displayGrid();
             }
         #endif
+        */
     }
 
     [BurstCompile]
