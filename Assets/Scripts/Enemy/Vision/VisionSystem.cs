@@ -27,7 +27,6 @@ partial struct VisionSystem : ISystem
             {
                 if (IsPointInTriangle(playerPos, tranform.Position, velocity.Linear, 6f, 12f))
                 {
-                    Debug.Log(state.EntityManager.GetName(entity) + "found the player at" + playerPos + " Enemy:" + tranform.Position);
                     ecb.RemoveComponent<Scouting>(entity);
                     ecb.AddComponent<Hunting>(entity);
                     ecb.SetComponent(entity, new PathFollowTarget

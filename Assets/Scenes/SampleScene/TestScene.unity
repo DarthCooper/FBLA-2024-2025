@@ -3750,15 +3750,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: triggerDistance
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: maxRetreatDistance
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3417053296596255926, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: minRetreatDistance
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3806973015836085860, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
       propertyPath: m_Name
@@ -3823,19 +3823,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: targetDistance
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
-      propertyPath: triggerDistance
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+      propertyPath: triggerDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: maxRetreatDistance
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4323826366749467146, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: minRetreatDistance
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6327667424098537992, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
       propertyPath: m_Name
