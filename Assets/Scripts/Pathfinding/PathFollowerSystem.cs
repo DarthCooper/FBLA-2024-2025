@@ -35,6 +35,7 @@ partial class PathFollowerSystem : SystemBase
             CheckRetreating(dist, entity, transform, target);
             if (dist < targetDistance.Value || EntityManager.GetComponentData<PathFollow>(entity).pathIndex == -1)
             {
+                ecb.AddComponent<AtTarget>(entity);
                 SetTarget(transform, target, entity, EntityManager.GetBuffer<PathPosition>(entity));
                 following.ValueRW.Value = false;
                 if(EntityManager.HasComponent<Retreating>(entity))
@@ -42,7 +43,7 @@ partial class PathFollowerSystem : SystemBase
                     ecb.DestroyEntity(target.Value);
                     ecb.RemoveComponent<Retreating>(entity);
                     ecb.AddComponent<Hunting>(entity);
-                    ChangeTarget(entity, Entity.Null, lastTarget.Value, 1f, EntityManager.GetComponentData<PathFollowerPreviousTargetDistance>(entity).Value);
+                    ChangeTarget(entity, Entity.Null, lastTarget.Value, EntityManager.GetComponentData<PathFollowerPreviousTargetDistance>(entity).Value);
                 }
                 if(EntityManager.HasComponent<Scouting>(entity))
                 {
@@ -53,6 +54,9 @@ partial class PathFollowerSystem : SystemBase
                         Value = Entity.Null
                     });
                 }
+            }else if(EntityManager.HasComponent<AtTarget>(entity))
+            {
+                ecb.RemoveComponent<AtTarget>(entity);
             }
         }
         ecb.Playback(EntityManager);
@@ -89,7 +93,7 @@ partial class PathFollowerSystem : SystemBase
                 Scale = 1
             });
 
-            ChangeTarget(entity, target.Value, retreatEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
+            ChangeTarget(entity, target.Value, retreatEntity, 1f);
             ecb.AddComponent<Retreating>(entity);
             if(EntityManager.HasComponent<Hunting>(entity))
             {
@@ -132,7 +136,7 @@ partial class PathFollowerSystem : SystemBase
             Scale = 1
         });
 
-        ChangeTarget(entity, target.Value, scoutEntity, EntityManager.GetComponentData<PathFollowTargetDistance>(entity).Value, 1f);
+        ChangeTarget(entity, target.Value, scoutEntity, 1f);
         ecb.AddComponent<Scouting>(entity);
         if (EntityManager.HasComponent<Hunting>(entity))
         {
@@ -144,7 +148,7 @@ partial class PathFollowerSystem : SystemBase
         }
     }
 
-    public void ChangeTarget(Entity entity, Entity target, Entity newTarget, float oldDistance, float newDistance)
+    public void ChangeTarget(Entity entity, Entity target, Entity newTarget, float newDistance)
     {
         ecb.SetComponent(entity, new PathFollowerPreviousTarget
         {
@@ -158,10 +162,6 @@ partial class PathFollowerSystem : SystemBase
         ecb.SetComponent(entity, new PathFollowTargetDistance
         {
             Value = newDistance,
-        });
-        ecb.SetComponent(entity, new PathFollowerPreviousTargetDistance
-        {
-            Value = oldDistance,
         });
     }
 

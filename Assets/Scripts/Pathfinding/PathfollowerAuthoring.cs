@@ -48,7 +48,7 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
         });
         AddComponent(entity, new PathFollowerPreviousTargetDistance
         {
-            Value = 1f
+            Value = authoring.targetDistance
         });
 
         if (authoring.startingTarget != null)
