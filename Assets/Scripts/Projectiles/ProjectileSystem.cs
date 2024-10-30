@@ -16,7 +16,7 @@ partial struct ProjectileSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((ProjectileSpeed speed, ProjectileDirection dir, ProjectileParent parent, RefRW<PhysicsVelocity> velocity, DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer, Entity entity) in SystemAPI.Query<ProjectileSpeed, ProjectileDirection, ProjectileParent, RefRW<PhysicsVelocity>, DynamicBuffer<StatefulTriggerEvent>>().WithEntityAccess())
+        foreach((ProjectileSpeed speed, ProjectileDirection dir, ProjectileParent parent, ProjectileDamage damage ,RefRW<PhysicsVelocity> velocity, DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer, Entity entity) in SystemAPI.Query<ProjectileSpeed, ProjectileDirection, ProjectileParent, ProjectileDamage, RefRW<PhysicsVelocity>, DynamicBuffer<StatefulTriggerEvent>>().WithEntityAccess())
         {
             velocity.ValueRW.Linear = dir.Value * speed.Speed;
 
@@ -26,6 +26,17 @@ partial struct ProjectileSystem : ISystem
                 var otherEntity = colliderEvent.GetOtherEntity(entity);
 
                 if(otherEntity.Equals(parent.Value)) { continue; }
+                if(state.EntityManager.HasComponent<Health>(otherEntity))
+                {
+                    RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);
+                    if (colliderEvent.State == StatefulEventState.Enter)
+                    {
+                        health.ValueRW.Value -= damage.Damage;
+                        ecb.DestroyEntity(entity);
+                        continue;
+                    }
+
+                }
 
                 // exclude other triggers and processed events
                 if (colliderEvent.State == StatefulEventState.Enter)

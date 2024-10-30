@@ -4,6 +4,7 @@ using UnityEngine;
 
 class PlayerAuthoring : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed;
 
     public float sprintSpeed;

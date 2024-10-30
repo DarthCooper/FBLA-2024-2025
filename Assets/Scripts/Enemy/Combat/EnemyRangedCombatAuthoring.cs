@@ -7,6 +7,7 @@ class EnemyRangedCombatAuthoring : MonoBehaviour
     public float speed = 10f;
     public float delay = 4f;
     public float projectileSize = 0.15f;
+    public float damage;
 }
 
 class EnemyRangedCombatAuthoringBaker : Baker<EnemyRangedCombatAuthoring>
@@ -20,6 +21,7 @@ class EnemyRangedCombatAuthoringBaker : Baker<EnemyRangedCombatAuthoring>
             speed = authoring.speed,
             maxDelay = authoring.delay,
             projectileSize = authoring.projectileSize,
+            damage = authoring.damage,
         });
     }
 }

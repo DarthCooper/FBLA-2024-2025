@@ -6,6 +6,7 @@ class EnemyMeleeAuthoring : MonoBehaviour
     public GameObject animObject;
     public GameObject pivotObject;
     public float delay = 4f;
+    public float damage = 10f;
 }
 
 class EnemyMeleeAuthoringBaker : Baker<EnemyMeleeAuthoring>
@@ -18,7 +19,8 @@ class EnemyMeleeAuthoringBaker : Baker<EnemyMeleeAuthoring>
             animEntity = GetEntity(authoring.animObject, TransformUsageFlags.Dynamic),
             pivotEntity = GetEntity(authoring.pivotObject, TransformUsageFlags.Dynamic),
             delay = 0,
-            maxDelay = authoring.delay
+            maxDelay = authoring.delay,
+            damage = authoring.damage
         });
     }
 }

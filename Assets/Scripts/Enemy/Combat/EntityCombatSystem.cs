@@ -47,7 +47,7 @@ partial struct EntityCombatSystem : ISystem
                     });
                     ecb.AddComponent(projectile, new ProjectileDamage
                     {
-                        Damage = 10f
+                        Damage = attack.ValueRO.damage,
                     });
                     ecb.AddComponent(projectile, new ProjectileParent
                     {

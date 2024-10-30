@@ -13,6 +13,8 @@ public struct RangedAttack : Attacks
     public float speed;
 
     public float projectileSize;
+
+    public float damage;
 }
 
 public struct MeleeAttacks: Attacks
@@ -21,4 +23,5 @@ public struct MeleeAttacks: Attacks
     public Entity pivotEntity;
     public float delay;
     public float maxDelay;
+    public float damage;
 }
