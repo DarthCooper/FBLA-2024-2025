@@ -82,7 +82,6 @@ partial class PathFollowerSystem : SystemBase
 
             float3 convertedTargetPos = new float3 { x = targetGoal.x, y = targetGoal.z, z = 0 };
 
-            Debug.Log(convertedTargetPos);
             grid.GetXY(convertedTargetPos + new float3(1, 0, 1) * grid.GetCellSize() * .5f, out int endX, out int endY);
             ValidateGridPosition(ref endX, ref endY, grid);
 

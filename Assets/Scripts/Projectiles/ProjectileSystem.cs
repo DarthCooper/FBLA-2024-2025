@@ -16,13 +16,13 @@ partial struct ProjectileSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((ProjectileSpeed speed, ProjectileDirection dir, ProjectileParent parent, RefRW<PhysicsVelocity> velocity, DynamicBuffer<StatefulCollisionEvent> collisionEventBuffer, Entity entity) in SystemAPI.Query<ProjectileSpeed, ProjectileDirection, ProjectileParent, RefRW<PhysicsVelocity>, DynamicBuffer<StatefulCollisionEvent>>().WithEntityAccess())
+        foreach((ProjectileSpeed speed, ProjectileDirection dir, ProjectileParent parent, RefRW<PhysicsVelocity> velocity, DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer, Entity entity) in SystemAPI.Query<ProjectileSpeed, ProjectileDirection, ProjectileParent, RefRW<PhysicsVelocity>, DynamicBuffer<StatefulTriggerEvent>>().WithEntityAccess())
         {
             velocity.ValueRW.Linear = dir.Value * speed.Speed;
 
-            for (int i = 0; i < collisionEventBuffer.Length; i++)
+            for (int i = 0; i < triggerEventBuffer.Length; i++)
             {
-                var colliderEvent = collisionEventBuffer[i];
+                var colliderEvent = triggerEventBuffer[i];
                 var otherEntity = colliderEvent.GetOtherEntity(entity);
 
                 if(otherEntity.Equals(parent.Value)) { continue; }

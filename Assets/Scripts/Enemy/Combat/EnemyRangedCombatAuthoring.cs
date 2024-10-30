@@ -6,6 +6,7 @@ class EnemyRangedCombatAuthoring : MonoBehaviour
     public GameObject projectilePrefab;
     public float speed = 10f;
     public float delay = 4f;
+    public float projectileSize = 0.15f;
 }
 
 class EnemyRangedCombatAuthoringBaker : Baker<EnemyRangedCombatAuthoring>
@@ -17,7 +18,8 @@ class EnemyRangedCombatAuthoringBaker : Baker<EnemyRangedCombatAuthoring>
         {
             projectile = GetEntity(authoring.projectilePrefab, TransformUsageFlags.Dynamic),
             speed = authoring.speed,
-            maxDelay = authoring.delay
+            maxDelay = authoring.delay,
+            projectileSize = authoring.projectileSize,
         });
     }
 }
