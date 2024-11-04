@@ -12,6 +12,10 @@ class PlayerAuthoring : MonoBehaviour
     public float jumpSpeed;
 
     public float4 playerChecksOffset;
+
+    [Header("Combat")]
+    public GameObject meleeWeapon;
+    public GameObject rangedWeapon;
 }
 
 class PlayerAuthoringBaker : Baker<PlayerAuthoring>
@@ -40,6 +44,17 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         AddComponent(playerEntity, new PlayerChecksOffset
         {
             Value = authoring.playerChecksOffset
+        });
+
+        AddComponent<PlayerFire>(playerEntity);
+        AddComponent<PlayerAiming>(playerEntity);
+        AddComponent(playerEntity, new PlayerMeleeWeapon
+        {
+            Value = GetEntity(authoring.meleeWeapon, TransformUsageFlags.Dynamic)
+        });
+        AddComponent(playerEntity, new PlayerRangedWeapon
+        {
+            Value = GetEntity(authoring.rangedWeapon, TransformUsageFlags.Dynamic)
         });
     }
 }

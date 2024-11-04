@@ -36,17 +36,26 @@ partial class GetPlayerInputSystem : SystemBase
         {
             Value = curMoveInput
         });
-
         SystemAPI.SetSingleton(new PlayerSprintInput
         {
             Value = curSprintInput
         });
-
         SystemAPI.SetSingleton(new PlayerJumpInput
         {
             Value = curJumpInput
         });
 
+        var curFireInput = playerActions.Player.Attack.WasPressedThisFrame();
+        var curAimInput = playerActions.Player.Aim.IsPressed();
+
+        SystemAPI.SetSingleton(new PlayerFire
+        {
+            Value = curFireInput
+        });
+        SystemAPI.SetSingleton(new PlayerAiming
+        {
+            value = curAimInput
+        });
     }
 
     protected override void OnStopRunning()
