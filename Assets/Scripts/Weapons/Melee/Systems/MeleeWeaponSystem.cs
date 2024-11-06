@@ -24,6 +24,7 @@ partial struct MeleeWeaponSystem : ISystem
             DynamicBuffer<AnimationEventComponent> animationEvents = state.EntityManager.GetBuffer<AnimationEventComponent>(anim.Value);
             bool use = state.EntityManager.HasComponent<Using>(entity);
             #region AnimationEvents
+            if(!state.EntityManager.HasBuffer<Child>(anim.Value)) { continue; }
             DynamicBuffer<Child> child = state.EntityManager.GetBuffer<Child>(anim.Value);
             Entity sword = child[0].Value;
             for (int i = 0; i < animationEvents.Length; i++)

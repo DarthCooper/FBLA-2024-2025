@@ -56,5 +56,7 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         {
             Value = GetEntity(authoring.rangedWeapon, TransformUsageFlags.Dynamic)
         });
+        AddComponent<MousePlayerAngle>(playerEntity);
+        AddComponent<MouseWorldPos>(playerEntity);
     }
 }

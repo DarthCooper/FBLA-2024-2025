@@ -18,40 +18,51 @@ partial struct PlayerCombatSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((LocalTransform transform, PlayerFire fire, PlayerAiming aiming, PlayerMeleeWeapon melee, PlayerRangedWeapon ranged, Entity entity) in SystemAPI.Query<LocalTransform, PlayerFire, PlayerAiming, PlayerMeleeWeapon, PlayerRangedWeapon>().WithEntityAccess())
+        foreach((RefRW<LocalTransform> transform, PlayerFire fire, PlayerAiming aiming, PlayerMeleeWeapon melee, PlayerRangedWeapon ranged, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PlayerFire, PlayerAiming, PlayerMeleeWeapon, PlayerRangedWeapon>().WithEntityAccess())
         {
-            EntityQuery query = state.GetEntityQuery(ComponentType.ReadOnly<EnemyTag>());
-            var entities = query.ToEntityListAsync(Allocator.TempJob, out JobHandle handle);
-            handle.Complete();
 
-            float minDist = float.MaxValue;
-            float3 closestPos = new float3(0,0,0);
-            for(int i = 0; i < entities.Length; i++)
+            if(aiming.value)
             {
-                Entity enemy = entities[i];
-                float3 enemyPos = state.EntityManager.GetComponentData<LocalToWorld>(enemy).Position;
+                MousePlayerAngle dir = state.EntityManager.GetComponentData<MousePlayerAngle>(entity);
+                transform.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
 
-                float dist = Vector3.Distance(transform.Position, enemyPos);
-                if (dist < minDist)
+                if(fire.Value)
                 {
-                    minDist = dist;
-                    closestPos = enemyPos;
+                    ecb.AddComponent<Using>(ranged.Value);
                 }
-            }
-
-            if (!fire.Value) { continue; }
-            if (!aiming.value)
-            {
-                if(melee.Value.Equals(Entity.Null)) { continue; }
-                ecb.AddComponent<Using>(melee.Value);
-                ecb.SetComponent(melee.Value, new MeleeDirection
-                {
-                    Value = closestPos - transform.Position
-                });
             }
             else
             {
-                Debug.Log("Ranged");
+                transform.ValueRW.Rotation = Quaternion.identity;
+                EntityQuery query = state.GetEntityQuery(ComponentType.ReadOnly<EnemyTag>());
+                var entities = query.ToEntityListAsync(Allocator.TempJob, out JobHandle handle);
+                handle.Complete();
+
+                float minDist = float.MaxValue;
+                float3 closestPos = new float3(0, 0, 0);
+                for (int i = 0; i < entities.Length; i++)
+                {
+                    Entity enemy = entities[i];
+                    float3 enemyPos = state.EntityManager.GetComponentData<LocalToWorld>(enemy).Position;
+
+                    float dist = Vector3.Distance(transform.ValueRO.Position, enemyPos);
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        closestPos = enemyPos;
+                    }
+                }
+
+                if(fire.Value)
+                {
+                    transform.ValueRW.Rotation = Quaternion.identity;
+                    if (melee.Value.Equals(Entity.Null)) { continue; }
+                    ecb.AddComponent<Using>(melee.Value);
+                    ecb.SetComponent(melee.Value, new MeleeDirection
+                    {
+                        Value = closestPos - transform.ValueRO.Position
+                    });
+                }
             }
         }
         ecb.Playback(state.EntityManager);

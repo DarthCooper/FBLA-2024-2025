@@ -4,6 +4,8 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using static UnityEngine.RuleTile.TilingRuleOutput;
+using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
 partial class GetPlayerInputSystem : SystemBase
@@ -56,6 +58,33 @@ partial class GetPlayerInputSystem : SystemBase
         {
             value = curAimInput
         });
+
+        Camera camera = Camera.main;
+        RefRW<LocalTransform> playerTransform = SystemAPI.GetComponentRW<LocalTransform>(playerEntity);
+        float3 dir = float3.zero;
+        var mouseInput = Input.mousePosition;
+        UnityEngine.Ray ray = camera.ScreenPointToRay(mouseInput);
+        UnityEngine.RaycastHit hit;
+        Physics.Raycast(ray, out hit);
+        if(hit.collider != null)
+        {
+            Vector3 target = hit.point;
+            target.y += 0.5f;
+            dir = (float3)target - playerTransform.ValueRO.Position;
+            SystemAPI.SetSingleton(new MouseWorldPos
+            {
+                Value = hit.point
+            });
+        }
+        SystemAPI.SetSingleton(new MousePlayerAngle
+        {
+            Value = dir
+        });
+    }
+
+    float AngleBetweenTwoPoints(Vector2 a, Vector2 b)
+    {
+        return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
     }
 
     protected override void OnStopRunning()
