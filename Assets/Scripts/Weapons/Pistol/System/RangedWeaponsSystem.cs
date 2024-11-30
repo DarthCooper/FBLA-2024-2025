@@ -23,6 +23,7 @@ partial struct RangedWeaponsSystem : ISystem
             {
                 Entity spawnedProjectile = ecb.Instantiate(projectile.Value);
                 Entity projectileParent = state.EntityManager.GetComponentData<Parent>(entity).Value;
+                float knockback = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value;
                 ecb.SetComponent(spawnedProjectile, new LocalTransform
                 {
                     Position = state.EntityManager.GetComponentData<LocalTransform>(projectileParent).Position,
@@ -44,6 +45,10 @@ partial struct RangedWeaponsSystem : ISystem
                 ecb.AddComponent(spawnedProjectile, new ProjectileParent
                 {
                     Value = projectileParent
+                });
+                ecb.AddComponent(spawnedProjectile, new RangedProjectileKnockback
+                {
+                    Value = knockback
                 });
                 ecb.AddComponent<ProjectileTag>(spawnedProjectile);
                 ecb.RemoveComponent<Using>(entity);

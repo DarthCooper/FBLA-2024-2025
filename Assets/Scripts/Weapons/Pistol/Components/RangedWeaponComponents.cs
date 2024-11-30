@@ -16,6 +16,11 @@ public struct RangedProjectileForce : IComponentData
     public float Value;
 }
 
+public struct RangedProjectileKnockback : IComponentData
+{
+    public float Value;
+}
+
 public struct RangedProjectile : IComponentData
 {
     public Entity Value;

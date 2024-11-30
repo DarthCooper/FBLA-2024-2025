@@ -16,7 +16,7 @@ partial struct KnockBackSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((KnockBackDir dir, KnockBackStrength force, RefRW<PhysicsVelocity> velocity, PhysicsMass mass, Entity entity) in SystemAPI.Query<KnockBackDir, KnockBackStrength, RefRW<PhysicsVelocity>, PhysicsMass>().WithEntityAccess())
+        foreach((KnockBackDir dir, KnockBackStrength force, RefRW<PhysicsVelocity> velocity, PhysicsMass mass, Entity entity) in SystemAPI.Query<KnockBackDir, KnockBackStrength, RefRW<PhysicsVelocity>, PhysicsMass>().WithAll<ApplyKnockBack>().WithEntityAccess())
         {
             velocity.ValueRW.ApplyLinearImpulse(mass, dir.Value * force.Value);
             ecb.RemoveComponent<ApplyKnockBack>(entity);

@@ -9,6 +9,7 @@ class RangedWeaponBaker : MonoBehaviour
     public float damage;
     public float force;
     public float delay;
+    public float knockback;
 }
 
 class RangedWeaponBakerBaker : Baker<RangedWeaponBaker>
@@ -40,6 +41,10 @@ class RangedWeaponBakerBaker : Baker<RangedWeaponBaker>
         AddComponent(entity, new RangedProjectileSize
         {
             Value = authoring.scale
+        });
+        AddComponent(entity, new RangedProjectileKnockback
+        {
+            Value = authoring.knockback
         });
         AddComponent<RangedDirection>(entity);
     }

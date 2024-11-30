@@ -26,21 +26,27 @@ partial struct ProjectileSystem : ISystem
                 var otherEntity = colliderEvent.GetOtherEntity(entity);
 
                 if(otherEntity.Equals(parent.Value)) { continue; }
-                if(state.EntityManager.HasComponent<Health>(otherEntity))
-                {
-                    RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);
-                    if (colliderEvent.State == StatefulEventState.Enter)
-                    {
-                        health.ValueRW.Value -= damage.Damage;
-                        ecb.DestroyEntity(entity);
-                        continue;
-                    }
-
-                }
 
                 // exclude other triggers and processed events
                 if (colliderEvent.State == StatefulEventState.Enter)
                 {
+                    if (state.EntityManager.HasComponent<Health>(otherEntity))
+                    {
+                        RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);
+                        health.ValueRW.Value -= damage.Damage;
+                    }
+                    if (state.EntityManager.HasComponent<PhysicsVelocity>(otherEntity) && state.EntityManager.HasComponent<RangedProjectileKnockback>(entity))
+                    {
+                        ecb.AddComponent<ApplyKnockBack>(otherEntity);
+                        ecb.AddComponent(otherEntity, new KnockBackDir
+                        {
+                            Value = dir.Value,
+                        });
+                        ecb.AddComponent(otherEntity, new KnockBackStrength
+                        {
+                            Value = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value
+                        });
+                    }
                     ecb.DestroyEntity(entity);
                 }
 
