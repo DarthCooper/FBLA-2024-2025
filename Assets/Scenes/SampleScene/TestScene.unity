@@ -4761,6 +4761,10 @@ PrefabInstance:
       propertyPath: delay
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 6226764187303217149, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
+      propertyPath: knockback
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9185191735185370972, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4821,7 +4825,7 @@ MonoBehaviour:
   damage: 25
   force: 10
   delay: 0.5
-  knockback: 15
+  knockback: 2
 --- !u!1001 &3072955231672018559
 PrefabInstance:
   m_ObjectHideFlags: 0

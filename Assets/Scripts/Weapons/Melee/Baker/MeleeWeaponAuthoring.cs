@@ -8,6 +8,7 @@ class MeleeWeaponAuthoring : MonoBehaviour
     public GameObject anchor;
     public GameObject animHolder;
     public float delay;
+    public float knockback;
 }
 
 class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
@@ -36,6 +37,10 @@ class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
         {
             Value = 0,
             maxDelay = authoring.delay
+        });
+        AddComponent(entity, new MeleeKnockbackStrength
+        {
+            Value = authoring.knockback
         });
     }
 }

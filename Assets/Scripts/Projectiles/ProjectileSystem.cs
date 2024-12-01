@@ -46,6 +46,10 @@ partial struct ProjectileSystem : ISystem
                         {
                             Value = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value
                         });
+                        ecb.AddComponent(otherEntity, new Stunned
+                        {
+                            Value = 2f
+                        });
                     }
                     ecb.DestroyEntity(entity);
                 }

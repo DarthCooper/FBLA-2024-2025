@@ -2,6 +2,7 @@ using Rukhanka;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics;
 using Unity.Physics.Stateful;
 using Unity.Rendering;
 using Unity.Transforms;
@@ -19,6 +20,7 @@ partial struct MeleeWeaponSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
+        NativeList<Entity> hits = new NativeList<Entity>(Allocator.Temp);
         foreach((MeleeAnchor anchor, MeleeAnimHolder anim, MeleeDamage damage, MeleeDirection dir, MeleeSpeed speed, RefRW<MeleeDelay> delay, Parent parent, Entity entity) in SystemAPI.Query<MeleeAnchor, MeleeAnimHolder, MeleeDamage, MeleeDirection, MeleeSpeed, RefRW<MeleeDelay>, Parent>().WithEntityAccess())
         {
             DynamicBuffer<AnimationEventComponent> animationEvents = state.EntityManager.GetBuffer<AnimationEventComponent>(anim.Value);
@@ -55,16 +57,34 @@ partial struct MeleeWeaponSystem : ISystem
                 var colliderEvent = triggerEventBuffer[i];
                 var otherEntity = colliderEvent.GetOtherEntity(anim.Value);
                 if (otherEntity.Equals(parent.Value)) { continue; }
-                if (state.EntityManager.HasComponent<Health>(otherEntity))
+                if(hits.Contains(otherEntity)) { continue; }
+                if (colliderEvent.State == StatefulEventState.Enter)
                 {
-                    RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);
-                    if (colliderEvent.State == StatefulEventState.Enter)
+                    if (state.EntityManager.HasComponent<Health>(otherEntity))
                     {
+                        RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);
                         health.ValueRW.Value -= damage.Value;
-                        continue;
+                    }
+                    if (state.EntityManager.HasComponent<PhysicsVelocity>(otherEntity))
+                    {
+                        ecb.AddComponent<ApplyKnockBack>(otherEntity);
+                        ecb.AddComponent(otherEntity, new KnockBackDir
+                        {
+                            Value = dir.Value,
+                        });
+                        ecb.AddComponent(otherEntity, new KnockBackStrength
+                        {
+                            Value = state.EntityManager.GetComponentData<MeleeKnockbackStrength>(entity).Value
+                        });
+                        ecb.AddComponent(otherEntity, new Stunned
+                        {
+                            Value = 3f
+                        });
                     }
                 }
+
             }
+
             #endregion
             #region StartAttack
             if (delay.ValueRO.Value <= 0)

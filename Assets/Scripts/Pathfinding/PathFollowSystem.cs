@@ -1,10 +1,7 @@
-using System.Net;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Extensions;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -20,6 +17,7 @@ partial class PathFollowSystem : SystemBase
         Entities.WithoutBurst().ForEach((Entity entity, ref PathFollowSpeed speed, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref LocalTransform transform, ref PhysicsVelocity velocity, ref PhysicsMass mass, ref PathFollow pathFollow) =>
         {
             if(!EntityManager.GetComponentData<IsFollowing>(entity).Value) { return; }
+            if(EntityManager.HasComponent<Stunned>(entity)) { return; }
             if(pathFollow.pathIndex != pathPositionBuffer.Length - 2)
             {
                 pathFollow.pathIndex = pathPositionBuffer.Length - 2;

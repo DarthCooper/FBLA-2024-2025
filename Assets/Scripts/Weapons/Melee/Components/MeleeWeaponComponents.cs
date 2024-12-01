@@ -31,3 +31,8 @@ public struct MeleeDelay : IComponentData
     public float Value;
     public float maxDelay;
 }
+
+public struct MeleeKnockbackStrength : IComponentData
+{
+    public float Value;
+}
