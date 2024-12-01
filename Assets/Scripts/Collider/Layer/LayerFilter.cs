@@ -11,6 +11,8 @@ public enum CollisionLayer
     InteractableTrigger = 1 << 5,
     EnemyTrigger = 1 << 6,
     PlayerTrigger = 1 << 7,
+    MeleeWeapon = 1 << 8,
+    Projectile = 1 << 9,
 }
 
 public class CollisionFilters
@@ -19,22 +21,22 @@ public class CollisionFilters
         filterSolid = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Solid),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.PlayerTrigger),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.PlayerTrigger | CollisionLayer.Projectile),
         },
         filterObstacle = new CollisionFilter()
         {
             BelongsTo = (uint)CollisionLayer.Obstacle,
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Obstacle),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Obstacle | CollisionLayer.Projectile),
         },
         filterCharacter = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Character),
-            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle)
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
         filterEnemy = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Enemy),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid)
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
         filterInteractable = new CollisionFilter()
         {
@@ -55,6 +57,16 @@ public class CollisionFilters
         {
             BelongsTo = (uint)(CollisionLayer.PlayerTrigger),
             CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle)
+        },
+        filterMeleeWeaponTrigger = new CollisionFilter()
+        {
+            BelongsTo = (uint)(CollisionLayer.MeleeWeapon),
+            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character)
+        },
+        filterProjectileTrigger = new CollisionFilter()
+        {
+            BelongsTo = (uint)(CollisionLayer.Projectile),
+            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character | CollisionLayer.Obstacle | CollisionLayer.Solid)
         };
 
     public static CollisionFilter getCollisionFilter(CollisionLayer layer)
@@ -77,6 +89,10 @@ public class CollisionFilters
                 return filterEnemyTrigger;
             case CollisionLayer.PlayerTrigger:
                 return filterPlayerTrigger;
+            case CollisionLayer.MeleeWeapon:
+                return filterMeleeWeaponTrigger;
+            case CollisionLayer.Projectile:
+                return filterProjectileTrigger;
             default:
                 return filterSolid;
         }

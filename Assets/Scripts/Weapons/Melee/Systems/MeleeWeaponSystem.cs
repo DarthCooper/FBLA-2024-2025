@@ -25,8 +25,15 @@ partial struct MeleeWeaponSystem : ISystem
             bool use = state.EntityManager.HasComponent<Using>(entity);
             #region AnimationEvents
             if(!state.EntityManager.HasBuffer<Child>(anim.Value)) { continue; }
-            DynamicBuffer<Child> child = state.EntityManager.GetBuffer<Child>(anim.Value);
-            Entity sword = child[0].Value;
+            DynamicBuffer<Child> children = state.EntityManager.GetBuffer<Child>(anim.Value);
+            Entity sword = Entity.Null;
+            foreach(Child child in children)
+            {
+                if(state.EntityManager.HasComponent<MaterialMeshInfo>(child.Value))
+                {
+                    sword = child.Value;
+                }
+            }
             for (int i = 0; i < animationEvents.Length; i++)
             {
                 AnimationEventComponent animationEvent = animationEvents[i];
@@ -42,7 +49,7 @@ partial struct MeleeWeaponSystem : ISystem
             }
             #endregion
             #region TriggerDetection
-            DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer = state.EntityManager.GetBuffer<StatefulTriggerEvent>(sword);
+            DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer = state.EntityManager.GetBuffer<StatefulTriggerEvent>(anim.Value);
             for(int i = 0; i < triggerEventBuffer.Length; i++)
             {
                 var colliderEvent = triggerEventBuffer[i];
@@ -55,16 +62,9 @@ partial struct MeleeWeaponSystem : ISystem
                     if (colliderEvent.State == StatefulEventState.Enter)
                     {
                         health.ValueRW.Value -= damage.Value;
-                        ecb.DestroyEntity(entity);
+                        Debug.Log("Hit Enemy");
                         continue;
                     }
-
-                }
-
-                // exclude other triggers and processed events
-                if (colliderEvent.State == StatefulEventState.Enter)
-                {
-                    ecb.DestroyEntity(entity);
                 }
             }
             #endregion
