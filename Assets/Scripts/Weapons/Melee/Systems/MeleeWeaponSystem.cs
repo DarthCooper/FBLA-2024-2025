@@ -53,8 +53,7 @@ partial struct MeleeWeaponSystem : ISystem
             for(int i = 0; i < triggerEventBuffer.Length; i++)
             {
                 var colliderEvent = triggerEventBuffer[i];
-                var otherEntity = colliderEvent.GetOtherEntity(entity);
-
+                var otherEntity = colliderEvent.GetOtherEntity(anim.Value);
                 if (otherEntity.Equals(parent.Value)) { continue; }
                 if (state.EntityManager.HasComponent<Health>(otherEntity))
                 {
@@ -62,7 +61,6 @@ partial struct MeleeWeaponSystem : ISystem
                     if (colliderEvent.State == StatefulEventState.Enter)
                     {
                         health.ValueRW.Value -= damage.Value;
-                        Debug.Log("Hit Enemy");
                         continue;
                     }
                 }
