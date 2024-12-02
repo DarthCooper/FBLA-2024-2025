@@ -12,3 +12,13 @@ public struct KnockBackDir : IComponentData
 {
     public float3 Value;
 }
+
+public struct KnockBackStartPos : IComponentData
+{
+    public float3 Value;
+}
+
+public struct KnockBackMaxDist : IComponentData
+{
+    public float Value;
+}

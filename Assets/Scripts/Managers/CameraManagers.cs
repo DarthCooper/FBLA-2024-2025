@@ -1,4 +1,5 @@
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class CameraManagers : MonoBehaviour
 {
@@ -6,9 +7,17 @@ public class CameraManagers : MonoBehaviour
 
     public Camera[] cameras;
 
-    void Awake()
+    [SerializeField] public CinemachineImpulseSource[] impulseSources;
+
+    public void Awake()
     {
         Instance = this;
+    }
+
+    public void Impulse(int i)
+    {
+        CinemachineImpulseSource source = impulseSources[i];
+        source.GenerateImpulse();
     }
 
     public Camera GetCamera(int i)

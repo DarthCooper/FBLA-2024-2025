@@ -9,3 +9,5 @@ public struct MaxHealth : IComponentData
 {
     public float Value;
 }
+
+public struct Dead : IComponentData { }

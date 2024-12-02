@@ -46,6 +46,10 @@ partial struct ProjectileSystem : ISystem
                         {
                             Value = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value
                         });
+                        ecb.AddComponent(otherEntity, new KnockBackMaxDist
+                        {
+                            Value = 5f
+                        });
                         ecb.AddComponent(otherEntity, new Stunned
                         {
                             Value = 2f

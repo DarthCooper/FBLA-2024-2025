@@ -6,3 +6,8 @@ public struct LayerFilterData : IComponentData
 {
     public CollisionFilter Value;
 }
+
+public struct PreviousLayerFilterData : IComponentData
+{
+    public CollisionFilter Value;
+}

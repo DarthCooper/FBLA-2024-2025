@@ -16,5 +16,10 @@ class LayerFilterAuthoringBaker : Baker<LayerFilterAuthoring>
         {
             Value = CollisionFilters.getCollisionFilter(authoring.layer)
         });
+
+        AddComponent(entity, new PreviousLayerFilterData
+        {
+            Value = CollisionFilters.getCollisionFilter(authoring.layer)
+        });
     }
 }

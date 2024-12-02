@@ -31,12 +31,12 @@ public class CollisionFilters
         filterCharacter = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Character),
-            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
         filterEnemy = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Enemy),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
+            CollidesWith = (uint)(CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
         filterInteractable = new CollisionFilter()
         {

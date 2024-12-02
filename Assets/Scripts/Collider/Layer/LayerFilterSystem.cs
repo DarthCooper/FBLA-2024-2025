@@ -27,7 +27,7 @@ partial struct LayerFilterSystem : ISystem
     {
         public void Execute(ref LayerFilterData data, ref PhysicsCollider collider)
         {
-            if(collider.Value.Value.GetCollisionFilter().Equals(data.Value)) { return; }
+            if(collider.Value.Value.GetCollisionFilter().BelongsTo.Equals(data.Value.BelongsTo)) { return; }
             collider.Value.Value.SetCollisionFilter(data.Value);
         }
     }

@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
+using Unity.Physics.Extensions;
 using Unity.Physics.Stateful;
 using Unity.Rendering;
 using Unity.Transforms;
@@ -76,21 +77,33 @@ partial struct MeleeWeaponSystem : ISystem
                         {
                             Value = state.EntityManager.GetComponentData<MeleeKnockbackStrength>(entity).Value
                         });
+                        ecb.AddComponent(otherEntity, new KnockBackMaxDist
+                        {
+                            Value = 2f
+                        });
                         ecb.AddComponent(otherEntity, new Stunned
                         {
                             Value = 3f
                         });
                     }
                 }
-
             }
-
             #endregion
             #region StartAttack
             if (delay.ValueRO.Value <= 0)
             {
                 if(!use) { continue; }
                 ecb.RemoveComponent<Using>(entity);
+                if(Mathf.Abs(dir.Value.x) <= 5 && Mathf.Abs(dir.Value.y) <= 5 && Mathf.Abs(dir.Value.z) <= 5)
+                {
+                    RefRW<PhysicsVelocity> playerVel = SystemAPI.GetComponentRW<PhysicsVelocity>(parent.Value);
+                    PhysicsMass playerMass = SystemAPI.GetComponent<PhysicsMass>(parent.Value);
+                    playerVel.ValueRW.ApplyLinearImpulse(playerMass, dir.Value * 5);
+                    ecb.AddComponent(parent.Value, new Stunned
+                    {
+                        Value = 0.25f
+                    });
+                }
 
                 RefRW<LocalTransform> pivot = SystemAPI.GetComponentRW<LocalTransform>(anchor.Value);
                 pivot.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
