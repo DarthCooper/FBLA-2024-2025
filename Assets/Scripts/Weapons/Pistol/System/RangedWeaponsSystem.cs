@@ -12,7 +12,6 @@ partial struct RangedWeaponsSystem : ISystem
         
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
@@ -21,6 +20,7 @@ partial struct RangedWeaponsSystem : ISystem
             bool use = state.EntityManager.HasComponent<Using>(entity);
             if (delay.ValueRO.Value <= 0 && use)
             {
+                CameraManagers.Instance.Impulse(1);
                 Entity spawnedProjectile = ecb.Instantiate(projectile.Value);
                 Entity projectileParent = state.EntityManager.GetComponentData<Parent>(entity).Value;
                 float knockback = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value;

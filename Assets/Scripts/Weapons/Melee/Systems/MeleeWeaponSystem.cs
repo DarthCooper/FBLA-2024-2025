@@ -41,12 +41,20 @@ partial struct MeleeWeaponSystem : ISystem
             {
                 AnimationEventComponent animationEvent = animationEvents[i];
                 ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
-                if (animationEvent.stringParamHash.Equals(FixedStringExtensions.CalculateHash32("EnableBlade")))
+                if (animationEvent.stringParamHash == 2123999296)
                 {
+                    ecb.SetComponent(anim.Value, new LayerFilterData
+                    {
+                        Value = CollisionFilters.filterMeleeWeaponTrigger
+                    });
                     meshLookup.SetComponentEnabled(sword, true);
                 }
-                else if (animationEvent.stringParamHash.Equals(FixedStringExtensions.CalculateHash32("DisableBlade")))
+                else if (animationEvent.stringParamHash == 4218191658)
                 {
+                    ecb.SetComponent(anim.Value, new LayerFilterData
+                    {
+                        Value = CollisionFilters.filterNone
+                    });
                     meshLookup.SetComponentEnabled(sword, false);
                 }
             }

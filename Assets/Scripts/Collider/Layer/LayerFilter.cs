@@ -13,6 +13,7 @@ public enum CollisionLayer
     PlayerTrigger = 1 << 7,
     MeleeWeapon = 1 << 8,
     Projectile = 1 << 9,
+    None = 1 << 10,
 }
 
 public class CollisionFilters
@@ -67,6 +68,11 @@ public class CollisionFilters
         {
             BelongsTo = (uint)(CollisionLayer.Projectile),
             CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character | CollisionLayer.Obstacle | CollisionLayer.Solid)
+        },
+        filterNone = new CollisionFilter
+        {
+            BelongsTo = (uint)CollisionLayer.None,
+            CollidesWith = (uint)CollisionLayer.None
         };
 
     public static CollisionFilter getCollisionFilter(CollisionLayer layer)
@@ -93,6 +99,8 @@ public class CollisionFilters
                 return filterMeleeWeaponTrigger;
             case CollisionLayer.Projectile:
                 return filterProjectileTrigger;
+            case CollisionLayer.None:
+                return filterNone;
             default:
                 return filterSolid;
         }

@@ -10,7 +10,6 @@ partial struct HealthSystem : ISystem
         state.RequireForUpdate<Health>();
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);

@@ -71,8 +71,8 @@ partial struct VisionSystem : ISystem
         Debug.DrawLine(baseLeft, baseRight, foundPlayer ? Color.red : Color.magenta);
         Debug.DrawLine(apex, baseRight, foundPlayer ? Color.red : Color.magenta);
         Debug.DrawLine(apex, baseLeft, foundPlayer ? Color.red : Color.magenta);
-        return foundPlayer;
         #endif
+        return foundPlayer;
     }
 
     float TriangleArea(Vector3 a, Vector3 b, Vector3 c)

@@ -70,10 +70,10 @@ partial struct EntityCombatSystem : ISystem
                     DynamicBuffer<Child> child = state.EntityManager.GetBuffer<Child>(attack.ValueRO.animEntity);
                     Entity sword = child[0].Value;
                     ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
-                    if (animationEvent.stringParamHash.Equals(FixedStringExtensions.CalculateHash32("EnableBlade")))
+                    if (animationEvent.stringParamHash == 2123999296)
                     {
                         meshLookup.SetComponentEnabled(sword, true);
-                    }else if(animationEvent.stringParamHash.Equals(FixedStringExtensions.CalculateHash32("DisableBlade")))
+                    }else if(animationEvent.stringParamHash == 4218191658)
                     {
                         meshLookup.SetComponentEnabled(sword, false);
                     }

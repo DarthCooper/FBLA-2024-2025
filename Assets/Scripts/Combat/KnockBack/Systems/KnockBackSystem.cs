@@ -38,17 +38,8 @@ partial struct KnockBackSystem : ISystem
                 ecb.RemoveComponent<KnockBackStrength>(entity);
                 ecb.RemoveComponent<KnockBackStartPos>(entity);
                 ecb.RemoveComponent<KnockBackMaxDist>(entity);
-                PreviousLayerFilterData preLayer = state.EntityManager.GetComponentData<PreviousLayerFilterData>(entity);
-                ecb.SetComponent(entity, new LayerFilterData
-                {
-                    Value = preLayer.Value,
-                });
                 continue;
             }
-            ecb.SetComponent(entity, new LayerFilterData
-            {
-                Value = CollisionFilters.filterSolid
-            });
             velocity.ValueRW.Linear = dir.Value * force.Value;
         }
         ecb.Playback(state.EntityManager);

@@ -20,9 +20,19 @@ partial struct DebuffSystem : ISystem
             if(stunTimer.ValueRO.Value <= 0)
             {
                 ecb.RemoveComponent<Stunned>(entity);
-            }else
+                PreviousLayerFilterData preLayer = state.EntityManager.GetComponentData<PreviousLayerFilterData>(entity);
+                ecb.SetComponent(entity, new LayerFilterData
+                {
+                    Value = preLayer.Value,
+                });
+            }
+            else
             {
                 stunTimer.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                ecb.SetComponent(entity, new LayerFilterData
+                {
+                    Value = CollisionFilters.filterCharacter
+                });
             }
         }
         ecb.Playback(state.EntityManager);
