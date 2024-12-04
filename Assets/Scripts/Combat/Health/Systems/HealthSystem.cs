@@ -1,13 +1,15 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Rendering;
+using Unity.Transforms;
+using UnityEditor;
 
 partial struct HealthSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Health>();
     }
 
     public void OnUpdate(ref SystemState state)
@@ -20,6 +22,13 @@ partial struct HealthSystem : ISystem
                 CameraManagers.Instance.Impulse(0);
                 ecb.AddComponent<Dead>(entity);
             }
+        }
+
+        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithEntityAccess())
+        {
+            ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
+
+            ecb.AddComponent<DestroyEntity>(entity);
         }
         ecb.Playback(state.EntityManager);
     }

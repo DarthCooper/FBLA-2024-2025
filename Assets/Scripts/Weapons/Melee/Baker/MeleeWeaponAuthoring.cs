@@ -42,5 +42,6 @@ class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
         {
             Value = authoring.knockback
         });
+        AddBuffer<MeleeHits>(entity);
     }
 }

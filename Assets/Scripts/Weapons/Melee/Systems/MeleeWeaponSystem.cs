@@ -21,9 +21,9 @@ partial struct MeleeWeaponSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        NativeList<Entity> hits = new NativeList<Entity>(Allocator.Temp);
-        foreach((MeleeAnchor anchor, MeleeAnimHolder anim, MeleeDamage damage, MeleeDirection dir, MeleeSpeed speed, RefRW<MeleeDelay> delay, Parent parent, Entity entity) in SystemAPI.Query<MeleeAnchor, MeleeAnimHolder, MeleeDamage, MeleeDirection, MeleeSpeed, RefRW<MeleeDelay>, Parent>().WithEntityAccess())
+        foreach ((MeleeAnchor anchor, MeleeAnimHolder anim, MeleeDamage damage, MeleeDirection dir, MeleeSpeed speed, RefRW<MeleeDelay> delay, Parent parent, Entity entity) in SystemAPI.Query<MeleeAnchor, MeleeAnimHolder, MeleeDamage, MeleeDirection, MeleeSpeed, RefRW<MeleeDelay>, Parent>().WithEntityAccess())
         {
+            DynamicBuffer<MeleeHits> hits = state.EntityManager.GetBuffer<MeleeHits>(entity);
             DynamicBuffer<AnimationEventComponent> animationEvents = state.EntityManager.GetBuffer<AnimationEventComponent>(anim.Value);
             bool use = state.EntityManager.HasComponent<Using>(entity);
             #region AnimationEvents
@@ -56,6 +56,7 @@ partial struct MeleeWeaponSystem : ISystem
                         Value = CollisionFilters.filterNone
                     });
                     meshLookup.SetComponentEnabled(sword, false);
+                    hits.Clear();
                 }
             }
             #endregion
@@ -66,9 +67,18 @@ partial struct MeleeWeaponSystem : ISystem
                 var colliderEvent = triggerEventBuffer[i];
                 var otherEntity = colliderEvent.GetOtherEntity(anim.Value);
                 if (otherEntity.Equals(parent.Value)) { continue; }
-                if(hits.Contains(otherEntity)) { continue; }
+                bool alreadyHit = false;
+                foreach(MeleeHits hit in hits)
+                {
+                    if(hit.Value.Equals(otherEntity))
+                    {
+                        alreadyHit = true;
+                    }
+                }
+                if(alreadyHit) { continue; }
                 if (colliderEvent.State == StatefulEventState.Enter)
                 {
+                    hits.Add(new MeleeHits { Value = otherEntity});
                     if (state.EntityManager.HasComponent<Health>(otherEntity))
                     {
                         RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);

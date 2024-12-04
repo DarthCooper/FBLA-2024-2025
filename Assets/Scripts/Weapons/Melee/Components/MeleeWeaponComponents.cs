@@ -36,3 +36,8 @@ public struct MeleeKnockbackStrength : IComponentData
 {
     public float Value;
 }
+
+public struct MeleeHits : IBufferElementData
+{
+    public Entity Value;
+}
