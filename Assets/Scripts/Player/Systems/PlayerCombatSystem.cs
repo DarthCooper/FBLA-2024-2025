@@ -24,9 +24,12 @@ partial struct PlayerCombatSystem : ISystem
             if(aiming.value)
             {
                 MousePlayerAngle dir = state.EntityManager.GetComponentData<MousePlayerAngle>(entity);
-                transform.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
+                if(!dir.Value.Equals(float3.zero))
+                {
+                    transform.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
+                }
 
-                if(fire.Value)
+                if (fire.Value)
                 {
                     ecb.AddComponent<Using>(ranged.Value);
                 }

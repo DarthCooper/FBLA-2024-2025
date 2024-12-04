@@ -26,7 +26,7 @@ partial struct RangedWeaponsSystem : ISystem
                 float knockback = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value;
                 ecb.SetComponent(spawnedProjectile, new LocalTransform
                 {
-                    Position = state.EntityManager.GetComponentData<LocalTransform>(projectileParent).Position,
+                    Position = state.EntityManager.GetComponentData<LocalToWorld>(firePoint.Value).Position,
                     Rotation = Quaternion.identity,
                     Scale = scale.Value
                 });

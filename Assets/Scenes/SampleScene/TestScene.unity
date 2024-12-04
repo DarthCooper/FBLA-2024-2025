@@ -1824,7 +1824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6cc8631ee939548992458f4c9a844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer: 2
+  layer: 1
 --- !u!23 &725227511
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2151,7 +2151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6cc8631ee939548992458f4c9a844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer: 2
+  layer: 1
 --- !u!23 &761332513
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3261,7 +3261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6cc8631ee939548992458f4c9a844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer: 2
+  layer: 1
 --- !u!23 &1090132772
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5959,7 +5959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6cc8631ee939548992458f4c9a844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer: 2
+  layer: 1
 --- !u!23 &2061921477
 MeshRenderer:
   m_ObjectHideFlags: 0
