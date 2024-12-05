@@ -86,6 +86,8 @@ partial struct MeleeWeaponSystem : ISystem
                     }
                     if (state.EntityManager.HasComponent<PhysicsVelocity>(otherEntity))
                     {
+                        DoesMeleeStuns stuns = state.EntityManager.GetComponentData<DoesMeleeStuns>(entity);
+                        MeleeKnockbackDistance knockbackDist = state.EntityManager.GetComponentData<MeleeKnockbackDistance>(entity);
                         ecb.AddComponent<ApplyKnockBack>(otherEntity);
                         ecb.AddComponent(otherEntity, new KnockBackDir
                         {
@@ -97,12 +99,16 @@ partial struct MeleeWeaponSystem : ISystem
                         });
                         ecb.AddComponent(otherEntity, new KnockBackMaxDist
                         {
-                            Value = 2f
+                            Value = knockbackDist.Value
                         });
-                        ecb.AddComponent(otherEntity, new Stunned
+                        if(stuns.Value)
                         {
-                            Value = 3f
-                        });
+                            MeleeStunTime stunTime = state.EntityManager.GetComponentData<MeleeStunTime>(entity);
+                            ecb.AddComponent(otherEntity, new Stunned
+                            {
+                                Value = stunTime.Value
+                            });
+                        }
                     }
                 }
             }
@@ -112,7 +118,8 @@ partial struct MeleeWeaponSystem : ISystem
             {
                 if(!use) { continue; }
                 ecb.RemoveComponent<Using>(entity);
-                if(Mathf.Abs(dir.Value.x) <= 5 && Mathf.Abs(dir.Value.y) <= 5 && Mathf.Abs(dir.Value.z) <= 5)
+                MeleeDashDist dashDist = state.EntityManager.GetComponentData<MeleeDashDist>(entity);
+                if(Mathf.Abs(dir.Value.x) <= dashDist.Value && Mathf.Abs(dir.Value.y) <= dashDist.Value && Mathf.Abs(dir.Value.z) <= dashDist.Value)
                 {
                     RefRW<PhysicsVelocity> playerVel = SystemAPI.GetComponentRW<PhysicsVelocity>(parent.Value);
                     PhysicsMass playerMass = SystemAPI.GetComponent<PhysicsMass>(parent.Value);

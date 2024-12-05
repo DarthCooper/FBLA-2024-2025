@@ -9,6 +9,10 @@ class MeleeWeaponAuthoring : MonoBehaviour
     public GameObject animHolder;
     public float delay;
     public float knockback;
+    public float knockbackDistance;
+    public float stunTime;
+    public bool stuns;
+    public float dashDist = 5f;
 }
 
 class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
@@ -43,5 +47,21 @@ class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
             Value = authoring.knockback
         });
         AddBuffer<MeleeHits>(entity);
+        AddComponent(entity, new MeleeStunTime
+        {
+            Value = authoring.stunTime
+        });
+        AddComponent(entity, new DoesMeleeStuns
+        {
+            Value = authoring.stuns
+        });
+        AddComponent(entity, new MeleeKnockbackDistance
+        {
+            Value = authoring.knockbackDistance
+        });
+        AddComponent(entity, new MeleeDashDist
+        {
+            Value = authoring.dashDist
+        });
     }
 }

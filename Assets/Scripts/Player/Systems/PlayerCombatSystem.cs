@@ -20,8 +20,8 @@ partial struct PlayerCombatSystem : ISystem
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
         foreach((RefRW<LocalTransform> transform, PlayerFire fire, PlayerAiming aiming, PlayerMeleeWeapon melee, PlayerRangedWeapon ranged, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PlayerFire, PlayerAiming, PlayerMeleeWeapon, PlayerRangedWeapon>().WithEntityAccess())
         {
-
-            if(aiming.value)
+            if (state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
+            if (aiming.value)
             {
                 MousePlayerAngle dir = state.EntityManager.GetComponentData<MousePlayerAngle>(entity);
                 if(!dir.Value.Equals(float3.zero))

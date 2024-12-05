@@ -13,7 +13,8 @@ public enum CollisionLayer
     PlayerTrigger = 1 << 7,
     MeleeWeapon = 1 << 8,
     Projectile = 1 << 9,
-    None = 1 << 10,
+    Stunned = 1 << 10,
+    None = 1 << 11,
 }
 
 public class CollisionFilters
@@ -22,12 +23,12 @@ public class CollisionFilters
         filterSolid = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Solid),
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.PlayerTrigger | CollisionLayer.Projectile),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Enemy | CollisionLayer.Obstacle | CollisionLayer.PlayerTrigger | CollisionLayer.Projectile | CollisionLayer.Stunned),
         },
         filterObstacle = new CollisionFilter()
         {
             BelongsTo = (uint)CollisionLayer.Obstacle,
-            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Obstacle | CollisionLayer.Projectile),
+            CollidesWith = (uint)(CollisionLayer.Character | CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.Stunned),
         },
         filterCharacter = new CollisionFilter()
         {
@@ -62,12 +63,17 @@ public class CollisionFilters
         filterMeleeWeaponTrigger = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.MeleeWeapon),
-            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character)
+            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character | CollisionLayer.Stunned)
         },
         filterProjectileTrigger = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Projectile),
-            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character | CollisionLayer.Obstacle | CollisionLayer.Solid)
+            CollidesWith = (uint)(CollisionLayer.Enemy | CollisionLayer.Character | CollisionLayer.Obstacle | CollisionLayer.Solid | CollisionLayer.Stunned)
+        },
+        filterStunned = new CollisionFilter()
+        {
+            BelongsTo = (uint)CollisionLayer.Stunned,
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
         filterNone = new CollisionFilter
         {
@@ -99,6 +105,8 @@ public class CollisionFilters
                 return filterMeleeWeaponTrigger;
             case CollisionLayer.Projectile:
                 return filterProjectileTrigger;
+            case CollisionLayer.Stunned:
+                return filterStunned;
             case CollisionLayer.None:
                 return filterNone;
             default:

@@ -31,7 +31,7 @@ partial struct DebuffSystem : ISystem
                 stunTimer.ValueRW.Value -= SystemAPI.Time.DeltaTime;
                 ecb.SetComponent(entity, new LayerFilterData
                 {
-                    Value = CollisionFilters.filterCharacter
+                    Value = CollisionFilters.filterStunned
                 });
             }
         }

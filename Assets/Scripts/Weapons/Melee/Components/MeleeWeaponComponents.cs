@@ -37,7 +37,27 @@ public struct MeleeKnockbackStrength : IComponentData
     public float Value;
 }
 
+public struct MeleeKnockbackDistance : IComponentData
+{
+    public float Value;
+}
+
+public struct MeleeStunTime : IComponentData
+{
+    public float Value;
+}
+
+public struct DoesMeleeStuns : IComponentData
+{
+    public bool Value;
+}
+
 public struct MeleeHits : IBufferElementData
 {
     public Entity Value;
+}
+
+public struct MeleeDashDist : IComponentData
+{
+    public float Value;
 }

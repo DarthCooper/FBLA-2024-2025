@@ -1,10 +1,11 @@
 using Unity.Entities;
 
-public interface Attacks : IComponentData
+public struct Attacks : IComponentData
 {
+    public Entity weapon;
 }
 
-public struct RangedAttack : Attacks
+public struct RangedAttack : IComponentData
 {
     public Entity projectile;
 
@@ -17,11 +18,3 @@ public struct RangedAttack : Attacks
     public float damage;
 }
 
-public struct MeleeAttacks: Attacks
-{
-    public Entity animEntity;
-    public Entity pivotEntity;
-    public float delay;
-    public float maxDelay;
-    public float damage;
-}

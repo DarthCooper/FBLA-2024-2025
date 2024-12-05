@@ -8,6 +8,7 @@ using Unity.Physics;
 using Unity.Mathematics;
 using UnityEngine.Rendering.VirtualTexturing;
 using Unity.Rendering;
+using Unity.Jobs;
 
 partial struct EntityCombatSystem : ISystem
 {
@@ -17,13 +18,16 @@ partial struct EntityCombatSystem : ISystem
         state.RequireForUpdate<EnemyTag>();
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((LocalTransform transform, PhysicsVelocity velocity, PathFollowTarget target, Entity entity) in SystemAPI.Query<LocalTransform, PhysicsVelocity, PathFollowTarget>().WithEntityAccess())
+        foreach((RefRW<LocalTransform> transform, PhysicsVelocity velocity, PathFollowTarget target, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PhysicsVelocity, PathFollowTarget>().WithEntityAccess())
         {
+            if(state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
             bool atTarget = state.EntityManager.HasComponent<AtTarget>(entity) && state.EntityManager.HasComponent<Hunting>(entity);
+            if (target.Value.Equals(Entity.Null)) { continue; }
+            Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+            if(!target.Value.Equals(player)) { continue; }
             if(state.EntityManager.HasComponent<RangedAttack>(entity))
             {
                 RefRW<RangedAttack> attack = SystemAPI.GetComponentRW<RangedAttack>(entity);
@@ -33,13 +37,13 @@ partial struct EntityCombatSystem : ISystem
                     Entity projectile = ecb.Instantiate(attack.ValueRO.projectile);
                     ecb.SetComponent(projectile, new LocalTransform
                     {
-                        Position = transform.Position,
+                        Position = transform.ValueRO.Position,
                         Rotation = Quaternion.identity,
                         Scale = attack.ValueRO.projectileSize,
                     });
                     ecb.AddComponent(projectile, new ProjectileDirection
                     {
-                        Value = state.EntityManager.GetComponentData<LocalToWorld>(target.Value).Position - transform.Position
+                        Value = state.EntityManager.GetComponentData<LocalToWorld>(target.Value).Position - transform.ValueRO.Position
                     });
                     ecb.AddComponent(projectile, new ProjectileSpeed
                     {
@@ -60,8 +64,19 @@ partial struct EntityCombatSystem : ISystem
                     attack.ValueRW.delay -= SystemAPI.Time.DeltaTime;
                 }
             }
-            if(state.EntityManager.HasComponent<MeleeAttacks>(entity))
+            if(state.EntityManager.HasComponent<Attacks>(entity) && state.EntityManager.HasComponent<LocalToWorld>(target.Value))
             {
+                Attacks melee = state.EntityManager.GetComponentData<Attacks>(entity);
+                transform.ValueRW.Rotation = Quaternion.identity;
+                if (melee.weapon.Equals(Entity.Null)) { continue; }
+                ecb.AddComponent<Using>(melee.weapon);
+                ecb.SetComponent(melee.weapon, new MeleeDirection
+                {
+                    Value = state.EntityManager.GetComponentData<LocalToWorld>(target.Value).Position - transform.ValueRO.Position
+                });
+
+
+                /*
                 RefRW<MeleeAttacks> attack = SystemAPI.GetComponentRW<MeleeAttacks>(entity);
                 DynamicBuffer<AnimationEventComponent> animationEvents = state.EntityManager.GetBuffer<AnimationEventComponent>(attack.ValueRO.animEntity);
                 for(int i = 0; i < animationEvents.Length; i++)
@@ -97,6 +112,7 @@ partial struct EntityCombatSystem : ISystem
                 {
                     attack.ValueRW.delay -= SystemAPI.Time.DeltaTime;
                 }
+                */
             }
         }
         ecb.Playback(state.EntityManager);
