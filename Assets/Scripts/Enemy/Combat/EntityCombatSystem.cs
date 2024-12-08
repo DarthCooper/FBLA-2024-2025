@@ -28,6 +28,7 @@ partial struct EntityCombatSystem : ISystem
             if (target.Value.Equals(Entity.Null)) { continue; }
             Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
             if(!target.Value.Equals(player)) { continue; }
+            /*
             if(state.EntityManager.HasComponent<RangedAttack>(entity))
             {
                 RefRW<RangedAttack> attack = SystemAPI.GetComponentRW<RangedAttack>(entity);
@@ -64,6 +65,7 @@ partial struct EntityCombatSystem : ISystem
                     attack.ValueRW.delay -= SystemAPI.Time.DeltaTime;
                 }
             }
+            */
             if(state.EntityManager.HasComponent<Attacks>(entity) && state.EntityManager.HasComponent<LocalToWorld>(target.Value))
             {
                 Attacks melee = state.EntityManager.GetComponentData<Attacks>(entity);
@@ -74,45 +76,17 @@ partial struct EntityCombatSystem : ISystem
                 {
                     Value = state.EntityManager.GetComponentData<LocalToWorld>(target.Value).Position - transform.ValueRO.Position
                 });
-
-
-                /*
-                RefRW<MeleeAttacks> attack = SystemAPI.GetComponentRW<MeleeAttacks>(entity);
-                DynamicBuffer<AnimationEventComponent> animationEvents = state.EntityManager.GetBuffer<AnimationEventComponent>(attack.ValueRO.animEntity);
-                for(int i = 0; i < animationEvents.Length; i++)
-                {
-                    AnimationEventComponent animationEvent = animationEvents[i];
-                    DynamicBuffer<Child> child = state.EntityManager.GetBuffer<Child>(attack.ValueRO.animEntity);
-                    Entity sword = child[0].Value;
-                    ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
-                    if (animationEvent.stringParamHash == 2123999296)
-                    {
-                        meshLookup.SetComponentEnabled(sword, true);
-                    }else if(animationEvent.stringParamHash == 4218191658)
-                    {
-                        meshLookup.SetComponentEnabled(sword, false);
-                    }
-
-                }
-                if (target.Value.Equals(Entity.Null)) { continue; }
-                float3 dir = state.EntityManager.GetComponentData<LocalTransform>(target.Value).Position - transform.Position;
-                RefRW<LocalTransform> pivot = SystemAPI.GetComponentRW<LocalTransform>(attack.ValueRO.pivotEntity);
-                pivot.ValueRW.Rotation = Quaternion.LookRotation(-dir);
-                if (attack.ValueRO.delay <= 0)
-                {
-                    if(!atTarget) { continue; }
-                    DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(attack.ValueRO.animEntity);
-                    var attacking = allParams[0];
-                    attacking.SetTrigger();
-                    allParams[0] = attacking;
-
-                    attack.ValueRW.delay = attack.ValueRO.maxDelay;
-                }
-                else
-                {
-                    attack.ValueRW.delay -= SystemAPI.Time.DeltaTime;
-                }
-                */
+            }
+            if(state.EntityManager.HasComponent<RangedAttacks>(entity) && state.EntityManager.HasComponent<LocalToWorld>(target.Value))
+            {
+                RangedAttacks range = state.EntityManager.GetComponentData<RangedAttacks>(entity);
+                transform.ValueRW.Rotation = Quaternion.identity;
+                if (range.weapon.Equals(Entity.Null)) { continue; }
+                LocalToWorld targetPos = state.EntityManager.GetComponentData<LocalToWorld>(target.Value);
+                float3 dir = targetPos.Position - transform.ValueRO.Position;
+                RefRW<LocalTransform> pistolTransform = SystemAPI.GetComponentRW<LocalTransform>(range.weapon);
+                pistolTransform.ValueRW.Rotation = Quaternion.LookRotation(-dir);
+                ecb.AddComponent<Using>(range.weapon);
             }
         }
         ecb.Playback(state.EntityManager);
