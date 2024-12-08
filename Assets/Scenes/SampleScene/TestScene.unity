@@ -895,7 +895,7 @@ MonoBehaviour:
   FirePoint: {fileID: 123873545}
   scale: 0.5
   damage: 100
-  force: 10
+  force: 5
   delay: 10
   knockback: 80
   knockbackDist: 8
