@@ -134,7 +134,7 @@ partial struct MeleeWeaponSystem : ISystem
             }
             #endregion
             #region StartAttack
-            if (delay.ValueRO.Value <= 0)
+            if (delay.ValueRO.Value >= delay.ValueRO.maxDelay)
             {
                 if(!use) { continue; }
                 ecb.RemoveComponent<Using>(entity);
@@ -145,10 +145,10 @@ partial struct MeleeWeaponSystem : ISystem
                 attacking.SetTrigger();
                 allParams[0] = attacking;
 
-                delay.ValueRW.Value = delay.ValueRO.maxDelay;
+                delay.ValueRW.Value = 0;
             }else
             {
-                delay.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                delay.ValueRW.Value += SystemAPI.Time.DeltaTime;
                 if(use) { ecb.RemoveComponent<Using>(entity); }
             }
             #endregion

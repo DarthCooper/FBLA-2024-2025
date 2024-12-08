@@ -18,7 +18,7 @@ partial struct RangedWeaponsSystem : ISystem
         foreach ((RangedDamage damage, RefRW<RangedDelay> delay, RangedDirection dir, RangedFirepoint firePoint, RangedProjectile projectile, RangedProjectileForce force, RangedProjectileSize scale, Entity entity) in SystemAPI.Query<RangedDamage, RefRW<RangedDelay>, RangedDirection, RangedFirepoint, RangedProjectile, RangedProjectileForce, RangedProjectileSize>().WithEntityAccess())
         {
             bool use = state.EntityManager.HasComponent<Using>(entity);
-            if (delay.ValueRO.Value <= 0 && use)
+            if (delay.ValueRO.Value >= delay.ValueRO.MaxValue && use)
             {
                 CameraManagers.Instance.Impulse(1);
                 Entity spawnedProjectile = ecb.Instantiate(projectile.Value);
@@ -64,10 +64,10 @@ partial struct RangedWeaponsSystem : ISystem
                 });
                 ecb.AddComponent<ProjectileTag>(spawnedProjectile);
                 ecb.RemoveComponent<Using>(entity);
-                delay.ValueRW.Value = delay.ValueRO.MaxValue;
+                delay.ValueRW.Value = 0;
             }else
             {
-                delay.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                delay.ValueRW.Value += SystemAPI.Time.DeltaTime;
                 if(use) { ecb.RemoveComponent<Using>(entity); }
             }
         }

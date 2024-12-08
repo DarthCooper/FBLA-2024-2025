@@ -895,7 +895,7 @@ MonoBehaviour:
   FirePoint: {fileID: 123873545}
   scale: 0.5
   damage: 100
-  force: 5
+  force: 10
   delay: 10
   knockback: 80
   knockbackDist: 8
@@ -5238,6 +5238,10 @@ PrefabInstance:
     - target: {fileID: 6026145934325639046, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: knockbackDist
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226764187303217149, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
+      propertyPath: delay
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6226764187303217149, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: stunTime
