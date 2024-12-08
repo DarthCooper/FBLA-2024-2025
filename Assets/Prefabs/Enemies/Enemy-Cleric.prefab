@@ -415,6 +415,7 @@ MonoBehaviour:
   knockbackDistance: 3
   stunTime: 1
   stuns: 1
+  dashDist: 3
 --- !u!1 &4375354257488600948
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,7 +677,7 @@ MonoBehaviour:
     m_BevelRadius: 0.05
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
-  m_ForceUnique: 0
+  m_ForceUnique: 1
   m_Material:
     m_SupportsTemplate: 1
     m_Template: {fileID: 0}

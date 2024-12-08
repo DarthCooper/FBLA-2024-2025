@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -23,10 +24,46 @@ partial struct PlayerCombatSystem : ISystem
             if (state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
             if (aiming.value)
             {
-                MousePlayerAngle dir = state.EntityManager.GetComponentData<MousePlayerAngle>(entity);
-                if(!dir.Value.Equals(float3.zero))
+                MouseWorldPos mousePos = state.EntityManager.GetComponentData<MouseWorldPos>(entity);
+
+                transform.ValueRW.Rotation = Quaternion.identity;
+                EntityQuery query = state.GetEntityQuery(ComponentType.ReadOnly<EnemyTag>());
+                var entities = query.ToEntityListAsync(Allocator.TempJob, out JobHandle handle);
+                handle.Complete();
+
+                float minDist = 2f;
+                float3 closestPos = float3.zero;
+                Entity closestEntity = Entity.Null;
+                for (int i = 0; i < entities.Length; i++)
                 {
-                    transform.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
+                    Entity enemy = entities[i];
+                    float3 enemyPos = state.EntityManager.GetComponentData<LocalToWorld>(enemy).Position;
+
+                    float dist = Vector3.Distance(mousePos.Value, enemyPos);
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        closestPos = enemyPos;
+                        closestEntity = enemy;
+                    }
+                }
+
+                float3 dir = float3.zero;
+                if(closestEntity.Equals(Entity.Null))
+                {
+                    dir = state.EntityManager.GetComponentData<MousePlayerAngle>(entity).Value;
+                }else
+                {
+                    dir = state.EntityManager.GetComponentData<LocalToWorld>(closestEntity).Position - transform.ValueRO.Position;
+                }
+
+                ecb.SetComponent(entity, new TargetEnemy
+                {
+                    Value = closestEntity
+                });
+                if (!dir.Equals(float3.zero))
+                {
+                    transform.ValueRW.Rotation = Quaternion.LookRotation(-dir);
                 }
 
                 if (fire.Value)
@@ -41,8 +78,9 @@ partial struct PlayerCombatSystem : ISystem
                 var entities = query.ToEntityListAsync(Allocator.TempJob, out JobHandle handle);
                 handle.Complete();
 
-                float minDist = float.MaxValue;
-                float3 closestPos = new float3(0, 0, 0);
+                float minDist = 5f;
+                float3 closestPos = float3.zero;
+                Entity closestEntity = Entity.Null;
                 for (int i = 0; i < entities.Length; i++)
                 {
                     Entity enemy = entities[i];
@@ -53,8 +91,14 @@ partial struct PlayerCombatSystem : ISystem
                     {
                         minDist = dist;
                         closestPos = enemyPos;
+                        closestEntity = enemy;
                     }
                 }
+
+                ecb.SetComponent(entity, new TargetEnemy
+                {
+                    Value = closestEntity,
+                });
 
                 if(fire.Value)
                 {
@@ -69,6 +113,29 @@ partial struct PlayerCombatSystem : ISystem
             }
         }
         ecb.Playback(state.EntityManager);
+    }
+
+    public Entity Raycast(float3 RayFrom, float3 RayTo)
+    {
+        // Set up Entity Query to get PhysicsWorldSingleton
+        // If doing this in SystemBase or ISystem, call GetSingleton<PhysicsWorldSingleton>()/SystemAPI.GetSingleton<PhysicsWorldSingleton>() directly.
+        var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+
+        var raycastInput = new RaycastInput
+        {
+            Start = RayFrom,
+            End = RayTo,
+            Filter = CollisionFilters.filterPlayerTrigger
+        };
+
+        Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
+        Debug.DrawLine(RayFrom, RayTo, Color.red);
+        bool haveHit = collisionWorld.CastRay(raycastInput, out hit);
+        if (haveHit)
+        {
+            return hit.Entity;
+        }
+        return Entity.Null;
     }
 
     [BurstCompile]

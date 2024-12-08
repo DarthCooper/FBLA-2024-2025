@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 129618362253854441}
   - component: {fileID: 3417053296596255926}
   - component: {fileID: 6187796840009840176}
+  - component: {fileID: 6962871799119486878}
   m_Layer: 0
   m_Name: Enemy-Ranged
   m_TagString: Untagged
@@ -175,7 +176,7 @@ MonoBehaviour:
   m_MotionType: 0
   m_Smoothing: 1
   m_Mass: 1
-  m_LinearDamping: 0.01
+  m_LinearDamping: 0.1
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
     x: 0
@@ -260,7 +261,7 @@ MonoBehaviour:
     m_Template: {fileID: 0}
     m_CollisionResponse:
       m_Override: 0
-      m_Value: 1
+      m_Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -466,3 +467,18 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8143647818431228097, guid: 0ccbae925e42dcf4594e11b80c1f04d7, type: 3}
   speed: 10
   delay: 4
+  projectileSize: 0.15
+  damage: 10
+--- !u!114 &6962871799119486878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3806973015836085860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8343f89eb112df846b95a4d0097e5f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 75

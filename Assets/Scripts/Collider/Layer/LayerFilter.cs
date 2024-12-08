@@ -38,7 +38,7 @@ public class CollisionFilters
         filterEnemy = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Enemy),
-            CollidesWith = (uint)(CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
+            CollidesWith = (uint)(CollisionLayer.Interactable | CollisionLayer.Solid | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon | CollisionLayer.PlayerTrigger)
         },
         filterInteractable = new CollisionFilter()
         {

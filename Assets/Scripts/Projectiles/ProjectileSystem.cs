@@ -37,6 +37,8 @@ partial struct ProjectileSystem : ISystem
                     }
                     if (state.EntityManager.HasComponent<PhysicsVelocity>(otherEntity) && state.EntityManager.HasComponent<RangedProjectileKnockback>(entity))
                     {
+                        DoesProjectileStun stuns = state.EntityManager.GetComponentData<DoesProjectileStun>(entity);
+                        ProjectileKnockbackDistance knockbackDist = state.EntityManager.GetComponentData<ProjectileKnockbackDistance>(entity);
                         ecb.AddComponent<ApplyKnockBack>(otherEntity);
                         ecb.AddComponent(otherEntity, new KnockBackDir
                         {
@@ -48,12 +50,16 @@ partial struct ProjectileSystem : ISystem
                         });
                         ecb.AddComponent(otherEntity, new KnockBackMaxDist
                         {
-                            Value = 5f
+                            Value = knockbackDist.Value
                         });
-                        ecb.AddComponent(otherEntity, new Stunned
+                        if (stuns.Value)
                         {
-                            Value = 2f
-                        });
+                            ProjectileStunTime stunTime = state.EntityManager.GetComponentData<ProjectileStunTime>(entity);
+                            ecb.AddComponent(otherEntity, new Stunned
+                            {
+                                Value = stunTime.Value
+                            });
+                        }
                     }
                     ecb.DestroyEntity(entity);
                 }

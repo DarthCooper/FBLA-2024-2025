@@ -31,3 +31,8 @@ public struct MouseWorldPos : IComponentData
 {
     public float3 Value;
 }
+
+public struct TargetEnemy : IComponentData
+{
+    public Entity Value;
+}

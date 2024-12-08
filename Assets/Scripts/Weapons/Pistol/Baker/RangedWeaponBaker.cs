@@ -10,6 +10,9 @@ class RangedWeaponBaker : MonoBehaviour
     public float force;
     public float delay;
     public float knockback;
+    public float knockbackDist;
+    public bool stuns;
+    public float stunTime;
 }
 
 class RangedWeaponBakerBaker : Baker<RangedWeaponBaker>
@@ -47,5 +50,17 @@ class RangedWeaponBakerBaker : Baker<RangedWeaponBaker>
             Value = authoring.knockback
         });
         AddComponent<RangedDirection>(entity);
+        AddComponent(entity, new RangedKnockBackDist
+        {
+            Value = authoring.knockbackDist
+        });
+        AddComponent(entity, new DoesRangedWeaponStun
+        {
+            Value = authoring.stuns
+        });
+        AddComponent(entity, new RangeStunTime
+        {
+            Value = authoring.stunTime
+        });
     }
 }

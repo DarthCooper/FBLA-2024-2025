@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class GridNode : MonoBehaviour
+public class GridNode
 {
     private Grid<GridNode> grid;
     private int x;

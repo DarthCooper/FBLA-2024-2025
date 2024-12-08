@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 7285360824263760938}
   - component: {fileID: 2611424596083111824}
   - component: {fileID: 4323826366749467146}
+  - component: {fileID: 3419995643581340008}
+  - component: {fileID: 1223335490984815354}
   m_Layer: 0
   m_Name: Enemy-Warlock
   m_TagString: Untagged
@@ -174,7 +176,7 @@ MonoBehaviour:
   m_MotionType: 0
   m_Smoothing: 1
   m_Mass: 1
-  m_LinearDamping: 0.01
+  m_LinearDamping: 0.1
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
     x: 0
@@ -259,7 +261,7 @@ MonoBehaviour:
     m_Template: {fileID: 0}
     m_CollisionResponse:
       m_Override: 0
-      m_Value: 1
+      m_Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -442,11 +444,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingTarget: {fileID: 0}
   moveSpeed: 5
-  targetDistance: 7
+  targetDistance: 5
   scouts: 1
   maxScoutDistance: 15
   minScoutDistance: -15
   retreats: 1
-  maxRetreatDistance: 15
-  minRetreatDistance: 10
-  triggerDistance: 8
+  maxRetreatDistance: 4
+  minRetreatDistance: 2
+  triggerDistance: 2
+--- !u!114 &3419995643581340008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327667424098537992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e02819b223d44949b079efebd3c831a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 8143647818431228097, guid: bd02928b28a21af46902cb3a747b7e16, type: 3}
+  speed: 2
+  delay: 5
+  projectileSize: 0.5
+  damage: 30
+--- !u!114 &1223335490984815354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327667424098537992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8343f89eb112df846b95a4d0097e5f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 50

@@ -48,6 +48,18 @@ partial struct MeleeWeaponSystem : ISystem
                         Value = CollisionFilters.filterMeleeWeaponTrigger
                     });
                     meshLookup.SetComponentEnabled(sword, true);
+
+                    MeleeDashDist dashDist = state.EntityManager.GetComponentData<MeleeDashDist>(entity);
+                    if (Mathf.Abs(dir.Value.x) <= dashDist.Value && Mathf.Abs(dir.Value.y) <= dashDist.Value && Mathf.Abs(dir.Value.z) <= dashDist.Value)
+                    {
+                        RefRW<PhysicsVelocity> playerVel = SystemAPI.GetComponentRW<PhysicsVelocity>(parent.Value);
+                        PhysicsMass playerMass = SystemAPI.GetComponent<PhysicsMass>(parent.Value);
+                        playerVel.ValueRW.ApplyLinearImpulse(playerMass, dir.Value * 5);
+                        ecb.AddComponent(parent.Value, new Stunned
+                        {
+                            Value = 0.25f
+                        });
+                    }
                 }
                 else if (animationEvent.stringParamHash == 4218191658)
                 {
@@ -118,18 +130,6 @@ partial struct MeleeWeaponSystem : ISystem
             {
                 if(!use) { continue; }
                 ecb.RemoveComponent<Using>(entity);
-                MeleeDashDist dashDist = state.EntityManager.GetComponentData<MeleeDashDist>(entity);
-                if(Mathf.Abs(dir.Value.x) <= dashDist.Value && Mathf.Abs(dir.Value.y) <= dashDist.Value && Mathf.Abs(dir.Value.z) <= dashDist.Value)
-                {
-                    RefRW<PhysicsVelocity> playerVel = SystemAPI.GetComponentRW<PhysicsVelocity>(parent.Value);
-                    PhysicsMass playerMass = SystemAPI.GetComponent<PhysicsMass>(parent.Value);
-                    playerVel.ValueRW.ApplyLinearImpulse(playerMass, dir.Value * 5);
-                    ecb.AddComponent(parent.Value, new Stunned
-                    {
-                        Value = 0.25f
-                    });
-                }
-
                 RefRW<LocalTransform> pivot = SystemAPI.GetComponentRW<LocalTransform>(anchor.Value);
                 pivot.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
                 DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
@@ -141,6 +141,7 @@ partial struct MeleeWeaponSystem : ISystem
             }else
             {
                 delay.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                if(use) { ecb.RemoveComponent<Using>(entity); }
             }
             #endregion
         }

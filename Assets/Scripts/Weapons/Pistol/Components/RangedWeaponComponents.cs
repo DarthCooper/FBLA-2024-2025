@@ -21,6 +21,21 @@ public struct RangedProjectileKnockback : IComponentData
     public float Value;
 }
 
+public struct RangedKnockBackDist : IComponentData
+{
+    public float Value;
+}
+
+public struct DoesRangedWeaponStun : IComponentData
+{
+    public bool Value;
+}
+
+public struct RangeStunTime : IComponentData
+{
+    public float Value;
+}
+
 public struct RangedProjectile : IComponentData
 {
     public Entity Value;

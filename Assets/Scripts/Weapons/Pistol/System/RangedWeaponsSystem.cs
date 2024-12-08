@@ -40,7 +40,7 @@ partial struct RangedWeaponsSystem : ISystem
                 });
                 ecb.AddComponent(spawnedProjectile, new ProjectileDirection
                 {
-                    Value = state.EntityManager.GetComponentData<MousePlayerAngle>(projectileParent).Value
+                    Value = state.EntityManager.GetComponentData<LocalToWorld>(firePoint.Value).Forward
                 });
                 ecb.AddComponent(spawnedProjectile, new ProjectileParent
                 {
@@ -50,12 +50,25 @@ partial struct RangedWeaponsSystem : ISystem
                 {
                     Value = knockback
                 });
+                ecb.AddComponent(spawnedProjectile, new ProjectileKnockbackDistance
+                {
+                    Value = state.EntityManager.GetComponentData<RangedKnockBackDist>(entity).Value
+                });
+                ecb.AddComponent(spawnedProjectile, new ProjectileStunTime
+                {
+                    Value = state.EntityManager.GetComponentData<RangeStunTime>(entity).Value
+                });
+                ecb.AddComponent(spawnedProjectile, new DoesProjectileStun
+                {
+                    Value = state.EntityManager.GetComponentData<DoesRangedWeaponStun>(entity).Value
+                });
                 ecb.AddComponent<ProjectileTag>(spawnedProjectile);
                 ecb.RemoveComponent<Using>(entity);
                 delay.ValueRW.Value = delay.ValueRO.MaxValue;
             }else
             {
                 delay.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                if(use) { ecb.RemoveComponent<Using>(entity); }
             }
         }
         ecb.Playback(state.EntityManager);

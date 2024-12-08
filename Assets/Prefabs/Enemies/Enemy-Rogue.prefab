@@ -54,6 +54,7 @@ MonoBehaviour:
   knockbackDistance: 0.5
   stunTime: 0.1
   stuns: 1
+  dashDist: 0
 --- !u!1 &1319369234418407438
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8343f89eb112df846b95a4d0097e5f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 25
+  maxHealth: 50
 --- !u!1 &2694199349565995610
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +623,7 @@ MonoBehaviour:
     m_BevelRadius: 0.05
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
-  m_ForceUnique: 0
+  m_ForceUnique: 1
   m_Material:
     m_SupportsTemplate: 1
     m_Template: {fileID: 0}

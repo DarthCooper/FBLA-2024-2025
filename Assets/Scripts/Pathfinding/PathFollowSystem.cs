@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,8 +8,7 @@ using UnityEngine;
 
 partial class PathFollowSystem : SystemBase
 {
-    NativeList<int2> enemyPositions = new NativeList<int2>(Allocator.Persistent);
-
+    public Action<float3, Entity> OnMove;
     protected override void OnUpdate()
     {
         Grid<GridNode> grid = GridSystem.instance.grid;
@@ -42,6 +42,9 @@ partial class PathFollowSystem : SystemBase
                 ecb.SetComponent(entity, new Direction { Value =  moveDir });
                 velocity.Linear = moveDir * moveSpeed;
 
+                LocalToWorld worldTransform = EntityManager.GetComponentData<LocalToWorld>(entity);
+                OnMove?.Invoke(worldTransform.Position, entity);
+
                 #if UNITY_EDITOR
                 for (int i = pathPositionBuffer.Length - 1; i > 0; i--)
                 {
@@ -60,17 +63,5 @@ partial class PathFollowSystem : SystemBase
         }).Run();
 
         ecb.Playback(EntityManager);
-    }
-
-    private static void ValidateGridPosition(ref int x, ref int y, int width, int height)
-    {
-        x = math.clamp(x, 0, width - 1);
-        y = math.clamp(y, 0, height - 1);
-    }
-
-    private static void GetXY(float3 worldPosition, float3 originPosition, float cellSize, out int x, out int y)
-    {
-        x = (int)math.floor((worldPosition - originPosition).x / cellSize);
-        y = (int)math.floor((worldPosition - originPosition).y / cellSize);
     }
 }

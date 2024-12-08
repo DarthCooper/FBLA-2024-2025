@@ -22,3 +22,18 @@ public struct ProjectileDamage : IComponentData
 {
     public float Damage;
 }
+
+public struct ProjectileKnockbackDistance : IComponentData
+{
+    public float Value;
+}
+
+public struct DoesProjectileStun : IComponentData
+{
+    public bool Value;
+}
+
+public struct ProjectileStunTime : IComponentData
+{
+    public float Value;
+}

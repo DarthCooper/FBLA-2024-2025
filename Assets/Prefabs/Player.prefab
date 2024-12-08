@@ -238,7 +238,7 @@ MonoBehaviour:
     m_BevelRadius: 0.05
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
-  m_ForceUnique: 0
+  m_ForceUnique: 1
   m_Material:
     m_SupportsTemplate: 1
     m_Template: {fileID: 0}
@@ -494,11 +494,12 @@ MonoBehaviour:
   speed: 1
   anchor: {fileID: 6265678260477319867}
   animHolder: {fileID: 3080168468477002035}
-  delay: 0.25
+  delay: 0.1
   knockback: 20
   knockbackDistance: 2
   stunTime: 3
   stuns: 1
+  dashDist: 5
 --- !u!1 &7855714608949253007
 GameObject:
   m_ObjectHideFlags: 0
