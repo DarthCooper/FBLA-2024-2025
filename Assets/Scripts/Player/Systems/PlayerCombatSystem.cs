@@ -63,7 +63,13 @@ partial struct PlayerCombatSystem : ISystem
                 });
                 if (!dir.Equals(float3.zero))
                 {
-                    transform.ValueRW.Rotation = Quaternion.LookRotation(-dir);
+                    transform.ValueRW.Rotation = new Quaternion
+                    {
+                        x = 0,
+                        y = Quaternion.LookRotation(-dir).y,
+                        z = 0,
+                        w = Quaternion.LookRotation(-dir).w
+                    };
                 }
 
                 if (fire.Value)

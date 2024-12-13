@@ -26,6 +26,9 @@ public class WorldSpaceUIController : MonoBehaviour
         entityUISystem.OnMove += MoveHealthIcon;
         entityUISystem.OnTakeDamage += UpdateHealthIcon;
         entityUISystem.OnDeath += DestroyHealthIcon;
+        entityUISystem.OnUseWeapon += ToggleAttackIcon;
+        entityUISystem.OnAttackDealy += FillAttackIcon;
+        entityUISystem.OnStun += ToggleStunVisual;
 
         PlayerUISystem playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerUISystem>();
         playerUISystem.toggledEnemy += ToggleTargetIdentifier;
@@ -39,6 +42,9 @@ public class WorldSpaceUIController : MonoBehaviour
         entityUISystem.OnMove -= MoveHealthIcon;
         entityUISystem.OnTakeDamage -= UpdateHealthIcon;
         entityUISystem.OnDeath -= DestroyHealthIcon;
+        entityUISystem.OnUseWeapon -= ToggleAttackIcon;
+        entityUISystem.OnAttackDealy -= FillAttackIcon;
+        entityUISystem.OnStun -= ToggleStunVisual;
 
         PlayerUISystem playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerUISystem>();
         playerUISystem.toggledEnemy -= ToggleTargetIdentifier;
@@ -79,6 +85,20 @@ public class WorldSpaceUIController : MonoBehaviour
         Destroy(identifiers[entity]);
     }
 
+    private void ToggleAttackIcon(bool toggle, Entity entity)
+    {
+        if (!identifiers.ContainsKey(entity)) { return; }
+        if (identifiers[entity] == null) { return; }
+        identifiers[entity].GetComponent<EntityAttackUI>().canvas.SetActive(toggle);
+    }
+
+    public void FillAttackIcon(float delay, float maxDelay, Entity entity)
+    {
+        if (!identifiers.ContainsKey(entity)) { return; }
+        if (identifiers[entity] == null) { return; }
+        identifiers[entity].GetComponent<EntityAttackUI>().visual.fillAmount = delay / maxDelay;
+    }
+
     private void ToggleTargetIdentifier(bool toggle, Entity entity)
     {
         if (!identifiers.ContainsKey(entity)) { return; }
@@ -98,5 +118,12 @@ public class WorldSpaceUIController : MonoBehaviour
             if (identifier == null) { continue; }
             identifier.GetComponent<EntityHealthUI>().identifiers.gameObject.SetActive(false);
         }
+    }
+
+    private void ToggleStunVisual(bool toggle, Entity entity)
+    {
+        if (!identifiers.ContainsKey(entity)) { return; }
+        if (identifiers[entity] == null) { return; }
+        identifiers[entity].GetComponent<EntityAttackUI>().stunCanvas.SetActive(toggle);
     }
 }

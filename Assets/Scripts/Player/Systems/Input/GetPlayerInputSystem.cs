@@ -47,7 +47,7 @@ partial class GetPlayerInputSystem : SystemBase
             Value = curJumpInput
         });
 
-        var curFireInput = playerActions.Player.Attack.WasPressedThisFrame();
+        var curFireInput = playerActions.Player.Attack.IsPressed();
         var curAimInput = playerActions.Player.Aim.IsPressed();
 
         SystemAPI.SetSingleton(new PlayerFire

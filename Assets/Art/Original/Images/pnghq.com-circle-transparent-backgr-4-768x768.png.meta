@@ -145,7 +145,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      pnghq.com-circle-transparent-backgr-4-768x768_0: 4258826709583036488
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

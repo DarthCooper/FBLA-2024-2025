@@ -30,6 +30,14 @@ partial struct ProjectileSystem : ISystem
                 // exclude other triggers and processed events
                 if (colliderEvent.State == StatefulEventState.Enter)
                 {
+                    if (state.EntityManager.HasComponent<EnemyTag>(parent.Value))
+                    {
+                        if (state.EntityManager.HasComponent<EnemyTag>(otherEntity)) { continue; }
+                    }
+                    if (state.EntityManager.HasComponent<PlayerTag>(parent.Value))
+                    {
+                        if (state.EntityManager.HasComponent<PlayerTag>(otherEntity)) { continue; }
+                    }
                     if (state.EntityManager.HasComponent<Health>(otherEntity))
                     {
                         RefRW<Health> health = SystemAPI.GetComponentRW<Health>(otherEntity);

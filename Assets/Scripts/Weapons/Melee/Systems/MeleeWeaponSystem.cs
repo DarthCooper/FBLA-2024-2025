@@ -63,6 +63,11 @@ partial struct MeleeWeaponSystem : ISystem
                 }
                 else if (animationEvent.stringParamHash == 4218191658)
                 {
+                    ecb.RemoveComponent<Using>(entity);
+                    DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
+                    var attacking = allParams[0];
+                    attacking.BoolValue = false;
+                    allParams[0] = attacking;
                     ecb.SetComponent(anim.Value, new LayerFilterData
                     {
                         Value = CollisionFilters.filterNone
@@ -134,22 +139,22 @@ partial struct MeleeWeaponSystem : ISystem
             }
             #endregion
             #region StartAttack
-            if (delay.ValueRO.Value >= delay.ValueRO.maxDelay)
+            if (delay.ValueRO.Value >= delay.ValueRO.maxDelay && use)
             {
-                if(!use) { continue; }
-                ecb.RemoveComponent<Using>(entity);
                 RefRW<LocalTransform> pivot = SystemAPI.GetComponentRW<LocalTransform>(anchor.Value);
                 pivot.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
                 DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
                 var attacking = allParams[0];
-                attacking.SetTrigger();
+                attacking.BoolValue = true;
                 allParams[0] = attacking;
 
                 delay.ValueRW.Value = 0;
+
+                ecb.RemoveComponent<WeaponAttacking>(entity);
             }else
             {
                 delay.ValueRW.Value += SystemAPI.Time.DeltaTime;
-                if(use) { ecb.RemoveComponent<Using>(entity); }
+                ecb.RemoveComponent<Using>(entity); 
             }
             #endregion
         }

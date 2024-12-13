@@ -145,7 +145,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      circle-ring-pngrepo-com_0: 4446170848560511101
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

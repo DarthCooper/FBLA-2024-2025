@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using UnityEngine.Rendering.VirtualTexturing;
 using Unity.Rendering;
 using Unity.Jobs;
+using System;
 
 partial struct EntityCombatSystem : ISystem
 {
@@ -24,53 +25,17 @@ partial struct EntityCombatSystem : ISystem
         foreach((RefRW<LocalTransform> transform, PhysicsVelocity velocity, PathFollowTarget target, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PhysicsVelocity, PathFollowTarget>().WithEntityAccess())
         {
             if(state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
-            bool atTarget = state.EntityManager.HasComponent<AtTarget>(entity) && state.EntityManager.HasComponent<Hunting>(entity);
+            bool atTarget = state.EntityManager.HasComponent<AtTarget>(entity);
+            if(!atTarget) { continue; }
             if (target.Value.Equals(Entity.Null)) { continue; }
             Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
             if(!target.Value.Equals(player)) { continue; }
-            /*
-            if(state.EntityManager.HasComponent<RangedAttack>(entity))
-            {
-                RefRW<RangedAttack> attack = SystemAPI.GetComponentRW<RangedAttack>(entity);
-                if(attack.ValueRO.delay <= 0)
-                {
-                    if (!atTarget) { continue; }
-                    Entity projectile = ecb.Instantiate(attack.ValueRO.projectile);
-                    ecb.SetComponent(projectile, new LocalTransform
-                    {
-                        Position = transform.ValueRO.Position,
-                        Rotation = Quaternion.identity,
-                        Scale = attack.ValueRO.projectileSize,
-                    });
-                    ecb.AddComponent(projectile, new ProjectileDirection
-                    {
-                        Value = state.EntityManager.GetComponentData<LocalToWorld>(target.Value).Position - transform.ValueRO.Position
-                    });
-                    ecb.AddComponent(projectile, new ProjectileSpeed
-                    {
-                        Speed = attack.ValueRO.speed,
-                    });
-                    ecb.AddComponent(projectile, new ProjectileDamage
-                    {
-                        Damage = attack.ValueRO.damage,
-                    });
-                    ecb.AddComponent(projectile, new ProjectileParent
-                    {
-                        Value = entity
-                    });
-                    ecb.AddComponent<ProjectileTag>(projectile);
-                    attack.ValueRW.delay = attack.ValueRO.maxDelay;
-                }else
-                {
-                    attack.ValueRW.delay -= SystemAPI.Time.DeltaTime;
-                }
-            }
-            */
             if(state.EntityManager.HasComponent<Attacks>(entity) && state.EntityManager.HasComponent<LocalToWorld>(target.Value))
             {
                 Attacks melee = state.EntityManager.GetComponentData<Attacks>(entity);
                 transform.ValueRW.Rotation = Quaternion.identity;
                 if (melee.weapon.Equals(Entity.Null)) { continue; }
+
                 ecb.AddComponent<Using>(melee.weapon);
                 ecb.SetComponent(melee.weapon, new MeleeDirection
                 {
