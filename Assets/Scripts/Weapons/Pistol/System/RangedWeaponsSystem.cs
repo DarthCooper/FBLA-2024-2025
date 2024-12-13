@@ -24,6 +24,7 @@ partial struct RangedWeaponsSystem : ISystem
                 Entity spawnedProjectile = ecb.Instantiate(projectile.Value);
                 Entity projectileParent = state.EntityManager.GetComponentData<Parent>(entity).Value;
                 float knockback = state.EntityManager.GetComponentData<RangedProjectileKnockback>(entity).Value;
+                ecb.AddComponent(firePoint.Value, new SpawnMuzzleFlash());
                 ecb.SetComponent(spawnedProjectile, new LocalTransform
                 {
                     Position = state.EntityManager.GetComponentData<LocalToWorld>(firePoint.Value).Position,

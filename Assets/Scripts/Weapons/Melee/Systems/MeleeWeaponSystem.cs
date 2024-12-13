@@ -63,17 +63,16 @@ partial struct MeleeWeaponSystem : ISystem
                 }
                 else if (animationEvent.stringParamHash == 4218191658)
                 {
-                    ecb.RemoveComponent<Using>(entity);
-                    DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
-                    var attacking = allParams[0];
-                    attacking.BoolValue = false;
-                    allParams[0] = attacking;
                     ecb.SetComponent(anim.Value, new LayerFilterData
                     {
                         Value = CollisionFilters.filterNone
                     });
                     meshLookup.SetComponentEnabled(sword, false);
                     hits.Clear();
+                    DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
+                    var attacking = allParams[0];
+                    attacking.value.boolValue = false;
+                    allParams[0] = attacking;
                 }
             }
             #endregion
@@ -145,16 +144,16 @@ partial struct MeleeWeaponSystem : ISystem
                 pivot.ValueRW.Rotation = Quaternion.LookRotation(-dir.Value);
                 DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);
                 var attacking = allParams[0];
-                attacking.BoolValue = true;
+                attacking.value.boolValue = true;
                 allParams[0] = attacking;
 
                 delay.ValueRW.Value = 0;
+                ecb.RemoveComponent<Using>(entity);
 
-                ecb.RemoveComponent<WeaponAttacking>(entity);
             }else
             {
                 delay.ValueRW.Value += SystemAPI.Time.DeltaTime;
-                ecb.RemoveComponent<Using>(entity); 
+                ecb.RemoveComponent<Using>(entity);
             }
             #endregion
         }

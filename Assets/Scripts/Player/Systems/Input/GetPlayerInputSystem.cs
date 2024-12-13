@@ -32,7 +32,7 @@ partial class GetPlayerInputSystem : SystemBase
     {
         var curMoveInput = playerActions.Player.Move.ReadValue<Vector2>();
         var curSprintInput = playerActions.Player.Sprint.IsPressed();
-        var curJumpInput = playerActions.Player.Jump.WasPressedThisFrame();
+        var curJumpInput = playerActions.Player.Jump.IsPressed();
 
         SystemAPI.SetSingleton(new PlayerMoveInput
         {

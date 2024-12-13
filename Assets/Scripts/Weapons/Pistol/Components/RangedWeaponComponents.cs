@@ -61,3 +61,5 @@ public struct RangedDelay : IComponentData
     public float Value;
     public float MaxValue;
 }
+
+public struct SpawnMuzzleFlash : IComponentData { }

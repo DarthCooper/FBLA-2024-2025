@@ -42,7 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -1946,6 +1947,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!114 &861647719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5229,7 +5231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6026145934325639046, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: stunTime
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6026145934325639046, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: knockback
@@ -5245,7 +5247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6226764187303217149, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: stunTime
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9185191735185370972, guid: a5668984304d1b545a4b9728be82e9e5, type: 3}
       propertyPath: m_Name
