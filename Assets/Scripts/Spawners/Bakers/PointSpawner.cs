@@ -21,6 +21,7 @@ public class DelaySpawnerData
 {
     public float3 pos;
     public float delay;
+    public float spawnRadius;
     public Enemies[] enemyTypes;
     public int amountPerSpawn;
 }
@@ -44,6 +45,7 @@ class PointSpawnerBaker : Baker<PointSpawner>
             data.amountPerSpawn = authoring.spawns[i].amountPerSpawn;
             data.maxDelay = authoring.spawns[i].delay;
             data.delay = authoring.spawns[i].delay;
+            data.radius = authoring.spawns[i].spawnRadius;
 
             var enemyTypes = builder.Allocate(ref data.enemies, authoring.spawns[i].enemyTypes.Length);
             for(int j = 0; j < enemyTypes.Length; j++)

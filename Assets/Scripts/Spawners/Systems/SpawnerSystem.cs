@@ -47,46 +47,54 @@ partial class SpawnerSystem : SystemBase
                     continue;
                 }
 
-                float3 pos = data.pos;
-                ref BlobArray<Enemies> enemies = ref data.enemies;
-
-                if (enemies.Length > 0)
+                for(int j = 0; j < data.amountPerSpawn; j++)
                 {
-                    Enemies enemyType = enemies[data.random.NextInt(0, enemies.Length - 1)];
-                    data.random = Unity.Mathematics.Random.CreateFromIndex((uint)i + 5);
-                    Entity enemy = Entity.Null;
-                    switch(enemyType)
+                    float3 pos = data.pos + new float3
                     {
-                        case Enemies.BARBARIAN:
-                            enemy = enemyTypes.Barbarian;
-                            break;
-                        case Enemies.FIGHTER:
-                            enemy = enemyTypes.Fighter;
-                            break;
-                        case Enemies.RANGER:
-                            enemy = enemyTypes.Ranger;
-                            break;
-                        case Enemies.ROGUE:
-                            enemy = enemyTypes.Rogue;
-                            break;
-                        case Enemies.WARLOCK:
-                            enemy = enemyTypes.Warlock;
-                            break;
-                        default:
-                            enemy = enemyTypes.Fighter;
-                            break;
+                        x = data.random.NextFloat(-data.radius, data.radius), 
+                        y = 0,
+                        z = data.random.NextFloat(-data.radius, data.radius)
+                    };
+                    ref BlobArray<Enemies> enemies = ref data.enemies;
+
+                    if (enemies.Length > 0)
+                    {
+                        Enemies enemyType = enemies[data.random.NextInt(0, enemies.Length)];
+                        data.random = Unity.Mathematics.Random.CreateFromIndex((uint)i + (uint)data.random.NextInt(0, 100));
+                        Entity enemy = Entity.Null;
+                        switch(enemyType)
+                        {
+                            case Enemies.BARBARIAN:
+                                enemy = enemyTypes.Barbarian;
+                                break;
+                            case Enemies.FIGHTER:
+                                enemy = enemyTypes.Fighter;
+                                break;
+                            case Enemies.RANGER:
+                                enemy = enemyTypes.Ranger;
+                                break;
+                            case Enemies.ROGUE:
+                                enemy = enemyTypes.Rogue;
+                                break;
+                            case Enemies.WARLOCK:
+                                enemy = enemyTypes.Warlock;
+                                break;
+                            default:
+                                enemy = enemyTypes.Fighter;
+                                break;
+                        }
+                        ecb.Instantiate(entityInQueryIndex, enemy);
+                        ecb.SetComponent(entityInQueryIndex, enemy, new LocalTransform
+                        {
+                            Position = pos,
+                            Rotation = Quaternion.identity,
+                            Scale = 1
+                        });
+                        ecb.SetComponent(entityInQueryIndex, enemy, new PathFollowTarget
+                        {
+                            Value = player
+                        });
                     }
-                    ecb.Instantiate(entityInQueryIndex, enemy);
-                    ecb.SetComponent(entityInQueryIndex, enemy, new LocalTransform
-                    {
-                        Position = pos,
-                        Rotation = Quaternion.identity,
-                        Scale = 1
-                    });
-                    ecb.SetComponent(entityInQueryIndex, enemy, new PathFollowTarget
-                    {
-                        Value = player
-                    });
                 }
                 data.delay = data.maxDelay;
             }

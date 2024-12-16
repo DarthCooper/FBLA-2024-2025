@@ -859,7 +859,7 @@ Transform:
   m_GameObject: {fileID: 511225490}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.32, y: 0.51, z: 15.38}
+  m_LocalPosition: {x: 28.66, y: 0.51, z: 13.08}
   m_LocalScale: {x: 2.8483608, y: 2.8483608, z: 2.8483608}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3343,6 +3343,7 @@ MonoBehaviour:
       y: 0.8
       z: 40
     delay: 20
+    spawnRadius: 3
     enemyTypes: 0000000001000000020000000300000004000000
     amountPerSpawn: 2
   - pos:
@@ -3350,6 +3351,7 @@ MonoBehaviour:
       y: 0.8
       z: 0
     delay: 20
+    spawnRadius: 3
     enemyTypes: 0000000001000000020000000300000004000000
     amountPerSpawn: 2
   - pos:
@@ -3357,6 +3359,7 @@ MonoBehaviour:
       y: 0.8
       z: 40
     delay: 20
+    spawnRadius: 3
     enemyTypes: 0000000001000000020000000300000004000000
     amountPerSpawn: 2
   - pos:
@@ -3364,8 +3367,9 @@ MonoBehaviour:
       y: 0.8
       z: 20
     delay: 20
+    spawnRadius: 5
     enemyTypes: 0000000001000000020000000300000004000000
-    amountPerSpawn: 2
+    amountPerSpawn: 4
   Ranger: {fileID: 3806973015836085860, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
   Fighter: {fileID: 700070333288536856, guid: 98f04d642a34ec94bb990664863eca53, type: 3}
   Barbarian: {fileID: 294412749124413294, guid: db5b02703464f6a4e8b018af9f2ca2eb, type: 3}

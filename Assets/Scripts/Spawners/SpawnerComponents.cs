@@ -19,6 +19,7 @@ public struct SpawnerData
     public float delay;
     public float maxDelay;
     public int amountPerSpawn;
+    public float radius;
 
     public BlobArray<Enemies> enemies;
 
