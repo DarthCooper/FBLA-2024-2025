@@ -23,7 +23,7 @@ partial class PathFollowerSystem : SystemBase
         ecb = new EntityCommandBuffer(Allocator.TempJob);
         foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithEntityAccess())
         {
-            if(target.Value.Equals(Entity.Null)) { CheckScouting(entity, transform, target); continue; }
+            if(target.Value.Equals(Entity.Null)) { ecb.SetComponent(entity, new PathFollowTarget { Value = SystemAPI.GetSingletonEntity<PlayerTag>() }); continue; }
             if(!following.ValueRO.Value) { following.ValueRW.Value = true; }
             if(!EntityManager.HasComponent<PathStartedTag>(entity))
             {

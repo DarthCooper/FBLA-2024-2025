@@ -2,6 +2,7 @@ using Rukhanka;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Extensions;
 using Unity.Physics.Stateful;
@@ -54,7 +55,7 @@ partial struct MeleeWeaponSystem : ISystem
                     {
                         RefRW<PhysicsVelocity> playerVel = SystemAPI.GetComponentRW<PhysicsVelocity>(parent.Value);
                         PhysicsMass playerMass = SystemAPI.GetComponent<PhysicsMass>(parent.Value);
-                        playerVel.ValueRW.ApplyLinearImpulse(playerMass, dir.Value * 5);
+                        playerVel.ValueRW.ApplyLinearImpulse(playerMass, new float3(dir.Value.x * Mathf.Abs(dir.Value.x), dir.Value.y * Mathf.Abs(dir.Value.y), dir.Value.z * Mathf.Abs(dir.Value.z)));
                         ecb.AddComponent(parent.Value, new Stunned
                         {
                             Value = 0.25f

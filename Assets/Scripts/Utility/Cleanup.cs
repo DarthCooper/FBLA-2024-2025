@@ -45,21 +45,26 @@ partial class Cleanup : SystemBase
             }
         }).ScheduleParallel();
 
-        Entities.WithAll<DestroyEntity>().ForEach((Entity entity, int entityInQueryIndex) =>
+        Entities.WithAll<DestroyEntity>().WithoutBurst().ForEach((Entity entity, int entityInQueryIndex) =>
         {
-            ecb.SetEnabled(entityInQueryIndex, entity, false);
-            if(SystemAPI.HasBuffer<Child>(entity))
-            {
-                DynamicBuffer<Child> children = SystemAPI.GetBuffer<Child>(entity);
-                foreach (var child in children)
-                {
-                    ecb.AddComponent<DestroyEntity>(entityInQueryIndex, child.Value);
-                }
-            }
-
-        }).Schedule();
+            DestroyEntity(entity, ecb, entityInQueryIndex);
+            ecb.DestroyEntity(entityInQueryIndex, entity);
+        }).Run();
 
         _frameCounter = 1;
+    }
+
+    public void DestroyEntity(Entity entity, EntityCommandBuffer.ParallelWriter ecb, int entityInQueryIndex)
+    {
+        if(SystemAPI.HasBuffer<Child> (entity))
+        {
+            DynamicBuffer<Child> children = SystemAPI.GetBuffer<Child>(entity);
+            foreach (var child in children)
+            {
+                DestroyEntity(child.Value, ecb, entityInQueryIndex);
+            }
+        }
+        ecb.DestroyEntity(entityInQueryIndex, entity);
     }
 
     [BurstCompile]

@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 partial struct RangedWeaponsSystem : ISystem
 {

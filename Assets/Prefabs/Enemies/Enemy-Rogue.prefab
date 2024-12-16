@@ -54,7 +54,7 @@ MonoBehaviour:
   knockbackDistance: 0.5
   stunTime: 0.1
   stuns: 1
-  dashDist: 0
+  dashDist: 5
 --- !u!1 &1319369234418407438
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,14 +162,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShapeType: 0
+  m_ShapeType: 3
   m_PrimitiveCenter:
     x: 0
     y: 0
     z: 0
   m_PrimitiveSize:
     x: 0.65
-    y: 0.16
+    y: 0.65
     z: 1.14
   m_PrimitiveOrientation:
     Value:
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingTarget: {fileID: 0}
   moveSpeed: 9
-  targetDistance: 1
+  targetDistance: 3
   scouts: 1
   maxScoutDistance: -25
   minScoutDistance: 25
