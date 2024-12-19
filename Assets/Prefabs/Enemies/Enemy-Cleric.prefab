@@ -328,13 +328,14 @@ MonoBehaviour:
   startingTarget: {fileID: 0}
   moveSpeed: 4
   targetDistance: 2
-  scouts: 1
+  scouts: 0
   maxScoutDistance: 15
   minScoutDistance: -15
   retreats: 0
   maxRetreatDistance: 15
   minRetreatDistance: 10
   triggerDistance: 8
+  perpetualTarget: {fileID: 0}
 --- !u!114 &7965665366941389908
 MonoBehaviour:
   m_ObjectHideFlags: 0

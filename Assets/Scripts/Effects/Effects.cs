@@ -14,12 +14,18 @@ public class Effects : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public Transform muzzleFlashParent;
 
+    Dictionary<Entity, GameObject> magicIdentifiers = new Dictionary<Entity, GameObject>();
+    public GameObject healParticles;
+    public GameObject leachParticles;
+
     // Update is called once per frame
     void OnEnable()
     {
         ProjectileEffects playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<ProjectileEffects>();
         playerUISystem.OnBulletMove += MoveBulletTrail;
         playerUISystem.OnSpawnBullet += SpawnMuzzleFlash;
+        MagicEffects magicEffectSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<MagicEffects>();
+        magicEffectSystem.OnCast += MoveCastSpell;
     }
 
     private void OnDisable()
@@ -28,6 +34,8 @@ public class Effects : MonoBehaviour
         ProjectileEffects playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<ProjectileEffects>();
         playerUISystem.OnBulletMove -= MoveBulletTrail;
         playerUISystem.OnSpawnBullet -= SpawnMuzzleFlash;
+        MagicEffects magicEffectSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<MagicEffects>();
+        magicEffectSystem.OnCast -= MoveCastSpell;
     }
 
     private void MoveBulletTrail(float3 pos, Entity entity)
@@ -49,5 +57,30 @@ public class Effects : MonoBehaviour
     {
         var newTrail = Instantiate(muzzleFlash, pos, rot, muzzleFlashParent);
         newTrail.transform.position = pos;
+    }
+
+    private void MoveCastSpell(float3 pos, CastingType castType, Entity entity)
+    {
+        GameObject prefab = null;
+        switch(castType)
+        {
+            case CastingType.HEALING:
+                prefab = healParticles;
+                break;
+            case CastingType.LEACHING:
+                prefab = leachParticles;
+                break;
+        }
+        if (magicIdentifiers.ContainsKey(entity))
+        {
+            if (magicIdentifiers[entity] == null) { magicIdentifiers.Remove(entity); MoveCastSpell(pos, castType, entity); }
+            magicIdentifiers[entity].transform.position = pos;
+        }
+        else
+        {
+            var newSpell = Instantiate(prefab, bulletTrailParent);
+            newSpell.transform.position = pos;
+            magicIdentifiers.Add(entity, newSpell);
+        }
     }
 }

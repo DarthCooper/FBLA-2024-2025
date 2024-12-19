@@ -58,10 +58,14 @@ public struct PathFollowerScoutingDistances : IComponentData
     public float Min;
 }
 
-public struct AtTarget : IComponentData { }
+public struct PerpetualTarget : IComponentData
+{
+    public Entity Value;
+}
 
+public struct AtTarget : IComponentData { }
 public struct Retreating : IComponentData { }
 public struct Attacking : IComponentData { }
 public struct Hunting : IComponentData { }
 public struct Scouting : IComponentData { }
-
+public struct Following : IComponentData { }

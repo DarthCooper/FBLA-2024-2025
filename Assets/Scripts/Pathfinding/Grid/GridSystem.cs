@@ -28,7 +28,6 @@ partial class GridSystem : SystemBase
             CheckStaticObstacles();
         }
         CheckTakenCells();
-
         CheckMovingObstacles();
         /*
         # if UNITY_EDITOR

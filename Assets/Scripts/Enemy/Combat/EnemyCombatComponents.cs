@@ -10,5 +10,10 @@ public struct RangedAttacks : IComponentData
     public Entity weapon;
 }
 
+public struct TargetAttacks : IComponentData
+{
+    public Entity weapon;
+}
+
 public struct WeaponAttacking : IComponentData { }
 

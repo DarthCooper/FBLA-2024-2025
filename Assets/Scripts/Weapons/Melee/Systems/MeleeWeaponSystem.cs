@@ -88,9 +88,10 @@ partial struct MeleeWeaponSystem : ISystem
                 {
                     if (state.EntityManager.HasComponent<EnemyTag>(otherEntity)) { continue; }
                 }
-                if (state.EntityManager.HasComponent<PlayerTag>(parent.Value))
+                if (state.EntityManager.HasComponent<PlayerTag>(parent.Value) || state.EntityManager.HasComponent<NPCTag>(parent.Value))
                 {
                     if (state.EntityManager.HasComponent<PlayerTag>(otherEntity)) { continue; }
+                    if (state.EntityManager.HasComponent<NPCTag>(otherEntity)) { continue; }
                 }
                 bool alreadyHit = false;
                 foreach(MeleeHits hit in hits)

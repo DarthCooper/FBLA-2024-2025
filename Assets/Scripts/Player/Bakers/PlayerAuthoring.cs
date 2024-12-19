@@ -59,5 +59,6 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         AddComponent<MousePlayerAngle>(playerEntity);
         AddComponent<MouseWorldPos>(playerEntity);
         AddComponent<TargetEnemy>(playerEntity);
+        AddComponent<Ally>(playerEntity);
     }
 }

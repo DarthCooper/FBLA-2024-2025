@@ -12,14 +12,6 @@ public class WorldSpaceUIController : MonoBehaviour
 
     private Entity lastPlayerTarget = Entity.Null;
 
-    private Transform mainCameraTransform;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        mainCameraTransform = Camera.main.transform;
-    }
-
     private void OnEnable()
     {
         EnemyUIManager entityUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<EnemyUIManager>();

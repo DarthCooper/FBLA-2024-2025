@@ -19,7 +19,8 @@ class PathfollowerAuthoring : MonoBehaviour
     public float minRetreatDistance;
     public float triggerDistance;
 
-
+    [Header("Perpetual Stats")]
+    public GameObject perpetualTarget;
 }
 
 class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
@@ -79,6 +80,13 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
             {
                 Max = authoring.maxScoutDistance,
                 Min = authoring.minScoutDistance
+            });
+        }
+        if(authoring.perpetualTarget)
+        {
+            AddComponent(entity, new PerpetualTarget
+            {
+                Value = GetEntity(authoring.perpetualTarget, TransformUsageFlags.Dynamic)
             });
         }
     }

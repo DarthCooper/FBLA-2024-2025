@@ -34,9 +34,10 @@ partial struct ProjectileSystem : ISystem
                     {
                         if (state.EntityManager.HasComponent<EnemyTag>(otherEntity)) { continue; }
                     }
-                    if (state.EntityManager.HasComponent<PlayerTag>(parent.Value))
+                    if (state.EntityManager.HasComponent<PlayerTag>(parent.Value) || state.EntityManager.HasComponent<NPCTag>(parent.Value))
                     {
                         if (state.EntityManager.HasComponent<PlayerTag>(otherEntity)) { continue; }
+                        if (state.EntityManager.HasComponent<NPCTag>(otherEntity)) { continue; }
                     }
                     if (state.EntityManager.HasComponent<Health>(otherEntity))
                     {

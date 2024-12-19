@@ -1,10 +1,12 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 partial class PathFollowerSystem : SystemBase
 {
@@ -21,9 +23,14 @@ partial class PathFollowerSystem : SystemBase
     protected override void OnUpdate()
     {
         ecb = new EntityCommandBuffer(Allocator.TempJob);
-        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithEntityAccess())
+        #region EnemyFollowing
+        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithAll<EnemyTag>().WithEntityAccess())
         {
-            if(target.Value.Equals(Entity.Null)) { ecb.SetComponent(entity, new PathFollowTarget { Value = SystemAPI.GetSingletonEntity<PlayerTag>() }); continue; }
+            if(target.Value.Equals(Entity.Null)) 
+            {
+                ecb.SetComponent(entity, new PathFollowTarget { Value = SystemAPI.GetSingletonEntity<PlayerTag>() }); 
+                continue; 
+            }
             if(!following.ValueRO.Value) { following.ValueRW.Value = true; }
             if(!EntityManager.HasComponent<PathStartedTag>(entity))
             {
@@ -59,6 +66,84 @@ partial class PathFollowerSystem : SystemBase
                 ecb.RemoveComponent<AtTarget>(entity);
             }
         }
+        #endregion
+        #region NPCFollowing
+        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithAll<NPCTag>().WithEntityAccess())
+        {
+            Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+            if (entity.Equals(Entity.Null)) { continue; }
+            if ((target.Value.Equals(Entity.Null) || !SystemAPI.Exists(target.Value)) && !EntityManager.HasComponent<PerpetualTarget>(entity)) {
+                (Entity possibleTarget, float3 posTargetDist) = GetClosest<EnemyTag>(transform.Position);
+                if (possibleTarget.Equals(Entity.Null)) { ecb.SetComponent(entity, new PathFollowTarget { Value = player }); ecb.AddComponent<Following>(entity); continue; }
+                ecb.SetComponent(entity, new PathFollowTarget
+                {
+                    Value = possibleTarget
+                });
+                if(EntityManager.HasComponent<Following>(entity)) { ecb.RemoveComponent<Following>(entity); }
+                continue; 
+            }
+            if(EntityManager.HasComponent<Following>(entity))
+            {
+                (Entity possibleTarget, float3 posTargetDist) = GetClosest<EnemyTag>(transform.Position);
+                if (!target.Value.Equals(player) && possibleTarget.Equals(Entity.Null))
+                {
+                    ecb.SetComponent(entity, new PathFollowTarget { Value = player }); ecb.AddComponent<Following>(entity);
+                    continue;
+                }else if(!possibleTarget.Equals(Entity.Null))
+                {
+                    ecb.SetComponent(entity, new PathFollowTarget { Value = Entity.Null });
+                    continue;
+                }
+
+            }
+            if (EntityManager.HasComponent<PerpetualTarget>(entity))
+            {
+                PerpetualTarget perTarget = EntityManager.GetComponentData<PerpetualTarget>(entity);
+                if (!target.Value.Equals(perTarget.Value))
+                {
+                    ecb.SetComponent(entity, new PathFollowTarget { Value = perTarget.Value });
+                    continue;
+                }
+            }
+            if (!following.ValueRO.Value) { following.ValueRW.Value = true; }
+            if (!EntityManager.HasComponent<PathStartedTag>(entity))
+            {
+                ecb.AddComponent<PathStartedTag>(entity);
+            }
+            if(target.Value.Equals(Entity.Null)) { continue; }
+            SetTarget(transform, target, entity, EntityManager.GetBuffer<PathPosition>(entity));
+            if(!EntityManager.HasComponent<LocalTransform>(target.Value)) { continue; }
+            LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(target.Value);
+            float dist = Vector3.Distance(transform.Position, targetTransform.Position);
+            CheckRetreating(dist, entity, transform, target);
+            if (dist < targetDistance.Value || EntityManager.GetComponentData<PathFollow>(entity).pathIndex == -1)
+            {
+                ecb.AddComponent<AtTarget>(entity);
+                SetTarget(transform, target, entity, EntityManager.GetBuffer<PathPosition>(entity));
+                following.ValueRW.Value = false;
+                if (EntityManager.HasComponent<Retreating>(entity))
+                {
+                    ecb.DestroyEntity(target.Value);
+                    ecb.RemoveComponent<Retreating>(entity);
+                    ecb.AddComponent<Hunting>(entity);
+                    ChangeTarget(entity, Entity.Null, lastTarget.Value, EntityManager.GetComponentData<PathFollowerPreviousTargetDistance>(entity).Value);
+                }
+                if (EntityManager.HasComponent<Scouting>(entity))
+                {
+                    ecb.DestroyEntity(target.Value);
+                    ecb.RemoveComponent<Scouting>(entity);
+                    ecb.SetComponent(entity, new PathFollowTarget
+                    {
+                        Value = Entity.Null
+                    });
+                }
+            }
+            else if (EntityManager.HasComponent<AtTarget>(entity))
+            {
+                ecb.RemoveComponent<AtTarget>(entity);
+            }
+        }
+        #endregion
         ecb.Playback(EntityManager);
     }
 
@@ -177,6 +262,7 @@ partial class PathFollowerSystem : SystemBase
 
         grid.GetXY(pos + new float3(1, 0, 1) * cellSize * .5f, out int startX, out int startY);
 
+        if(!EntityManager.HasComponent<LocalTransform>(target.Value)) { return; }
         float3 targetPos = EntityManager.GetComponentData<LocalTransform>(target.Value).Position;
         float3 convertedTargetPos = new float3 { x = targetPos.x, y = targetPos.z, z = 0 };
 
@@ -212,34 +298,29 @@ partial class PathFollowerSystem : SystemBase
     {
     }
 
-    public Entity Raycast(float3 RayFrom, float3 RayTo)
+    public (Entity, float3) GetClosest<T>(float3 origin, float maxDistance = math.INFINITY)
     {
-        // Set up Entity Query to get PhysicsWorldSingleton
-        // If doing this in SystemBase or ISystem, call GetSingleton<PhysicsWorldSingleton>()/SystemAPI.GetSingleton<PhysicsWorldSingleton>() directly.
-        EntityQueryBuilder builder = new EntityQueryBuilder(Allocator.Temp).WithAll<PhysicsWorldSingleton>();
+        EntityQuery query = GetEntityQuery(ComponentType.ReadOnly<T>());
+        var entities = query.ToEntityListAsync(Allocator.TempJob, out JobHandle handle);
+        handle.Complete();
 
-        EntityQuery singletonQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(builder);
-        var collisionWorld = singletonQuery.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
-        singletonQuery.Dispose();
-
-        RaycastInput input = new RaycastInput()
+        float minDist = maxDistance;
+        float3 closestPos = float3.zero;
+        Entity closestEntity = Entity.Null;
+        for (int i = 0; i < entities.Length; i++)
         {
-            Start = RayFrom,
-            End = RayTo,
-            Filter = new CollisionFilter()
+            Entity enemy = entities[i];
+            float3 enemyPos = EntityManager.GetComponentData<LocalToWorld>(enemy).Position;
+
+            float dist = Vector3.Distance(origin, enemyPos);
+            if (dist < minDist)
             {
-                BelongsTo = ~0u,
-                CollidesWith = ~0u, // all 1s, so all layers, collide with everything
-                GroupIndex = 0
+                minDist = dist;
+                closestPos = enemyPos;
+                closestEntity = enemy;
             }
-        };
-
-        Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-        bool haveHit = collisionWorld.CastRay(input, out hit);
-        if (haveHit)
-        {
-            return hit.Entity;
         }
-        return Entity.Null;
+
+        return (closestEntity, closestPos);
     }
 }

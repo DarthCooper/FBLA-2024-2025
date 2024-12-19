@@ -15,12 +15,19 @@ partial struct HealthSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((Health health, Entity entity) in SystemAPI.Query<Health>().WithNone<Dead>().WithEntityAccess())
+        foreach((Health health, MaxHealth maxHealth, Entity entity) in SystemAPI.Query<Health, MaxHealth>().WithNone<Dead>().WithEntityAccess())
         {
             if(health.Value <= 0)
             {
                 CameraManagers.Instance.Impulse(0);
                 ecb.AddComponent<Dead>(entity);
+            }
+            if(health.Value > maxHealth.Value)
+            {
+                ecb.SetComponent(entity, new Health
+                {
+                    Value = maxHealth.Value,
+                });
             }
         }
 
