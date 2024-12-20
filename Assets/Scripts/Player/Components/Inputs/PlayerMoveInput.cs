@@ -31,3 +31,8 @@ public struct PlayerJumpForce : IComponentData
 {
     public float Value;
 }
+
+public struct PlayerInteractInput : IComponentData
+{
+    public bool Value;
+}

@@ -1,11 +1,7 @@
 using UnityEngine;
 using Unity.Entities;
-using Unity.Collections;
 using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
 partial class GetPlayerInputSystem : SystemBase
@@ -47,6 +43,13 @@ partial class GetPlayerInputSystem : SystemBase
             Value = curJumpInput
         });
 
+        var curInteractInput = playerActions.Player.Interact.IsPressed();
+
+        SystemAPI.SetSingleton(new PlayerInteractInput
+        {
+            Value = curInteractInput
+        });
+
         var curFireInput = playerActions.Player.Attack.IsPressed();
         var curAimInput = playerActions.Player.Aim.IsPressed();
 
@@ -80,11 +83,6 @@ partial class GetPlayerInputSystem : SystemBase
         {
             Value = dir
         });
-    }
-
-    float AngleBetweenTwoPoints(Vector2 a, Vector2 b)
-    {
-        return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
     }
 
     protected override void OnStopRunning()

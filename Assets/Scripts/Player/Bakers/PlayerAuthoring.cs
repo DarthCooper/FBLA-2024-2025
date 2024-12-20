@@ -28,6 +28,7 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         AddComponent<PlayerMoveInput>(playerEntity);
         AddComponent<PlayerSprintInput>(playerEntity);
         AddComponent<PlayerJumpInput>(playerEntity);
+        AddComponent<PlayerInteractInput>(playerEntity);
         AddComponent<PlayerChecks>(playerEntity);
         AddComponent(playerEntity, new PlayerJumpForce
         {

@@ -19,7 +19,7 @@ partial struct PlayerCombatSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((RefRW<LocalTransform> transform, PlayerFire fire, PlayerAiming aiming, PlayerMeleeWeapon melee, PlayerRangedWeapon ranged, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PlayerFire, PlayerAiming, PlayerMeleeWeapon, PlayerRangedWeapon>().WithEntityAccess())
+        foreach((RefRW<LocalTransform> transform, PlayerFire fire, PlayerAiming aiming, PlayerMeleeWeapon melee, PlayerRangedWeapon ranged, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PlayerFire, PlayerAiming, PlayerMeleeWeapon, PlayerRangedWeapon>().WithNone<PlayerSpeaking>().WithEntityAccess())
         {
             if (state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
             if (aiming.value)
