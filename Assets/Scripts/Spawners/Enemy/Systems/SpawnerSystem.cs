@@ -30,7 +30,6 @@ partial class SpawnerSystem : SystemBase
     protected override void OnUpdate()
     {
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
 

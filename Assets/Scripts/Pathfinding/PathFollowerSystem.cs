@@ -99,9 +99,9 @@ partial class PathFollowerSystem : SystemBase
             if (EntityManager.HasComponent<PerpetualTarget>(entity))
             {
                 PerpetualTarget perTarget = EntityManager.GetComponentData<PerpetualTarget>(entity);
-                if (!target.Value.Equals(perTarget.Value))
+                if (!target.Value.Equals(player))
                 {
-                    ecb.SetComponent(entity, new PathFollowTarget { Value = perTarget.Value });
+                    ecb.SetComponent(entity, new PathFollowTarget { Value = player });
                     continue;
                 }
             }

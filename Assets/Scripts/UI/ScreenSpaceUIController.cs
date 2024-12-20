@@ -81,7 +81,6 @@ public class ScreenSpaceUIController : MonoBehaviour
         }
 
         runDialogues.Add(index, pos);
-        Debug.Log(pos);
     }
 
     public void HideDialogue()

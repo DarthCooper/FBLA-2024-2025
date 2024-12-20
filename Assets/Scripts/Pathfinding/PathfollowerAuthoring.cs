@@ -20,7 +20,7 @@ class PathfollowerAuthoring : MonoBehaviour
     public float triggerDistance;
 
     [Header("Perpetual Stats")]
-    public GameObject perpetualTarget;
+    public bool alwaysFollowsPlayer = false;
 }
 
 class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
@@ -82,12 +82,9 @@ class PathfollowerAuthoringBaker : Baker<PathfollowerAuthoring>
                 Min = authoring.minScoutDistance
             });
         }
-        if(authoring.perpetualTarget)
+        if(authoring.alwaysFollowsPlayer)
         {
-            AddComponent(entity, new PerpetualTarget
-            {
-                Value = GetEntity(authoring.perpetualTarget, TransformUsageFlags.Dynamic)
-            });
+            AddComponent<PerpetualTarget>(entity);
         }
     }
 }
