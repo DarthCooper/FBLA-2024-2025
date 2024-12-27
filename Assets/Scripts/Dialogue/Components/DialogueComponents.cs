@@ -32,6 +32,9 @@ public struct Dialogue
     public float time;
 
     public DialoguePos pos;
+
+    public BlobString leftSpritePath;
+    public BlobString rightSpritePath;
 }
 
 public struct IncrementDialogue : IComponentData { }

@@ -6,7 +6,7 @@ public partial class DialogueSystem : SystemBase
 {
     private EntityCommandBufferSystem _ecbSystem;
 
-    public Action<string, DialoguePos, int> OnTalk;
+    public Action<string, DialoguePos, int, string, string> OnTalk;
     public Action OnTalkEnd;
 
     public Action<float, float> OnDialogueCountdown;
@@ -75,7 +75,10 @@ public partial class DialogueSystem : SystemBase
             string text = dialogue.dialogue.ToString();
             DialoguePos pos = dialogue.pos;
 
-            OnTalk?.Invoke(text, pos, dialogueArray.curIndex);
+            string leftSpritePath = dialogue.leftSpritePath.ToString();
+            string rightSpritePath = dialogue.rightSpritePath.ToString();
+
+            OnTalk?.Invoke(text, pos, dialogueArray.curIndex, leftSpritePath, rightSpritePath);
         }).Run();
 
         Entities.WithAll<PlayerSpeaking>().ForEach((Entity entity, int entityInQueryIndex, ref PlayerFire fireInput, ref PlayerJumpInput jumpInput, ref PlayerSpeaking playerSpeaking) =>

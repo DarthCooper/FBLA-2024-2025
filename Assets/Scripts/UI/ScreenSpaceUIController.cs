@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TMPro;
 using Unity.Entities;
@@ -7,11 +8,14 @@ using UnityEngine.UI;
 
 public class ScreenSpaceUIController : MonoBehaviour
 {
+    [Header("Health")]
     public Image playerHealthBar;
 
+    [Header("Combat")]
     public Image meleeDelayVisual;
     public Image rangedDelayVisual;
 
+    [Header("Dialogue")]
     public GameObject dialogueHolder;
     public Animator dialogueAnimator;
     public TMP_Text dialogueText;
@@ -19,6 +23,14 @@ public class ScreenSpaceUIController : MonoBehaviour
     Dictionary<int, DialoguePos> runDialogues = new Dictionary<int, DialoguePos>();
     public Image DialogueTimer;
     public GameObject dialogueTimerText;
+
+    public Image leftCharacter;
+    public Image rightCharacter;
+
+    [Header("Win Conditions")]
+    public GameObject winConditionText;
+    public Transform winConditionHolder;
+    Dictionary<WinConditons, TMP_Text> winConditions = new Dictionary<WinConditons, TMP_Text>();
 
     private void OnEnable()
     {
@@ -31,6 +43,9 @@ public class ScreenSpaceUIController : MonoBehaviour
         dialogueSystem.OnTalk += ShowDialogue;
         dialogueSystem.OnTalkEnd += HideDialogue;
         dialogueSystem.OnDialogueCountdown += ShowTimer;
+
+        WinConditionsSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<WinConditionsSystem>();
+        winSystem.SyncWinText += SetWinConditons;
     }
 
     private void OnDisable()
@@ -45,6 +60,9 @@ public class ScreenSpaceUIController : MonoBehaviour
         dialogueSystem.OnTalk -= ShowDialogue;
         dialogueSystem.OnTalkEnd -= HideDialogue;
         dialogueSystem.OnDialogueCountdown -= ShowTimer;
+
+        WinConditionsSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<WinConditionsSystem>();
+        winSystem.SyncWinText -= SetWinConditons;
     }
 
     public void ShowPlayerHealth(float health, float maxHealth)
@@ -62,12 +80,18 @@ public class ScreenSpaceUIController : MonoBehaviour
         rangedDelayVisual.fillAmount = delay / maxDelay;
     }
 
-    public void ShowDialogue(string message, DialoguePos pos, int index)
+    public void ShowDialogue(string message, DialoguePos pos, int index, string leftSpritePath, string rightSpritePath)
     {
         if(runDialogues.ContainsKey(index)) { return; }
         if(!dialogueHolder.activeSelf) { dialogueHolder.SetActive(true); }
         dialogueText.text = message;
         dialogueTimerText.SetActive(false);
+
+        var leftTexture = Instantiate(LoadPrefabFromFile(leftSpritePath), Vector3.zero, Quaternion.identity) as Texture2D;
+        var rightTexture = Instantiate(LoadPrefabFromFile(rightSpritePath), Vector3.zero, Quaternion.identity) as Texture2D;
+
+        leftCharacter.sprite = Sprite.Create(leftTexture, new Rect(0.0f, 0.0f, leftTexture.width, leftTexture.height), new Vector3(0.5f, 0.5f), 100.0f);
+        rightCharacter.sprite = Sprite.Create(rightTexture, new Rect(0.0f, 0.0f, rightTexture.width, rightTexture.height), new Vector3(0.5f, 0.5f), 100.0f);
 
         if (runDialogues.Count > 0)
         {
@@ -83,11 +107,24 @@ public class ScreenSpaceUIController : MonoBehaviour
         runDialogues.Add(index, pos);
     }
 
+    private UnityEngine.Object LoadPrefabFromFile(string filename)
+    {
+        Debug.Log("Trying to load LevelPrefab from file (" + filename + ")...");
+        var loadedObject = Resources.Load("Sprites/" + filename);
+        if (loadedObject == null)
+        {
+            throw new FileNotFoundException("...no file found - please check the configuration");
+        }
+        return loadedObject;
+    }
+
     public void HideDialogue()
     {
         dialogueText.text = "";
         runDialogues.Clear();
         dialogueHolder.SetActive(false);
+        leftCharacter.sprite = null;
+        rightCharacter.sprite = null;
     }
 
     public void ShowTimer(float timer, float maxTime)
@@ -115,6 +152,20 @@ public class ScreenSpaceUIController : MonoBehaviour
             default:
                 dialogueAnimator.SetTrigger("NoOneSpeaking");
                 break;
+        }
+    }
+
+    public void SetWinConditons(WinConditons winCondition, string text)
+    {
+        if(winConditions.ContainsKey(winCondition))
+        {
+            winConditions[winCondition].text = text;
+        }else
+        {
+            GameObject winTextObject = Instantiate(winConditionText, winConditionHolder);
+            TMP_Text winText = winTextObject.GetComponent<TMP_Text>();
+            winText.text = text;
+            winConditions.Add(winCondition, winText);
         }
     }
 }

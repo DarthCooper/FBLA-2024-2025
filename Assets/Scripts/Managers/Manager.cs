@@ -11,8 +11,6 @@ public class Manager : MonoBehaviour
     public float timeInMatch;
     public TMP_Text timer;
 
-    string countdownFormat = "{00}:{00}";
-
     public void Update()
     {
         timeInMatch -= Time.deltaTime;

@@ -31,11 +31,24 @@ partial struct HealthSystem : ISystem
             }
         }
 
-        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithEntityAccess())
+
+        int kills = 0;
+        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DestroyEntity>().WithEntityAccess())
         {
             ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
 
             ecb.AddComponent<DestroyEntity>(entity);
+
+            kills += 1;
+        }
+
+        if (SystemAPI.TryGetSingleton(out KillWinConditions curCondition))
+        {
+            SystemAPI.SetSingleton(new KillWinConditions
+            {
+                kills = curCondition.kills += kills,
+                neededKills = curCondition.neededKills,
+            });
         }
         ecb.Playback(state.EntityManager);
     }

@@ -2570,7 +2570,7 @@ GameObject:
   - component: {fileID: 1142361842}
   - component: {fileID: 1142361841}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: PickUpAble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3742,6 +3742,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285757942}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1331791669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1331791671}
+  - component: {fileID: 1331791670}
+  m_Layer: 0
+  m_Name: EntityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1331791670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331791669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760f45e0f091eb84bad6fadc6aef0432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  winCondition: 1
+  maxTime: 30
+  maxKills: 30
+  maxWaves: 0
+  winTrigger: {fileID: 0}
+--- !u!4 &1331791671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331791669}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1385806781
 GameObject:
   m_ObjectHideFlags: 0
@@ -4241,10 +4290,14 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: Again? Fine. Let's go deal with this...
       index: 0
       pos: 1
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     curIndex: 0
     requiredDialogues:
     - VhHvm2e6eq
@@ -4369,20 +4422,28 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: Ugh. You sure he actually has something. You know how many "raids"
         turned out to just be a trading ship.
       index: 1
       pos: 1
       minTime: 3
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: Yeah, yeah. I know we need a better scout. Just make sure it's nothing,
         I'd hate to be caught off guard.
       index: 2
       pos: 0
       minTime: 3
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: Ok. I'll get on it.
       index: 2
       pos: 1
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     curIndex: 0
     requiredDialogues: []
     dialogueKey: VhHvm2e6eq
@@ -4391,14 +4452,20 @@ MonoBehaviour:
       index: 0
       pos: 1
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: What? A ship? A fleet? what are we dealing with here?
       index: 1
       pos: 0
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     - dialogue: Not sure yet, but we'll need to evacuate the market.
       index: 2
       pos: 1
       minTime: 2
+      leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
+      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
     curIndex: 0
     requiredDialogues:
     - 1CjiXnuceu
@@ -5816,3 +5883,4 @@ SceneRoots:
   - {fileID: 1142361845}
   - {fileID: 1703761687}
   - {fileID: 1705830021}
+  - {fileID: 1331791671}

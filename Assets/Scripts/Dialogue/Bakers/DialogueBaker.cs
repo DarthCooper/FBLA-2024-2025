@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -28,6 +29,9 @@ public class DialogueSetterData
     public DialoguePos pos;
 
     public float minTime = 2f;
+
+    public Sprite leftSprite;
+    public Sprite rightSprite;
 }
 
 class DialogueBakerBaker : Baker<DialogueBaker>
@@ -63,6 +67,9 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                 dialogue.minTime = authoring.dialogues[i].dialogues[j].minTime;
                 dialogue.time = 0;
                 dialogue.pos = authoring.dialogues[i].dialogues[j].pos;
+
+                builder.AllocateString(ref dialogue.leftSpritePath, authoring.dialogues[i].dialogues[j].leftSprite.name);
+                builder.AllocateString(ref dialogue.rightSpritePath, authoring.dialogues[i].dialogues[j].rightSprite.name);
 
                 builder.AllocateString(ref dialogue.dialogue, authoring.dialogues[i].dialogues[j].dialogue);
             }
