@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &68442591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 68442593}
+  - component: {fileID: 68442592}
+  m_Layer: 0
+  m_Name: EventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &68442592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68442591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ecca52870e0d6f49948caa2fabb1ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingEvent: 0
+  spawnerEntity: {fileID: 740812353}
+--- !u!4 &68442593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68442591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &173001823
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,6 +1200,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511225490}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &575545339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 575545340}
+  m_Layer: 0
+  m_Name: PosChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &575545340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575545339}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 0, z: 35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 740812355}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &725227504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,6 +1527,127 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725227504}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &740812353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740812355}
+  - component: {fileID: 740812354}
+  m_Layer: 0
+  m_Name: WaveSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &740812354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740812353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afb1780214c5f44a886caab24049e80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawns:
+  - spawns:
+    - pos:
+        x: 35
+        y: 0
+        z: 35
+      delay: 0
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 2
+    - pos:
+        x: 5
+        y: 0
+        z: 35
+      delay: 2
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 2
+    delay: 2
+  - spawns:
+    - pos:
+        x: 35
+        y: 0
+        z: 35
+      delay: 0
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 4
+    - pos:
+        x: 5
+        y: 0
+        z: 35
+      delay: 2
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 4
+    - pos:
+        x: 35
+        y: 0
+        z: 5
+      delay: 4
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 4
+    delay: 20
+  - spawns:
+    - pos:
+        x: 35
+        y: 0
+        z: 35
+      delay: 0
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 3
+    - pos:
+        x: 5
+        y: 0
+        z: 35
+      delay: 2
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 6
+    - pos:
+        x: 35
+        y: 0
+        z: 5
+      delay: 4
+      spawnRadius: 5
+      enemyTypes: 0000000001000000020000000300000004000000
+      amountPerSpawn: 6
+    delay: 20
+  Ranger: {fileID: 3806973015836085860, guid: 3c7a624471883db4fa7a1194841e2378, type: 3}
+  Fighter: {fileID: 700070333288536856, guid: 98f04d642a34ec94bb990664863eca53, type: 3}
+  Barbarian: {fileID: 294412749124413294, guid: db5b02703464f6a4e8b018af9f2ca2eb, type: 3}
+  Rogue: {fileID: 1319369234418407438, guid: cb745ec5ffa7619408fb979024afe472, type: 3}
+  Warlock: {fileID: 6327667424098537992, guid: 17b83dc3d5e55444bb6eac4dab73b52f, type: 3}
+--- !u!4 &740812355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740812353}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 575545340}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &761332506
 GameObject:
   m_ObjectHideFlags: 0
@@ -3343,7 +3541,7 @@ GameObject:
   - component: {fileID: 1213162511}
   - component: {fileID: 1213162510}
   m_Layer: 0
-  m_Name: Spawners
+  m_Name: PointSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5879,8 +6077,10 @@ SceneRoots:
   - {fileID: 930073651}
   - {fileID: 861647720}
   - {fileID: 1213162511}
+  - {fileID: 740812355}
   - {fileID: 1664081261}
   - {fileID: 1142361845}
   - {fileID: 1703761687}
   - {fileID: 1705830021}
   - {fileID: 1331791671}
+  - {fileID: 68442593}

@@ -19,6 +19,7 @@ partial struct RangedWeaponsSystem : ISystem
             bool use = state.EntityManager.HasComponent<Using>(entity);
             if (delay.ValueRO.Value >= delay.ValueRO.MaxValue && use)
             {
+                if(projectile.Value.Equals(Entity.Null)) { continue; }
                 CameraManagers.Instance.Impulse(1);
                 Entity spawnedProjectile = ecb.Instantiate(projectile.Value);
                 Entity projectileParent = state.EntityManager.GetComponentData<Parent>(entity).Value;

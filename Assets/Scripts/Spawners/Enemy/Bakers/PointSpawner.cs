@@ -73,5 +73,7 @@ class PointSpawnerBaker : Baker<PointSpawner>
             Rogue = GetEntity(authoring.Rogue, TransformUsageFlags.Dynamic),
             Warlock = GetEntity(authoring.Warlock, TransformUsageFlags.Dynamic),
         });
+
+        AddComponent<InfiniteTimeSpawner>(entity);
     }
 }
