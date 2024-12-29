@@ -6,6 +6,11 @@ public struct DialogueData : IComponentData
     public BlobAssetReference<Dialogues> Blob;
 }
 
+public struct DialogueSpawner : IBufferElementData
+{
+    public Entity Spawner;
+}
+
 public struct Dialogues : IComponentData
 {
     public BlobArray<DialogueArray> Value;
@@ -35,6 +40,9 @@ public struct Dialogue
 
     public BlobString leftSpritePath;
     public BlobString rightSpritePath;
+
+    public EventType eventType;
+    public int entityID;
 }
 
 public struct IncrementDialogue : IComponentData { }

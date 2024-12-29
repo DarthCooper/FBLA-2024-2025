@@ -111,7 +111,7 @@ partial class SpawnerSystem : SystemBase
                 }
                 data.delay = data.maxDelay;
             }
-        }).Schedule();
+        }).ScheduleParallel();
         Entities.WithAll<CanSpawn>().WithAll<FiniteWaveSpawner>().ForEach((Entity entity, int entityInQueryIndex, ref EnemyTypes enemyTypes, ref WaveSpawners spawner) =>
         {
             ref EnemyWaveData waveData = ref spawner.BlobAssetReference.Value;
@@ -197,6 +197,6 @@ partial class SpawnerSystem : SystemBase
             {
                 waveData.waveIndex++;
             }
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

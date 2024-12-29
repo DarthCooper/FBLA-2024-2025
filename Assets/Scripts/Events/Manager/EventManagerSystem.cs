@@ -17,6 +17,7 @@ public partial class EventManagerSystem : SystemBase
         if(EntityManager.HasComponent<SpawnEnemiesEvent>(eventManagerEntity))
         {
             SpawnEnemiesEvent spawnEvent = EntityManager.GetComponentData<SpawnEnemiesEvent>(eventManagerEntity);
+            if(spawnEvent.Equals(Entity.Null) || !SystemAPI.Exists(spawnEvent.spawnEntity)) { return; }
             EntityManager.AddComponent<CanSpawn>(spawnEvent.spawnEntity);
             EntityManager.RemoveComponent<SpawnEnemiesEvent>(eventManagerEntity);
         }

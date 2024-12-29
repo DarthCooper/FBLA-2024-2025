@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Unity.Entities;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public partial class DialogueSystem : SystemBase
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
         playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+
+        SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManger);
 
         Entities.WithoutBurst().WithAll<Speaking>().ForEach((Entity entity, int entityInQueryIndex, ref DialogueData data) =>
         {
@@ -77,6 +80,23 @@ public partial class DialogueSystem : SystemBase
 
             string leftSpritePath = dialogue.leftSpritePath.ToString();
             string rightSpritePath = dialogue.rightSpritePath.ToString();
+
+            if (!eventManger.Equals(Entity.Null))
+            {
+                switch (dialogue.eventType)
+                {
+                    case EventType.SPAWNENEMIES:
+                        int entityIdInBlob = dialogue.entityID;
+                        DynamicBuffer<DialogueSpawner> spawners = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                        ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
+                        {
+                            spawnEntity = spawners[dialogue.entityID].Spawner
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             OnTalk?.Invoke(text, pos, dialogueArray.curIndex, leftSpritePath, rightSpritePath);
         }).Run();

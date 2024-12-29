@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -32,6 +31,9 @@ public class DialogueSetterData
 
     public Sprite leftSprite;
     public Sprite rightSprite;
+
+    public EventType eventType = EventType.NONE;
+    public GameObject spawnerGameObject;
 }
 
 class DialogueBakerBaker : Baker<DialogueBaker>
@@ -46,6 +48,10 @@ class DialogueBakerBaker : Baker<DialogueBaker>
         dialoguePool.curIndex = 0;
 
         var dialogueDataArray = builder.Allocate(ref dialoguePool.Value, authoring.dialogues.Length);
+
+        DynamicBuffer<DialogueSpawner> spawners = AddBuffer<DialogueSpawner>(entity);
+
+        int spawnerIndex = 0;
 
         for (int i = 0; i < dialogueDataArray.Length; i++)
         {
@@ -67,6 +73,18 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                 dialogue.minTime = authoring.dialogues[i].dialogues[j].minTime;
                 dialogue.time = 0;
                 dialogue.pos = authoring.dialogues[i].dialogues[j].pos;
+                dialogue.eventType = authoring.dialogues[i].dialogues[j].eventType;
+                switch (authoring.dialogues[i].dialogues[j].eventType)
+                {
+                    case EventType.SPAWNENEMIES:
+                        spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].spawnerGameObject, TransformUsageFlags.Dynamic) } );
+                        dialogue.entityID = spawnerIndex;
+                        spawnerIndex++;
+                        break;
+                    default:
+                        dialogue.entityID = -1;
+                        break;
+                }
 
                 builder.AllocateString(ref dialogue.leftSpritePath, authoring.dialogues[i].dialogues[j].leftSprite.name);
                 builder.AllocateString(ref dialogue.rightSpritePath, authoring.dialogues[i].dialogues[j].rightSprite.name);

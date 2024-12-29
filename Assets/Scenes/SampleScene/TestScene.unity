@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ecca52870e0d6f49948caa2fabb1ce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingEvent: 0
+  startingEvent: 2
   spawnerEntity: {fileID: 740812353}
 --- !u!4 &68442593
 Transform:
@@ -1600,7 +1600,7 @@ MonoBehaviour:
       spawnRadius: 5
       enemyTypes: 0000000001000000020000000300000004000000
       amountPerSpawn: 4
-    delay: 20
+    delay: 10
   - spawns:
     - pos:
         x: 35
@@ -4490,12 +4490,16 @@ MonoBehaviour:
       minTime: 2
       leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: Again? Fine. Let's go deal with this...
       index: 0
       pos: 1
       minTime: 2
       leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 0
+      spawnerGameObject: {fileID: 740812353}
     curIndex: 0
     requiredDialogues:
     - VhHvm2e6eq
@@ -4622,6 +4626,8 @@ MonoBehaviour:
       minTime: 2
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: Ugh. You sure he actually has something. You know how many "raids"
         turned out to just be a trading ship.
       index: 1
@@ -4629,6 +4635,8 @@ MonoBehaviour:
       minTime: 3
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: Yeah, yeah. I know we need a better scout. Just make sure it's nothing,
         I'd hate to be caught off guard.
       index: 2
@@ -4636,12 +4644,16 @@ MonoBehaviour:
       minTime: 3
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: Ok. I'll get on it.
       index: 2
       pos: 1
       minTime: 2
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     curIndex: 0
     requiredDialogues: []
     dialogueKey: VhHvm2e6eq
@@ -4652,18 +4664,24 @@ MonoBehaviour:
       minTime: 2
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: What? A ship? A fleet? what are we dealing with here?
       index: 1
       pos: 0
       minTime: 2
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     - dialogue: Not sure yet, but we'll need to evacuate the market.
       index: 2
       pos: 1
       minTime: 2
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      eventType: 2
+      spawnerGameObject: {fileID: 0}
     curIndex: 0
     requiredDialogues:
     - 1CjiXnuceu
