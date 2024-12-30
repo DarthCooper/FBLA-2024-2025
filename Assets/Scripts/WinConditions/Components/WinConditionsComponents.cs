@@ -1,24 +1,26 @@
 using Unity.Entities;
 
-public struct TimerWinConditions : IComponentData
+public interface WinConditionData : IComponentData { }
+
+public struct TimerWinConditions : WinConditionData
 {
     public float maxTime;
     public float time;
 }
 
-public struct KillWinConditions : IComponentData
+public struct KillWinConditions : WinConditionData
 {
     public int neededKills;
     public int kills;
 }
 
-public struct WaveWinConditions : IComponentData
+public struct WaveWinConditions : WinConditionData
 {
     public int neededWaves;
     public int waves;
 }
 
-public struct TriggerWinConditions : IComponentData
+public struct TriggerWinConditions : WinConditionData
 {
     public Entity triggerEntity;
 }

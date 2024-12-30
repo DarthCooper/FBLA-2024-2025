@@ -42,14 +42,9 @@ partial struct HealthSystem : ISystem
             kills += 1;
         }
 
-        if (SystemAPI.TryGetSingleton(out KillWinConditions curCondition))
-        {
-            SystemAPI.SetSingleton(new KillWinConditions
-            {
-                kills = curCondition.kills += kills,
-                neededKills = curCondition.neededKills,
-            });
-        }
+        QuestSystem questSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
+        questSystem.curKills = questSystem.curKills + kills;
+
         ecb.Playback(state.EntityManager);
     }
 

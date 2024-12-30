@@ -29,8 +29,9 @@ public class ScreenSpaceUIController : MonoBehaviour
 
     [Header("Win Conditions")]
     public GameObject winConditionText;
+    public GameObject winConditionName;
     public Transform winConditionHolder;
-    Dictionary<WinConditons, TMP_Text> winConditions = new Dictionary<WinConditons, TMP_Text>();
+    Dictionary<int, (TMP_Text, TMP_Text)> winConditions = new Dictionary<int, (TMP_Text, TMP_Text)>();
 
     private void OnEnable()
     {
@@ -44,8 +45,9 @@ public class ScreenSpaceUIController : MonoBehaviour
         dialogueSystem.OnTalkEnd += HideDialogue;
         dialogueSystem.OnDialogueCountdown += ShowTimer;
 
-        WinConditionsSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<WinConditionsSystem>();
-        winSystem.SyncWinText += SetWinConditons;
+        QuestSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
+        winSystem.QuestVisual += SetWinConditons;
+        winSystem.OnEndQuest += DestroyWinCondition;
     }
 
     private void OnDisable()
@@ -61,8 +63,9 @@ public class ScreenSpaceUIController : MonoBehaviour
         dialogueSystem.OnTalkEnd -= HideDialogue;
         dialogueSystem.OnDialogueCountdown -= ShowTimer;
 
-        WinConditionsSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<WinConditionsSystem>();
-        winSystem.SyncWinText -= SetWinConditons;
+        QuestSystem winSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
+        winSystem.QuestVisual -= SetWinConditons;
+        winSystem.OnEndQuest -= DestroyWinCondition;
     }
 
     public void ShowPlayerHealth(float health, float maxHealth)
@@ -155,17 +158,32 @@ public class ScreenSpaceUIController : MonoBehaviour
         }
     }
 
-    public void SetWinConditons(WinConditons winCondition, string text)
+    public void SetWinConditons(string questName, string text, bool completed, int questID)
     {
-        if(winConditions.ContainsKey(winCondition))
+        if(winConditions.ContainsKey(questID))
         {
-            winConditions[winCondition].text = text;
+            winConditions[questID].Item1.text = questName;
+            winConditions[questID].Item2.text = text;
         }else
         {
+            GameObject questNameObject = Instantiate(winConditionName, winConditionHolder);
             GameObject winTextObject = Instantiate(winConditionText, winConditionHolder);
+
             TMP_Text winText = winTextObject.GetComponent<TMP_Text>();
+            TMP_Text questNameText = questNameObject.GetComponent<TMP_Text>();
+
             winText.text = text;
-            winConditions.Add(winCondition, winText);
+            winConditions.Add(questID, (questNameText, winText));
+        }
+    }
+
+    public void DestroyWinCondition(int questID)
+    {
+        if(winConditions.ContainsKey(questID))
+        {
+            Destroy(winConditions[questID].Item1.gameObject);
+            Destroy(winConditions[questID].Item2.gameObject);
+            winConditions.Remove(questID);
         }
     }
 }
