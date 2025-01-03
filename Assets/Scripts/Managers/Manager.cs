@@ -11,6 +11,11 @@ public class Manager : MonoBehaviour
     public float timeInMatch;
     public TMP_Text timer;
 
+    public void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     public void Update()
     {
         timeInMatch -= Time.deltaTime;

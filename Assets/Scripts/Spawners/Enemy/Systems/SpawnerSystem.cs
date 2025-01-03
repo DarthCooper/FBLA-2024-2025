@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEditor.Overlays;
 using UnityEngine;
 
 partial class SpawnerSystem : SystemBase
@@ -149,6 +148,9 @@ partial class SpawnerSystem : SystemBase
                         y = 0,
                         z = data.random.NextFloat(-data.radius, data.radius)
                     };
+
+                    Debug.Log($"original : {data.pos}. New : {pos}");
+
                     ref BlobArray<Enemies> enemies = ref data.enemies;
 
                     if (enemies.Length > 0)
@@ -187,6 +189,11 @@ partial class SpawnerSystem : SystemBase
                         ecb.SetComponent(entityInQueryIndex, enemy, new PathFollowTarget
                         {
                             Value = player
+                        });
+
+                        ecb.AddComponent(entityInQueryIndex, enemy, new Stunned
+                        {
+                            Value = 1f
                         });
                     }
                 }

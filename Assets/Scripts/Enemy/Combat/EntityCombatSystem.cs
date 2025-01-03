@@ -56,7 +56,7 @@ partial struct EntityCombatSystem : ISystem
         }
         #endregion
         #region NPCAttacks
-        foreach ((RefRW<LocalTransform> transform, PhysicsVelocity velocity, PathFollowTarget target, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PhysicsVelocity, PathFollowTarget>().WithAll<NPCTag>().WithNone<Following>().WithEntityAccess())
+        foreach ((RefRW<LocalTransform> transform, PhysicsVelocity velocity, PathFollowTarget target, Entity entity) in SystemAPI.Query<RefRW<LocalTransform>, PhysicsVelocity, PathFollowTarget>().WithAll<NPCTag>().WithNone<Following>().WithNone<DeActive>().WithNone<CantAttack>().WithEntityAccess())
         {
             if (state.EntityManager.HasChunkComponent<Stunned>(entity)) { continue; }
             bool atTarget = state.EntityManager.HasComponent<AtTarget>(entity);

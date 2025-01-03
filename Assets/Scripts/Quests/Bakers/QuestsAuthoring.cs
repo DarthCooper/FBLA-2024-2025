@@ -32,6 +32,10 @@ public class QuestSetterData
 
     [Header("Interact Based")]
     public GameObject interactEntity;
+
+    public EventType questEndEventType;
+    public GameObject spawner;
+    public int cameraIndex;
 }
 
 class QuestsAuthoringBaker : Baker<QuestsAuthoring>
@@ -46,6 +50,7 @@ class QuestsAuthoringBaker : Baker<QuestsAuthoring>
         questPool.index = 0;
 
         DynamicBuffer<WinConditionElementData> winConditions = AddBuffer<WinConditionElementData>(entity);
+        DynamicBuffer<QuestEndEvent> endEvent = AddBuffer<QuestEndEvent>(entity);
 
         var questDataArray = builder.Allocate(ref questPool.Blobs, authoring.quests.Length);
         for (int i = 0; i < questDataArray.Length; i++)
@@ -66,7 +71,17 @@ class QuestsAuthoringBaker : Baker<QuestsAuthoring>
                 triggerEntity = GetEntity(authoring.quests[i].winTrigger, TransformUsageFlags.Dynamic),
                 interactEntity = GetEntity(authoring.quests[i].interactEntity, TransformUsageFlags.Dynamic),
             });
+
+            endEvent.Add(new QuestEndEvent
+            {
+                QuestID = authoring.quests[i].QuestID,
+                EventType = authoring.quests[i].questEndEventType,
+                spawner = GetEntity(authoring.quests[i].spawner, TransformUsageFlags.Dynamic),
+                cameraIndex = authoring.quests[i].cameraIndex,
+            });
         }
+
+        AddComponent<QuestTargetEntity>(entity);
 
         var blobReference = builder.CreateBlobAssetReference<Quests>(Allocator.Persistent);
         builder.Dispose();

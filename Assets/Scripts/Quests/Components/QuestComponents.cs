@@ -36,3 +36,16 @@ public struct Quest
     public int QuestId;
     public bool completed;
 }
+
+public struct QuestEndEvent : IBufferElementData
+{
+    public int QuestID;
+    public EventType EventType;
+    public Entity spawner;
+    public int cameraIndex;
+}
+
+public struct QuestTargetEntity : IComponentData
+{
+    public Entity Value;
+}

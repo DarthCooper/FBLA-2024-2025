@@ -9,9 +9,27 @@ public struct SpawnEnemiesEvent : IComponentData
 
 public struct EndLevelEvent : IComponentData { }
 
+public struct ActivateEntitiesEvent : IComponentData
+{
+    public Entity ActivateEntityHolder;
+}
+
+public struct DeActivateEntitiesEvent : IComponentData
+{
+    public Entity DeActivateEntityHolder;
+}
+
+public struct ShakeCameraEvent : IComponentData
+{
+    public int index;
+}
+
 public enum EventType
 {
     SPAWNENEMIES,
     ENDLEVEL,
-    NONE
+    ActivateEntities,
+    NONE,
+    ShakeCamera,
+    DeactivateEntities
 }

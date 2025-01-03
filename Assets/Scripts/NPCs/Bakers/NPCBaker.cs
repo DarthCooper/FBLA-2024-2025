@@ -3,7 +3,7 @@ using UnityEngine;
 
 class NPCBaker : MonoBehaviour
 {
-    
+    public bool startActive = true;
 }
 
 class NPCBakerBaker : Baker<NPCBaker>
@@ -13,5 +13,12 @@ class NPCBakerBaker : Baker<NPCBaker>
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent<NPCTag>(entity);
         AddComponent<Ally>(entity);
+        if(authoring.startActive)
+        {
+            AddComponent<Active>(entity);
+        }else
+        {
+            AddComponent<DeActive>(entity);
+        }
     }
 }

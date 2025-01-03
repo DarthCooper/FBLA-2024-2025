@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+# if UNITY_EDITOR
 using UnityEditor;
+# endif
 using Unity.Entities;
 
 class WinConditionsAuthoring : MonoBehaviour
@@ -16,6 +16,7 @@ class WinConditionsAuthoring : MonoBehaviour
 
     public GameObject winTrigger;
 
+    # if UNITY_EDITOR
     [CustomEditor(typeof(WinConditionsAuthoring))]
     public class WinConditionsEditor : Editor
     {
@@ -47,6 +48,7 @@ class WinConditionsAuthoring : MonoBehaviour
             EditorUtility.SetDirty(target);
         }
     }
+    #endif
 }
 
 class WinConditionsAuthoringBaker : Baker<WinConditionsAuthoring>

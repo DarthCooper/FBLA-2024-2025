@@ -34,6 +34,7 @@ public class DialogueSetterData
 
     public EventType eventType = EventType.NONE;
     public GameObject spawnerGameObject;
+    public int shakeIndex;
 }
 
 class DialogueBakerBaker : Baker<DialogueBaker>
@@ -74,10 +75,16 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                 dialogue.time = 0;
                 dialogue.pos = authoring.dialogues[i].dialogues[j].pos;
                 dialogue.eventType = authoring.dialogues[i].dialogues[j].eventType;
+                dialogue.cameraShakeIndex = authoring.dialogues[i].dialogues[j].shakeIndex;
                 switch (authoring.dialogues[i].dialogues[j].eventType)
                 {
                     case EventType.SPAWNENEMIES:
                         spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].spawnerGameObject, TransformUsageFlags.Dynamic) } );
+                        dialogue.entityID = spawnerIndex;
+                        spawnerIndex++;
+                        break;
+                    case EventType.ActivateEntities:
+                        spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].spawnerGameObject, TransformUsageFlags.Dynamic) });
                         dialogue.entityID = spawnerIndex;
                         spawnerIndex++;
                         break;

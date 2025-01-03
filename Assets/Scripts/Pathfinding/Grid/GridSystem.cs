@@ -26,17 +26,10 @@ partial class GridSystem : SystemBase
         {
             CreateGrid();
             CheckStaticObstacles();
+            DisplayGrid();
         }
         CheckTakenCells();
         CheckMovingObstacles();
-        /*
-        # if UNITY_EDITOR
-            if(FPSCounter.m_lastFramerate > 60)
-            {
-                displayGrid();
-            }
-        #endif
-        */
     }
 
     [BurstCompile]
@@ -205,7 +198,6 @@ partial class GridSystem : SystemBase
                         safe = false,
                     };
 
-
                     bool contained = false;
                     for (int i = 0; i < takenCells.Length; i++)
                     {
@@ -286,7 +278,7 @@ partial class GridSystem : SystemBase
         }
     }
 
-    public void displayGrid()
+    public void DisplayGrid()
     {
         int width = grid.GetWidth();
         int height = grid.GetHeight();

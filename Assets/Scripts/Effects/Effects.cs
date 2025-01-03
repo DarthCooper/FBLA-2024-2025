@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,14 +19,21 @@ public class Effects : MonoBehaviour
     public GameObject healParticles;
     public GameObject leachParticles;
 
+    public LineRenderer pathFinder;
+
     // Update is called once per frame
     void OnEnable()
     {
         ProjectileEffects playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<ProjectileEffects>();
         playerUISystem.OnBulletMove += MoveBulletTrail;
         playerUISystem.OnSpawnBullet += SpawnMuzzleFlash;
+
         MagicEffects magicEffectSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<MagicEffects>();
         magicEffectSystem.OnCast += MoveCastSpell;
+
+        PlayerPathFinderSystem pathFinderSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerPathFinderSystem>();
+        pathFinderSystem.OnPathFind += MovePathFinder;
+        pathFinderSystem.HidePathFinder += DisablePathFinder;
     }
 
     private void OnDisable()
@@ -34,8 +42,13 @@ public class Effects : MonoBehaviour
         ProjectileEffects playerUISystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<ProjectileEffects>();
         playerUISystem.OnBulletMove -= MoveBulletTrail;
         playerUISystem.OnSpawnBullet -= SpawnMuzzleFlash;
+
         MagicEffects magicEffectSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<MagicEffects>();
         magicEffectSystem.OnCast -= MoveCastSpell;
+
+        PlayerPathFinderSystem pathFinderSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerPathFinderSystem>();
+        pathFinderSystem.OnPathFind -= MovePathFinder;
+        pathFinderSystem.HidePathFinder -= DisablePathFinder;
     }
 
     private void MoveBulletTrail(float3 pos, Entity entity)
@@ -82,5 +95,23 @@ public class Effects : MonoBehaviour
             newSpell.transform.position = pos;
             magicIdentifiers.Add(entity, newSpell);
         }
+    }
+
+    private void MovePathFinder(float3[] pos)
+    {
+        pathFinder.enabled = true;
+        Vector3[] convertedPos = new Vector3[pos.Length];
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if(convertedPos.Contains(pos[i])) { continue; }
+            convertedPos[i] = pos[i];
+        }
+        pathFinder.positionCount = convertedPos.Length;
+        pathFinder.SetPositions(convertedPos);
+    }
+
+    private void DisablePathFinder()
+    {
+        pathFinder.enabled = false;
     }
 }

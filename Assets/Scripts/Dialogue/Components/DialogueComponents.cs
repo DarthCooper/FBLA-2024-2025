@@ -43,6 +43,8 @@ public struct Dialogue
 
     public EventType eventType;
     public int entityID;
+
+    public int cameraShakeIndex;
 }
 
 public struct IncrementDialogue : IComponentData { }

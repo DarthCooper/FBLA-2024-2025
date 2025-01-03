@@ -18,6 +18,7 @@ partial class PathFollowSystem : SystemBase
         {
             if(!EntityManager.GetComponentData<IsFollowing>(entity).Value) { return; }
             if(EntityManager.HasComponent<Stunned>(entity)) { return; }
+            if(EntityManager.HasComponent<DeActive>(entity)) { return; }
             if(EntityManager.HasComponent<Casting>(entity)) { return; }
             if(pathFollow.pathIndex != pathPositionBuffer.Length - 2)
             {

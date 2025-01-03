@@ -1,5 +1,7 @@
 using Unity.Entities;
+# if UNITY_EDITOR
 using UnityEditor;
+# endif
 using UnityEngine;
 
 class EventManagerAuthoring : MonoBehaviour
@@ -8,6 +10,7 @@ class EventManagerAuthoring : MonoBehaviour
 
     [HideInInspector] public GameObject spawnerEntity;
 
+    #if UNITY_EDITOR
     [CustomEditor(typeof(EventManagerAuthoring))]
     public class EventManagerEditor : Editor
     {
@@ -33,6 +36,7 @@ class EventManagerAuthoring : MonoBehaviour
             EditorUtility.SetDirty(target);
         }
     }
+    #endif
 }
 
 class EventManagerAuthoringBaker : Baker<EventManagerAuthoring>

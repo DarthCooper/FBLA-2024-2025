@@ -68,7 +68,7 @@ partial class PathFollowerSystem : SystemBase
         }
         #endregion
         #region NPCFollowing
-        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithAll<NPCTag>().WithEntityAccess())
+        foreach ((RefRW<IsFollowing> following, PathFollowTargetDistance targetDistance, PathFollowTarget target, PathFollowerPreviousTarget lastTarget, LocalTransform transform, Entity entity) in SystemAPI.Query<RefRW<IsFollowing>, PathFollowTargetDistance, PathFollowTarget, PathFollowerPreviousTarget, LocalTransform>().WithAll<NPCTag>().WithNone<DeActive>().WithEntityAccess())
         {
             Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
             if (entity.Equals(Entity.Null)) { continue; }
@@ -79,6 +79,7 @@ partial class PathFollowerSystem : SystemBase
                 {
                     Value = possibleTarget
                 });
+                Debug.Log(EntityManager.GetName(possibleTarget));
                 if(EntityManager.HasComponent<Following>(entity)) { ecb.RemoveComponent<Following>(entity); }
                 continue; 
             }

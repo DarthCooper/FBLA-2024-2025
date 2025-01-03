@@ -25,6 +25,7 @@ public partial class NPCSpawnerSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        /*
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
         Entities.WithNone<NPCsSpawned>().ForEach((Entity entity, int entityInQueryIndex, ref NPCSpawners spawner, ref NPCTypes npcTypes) =>
@@ -76,5 +77,6 @@ public partial class NPCSpawnerSystem : SystemBase
 
             ecb.AddComponent<NPCsSpawned>(entityInQueryIndex, entity);
         }).Schedule();
+        */
     }
 }
