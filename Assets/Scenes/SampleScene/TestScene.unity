@@ -9542,78 +9542,6 @@ MonoBehaviour:
     - VhHvm2e6eq
     dialogueKey: 1CjiXnuceu
   - dialogues:
-    - dialogue: Hey Jack...Why the long face?
-      index: 0
-      pos: 0
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: Out of everything in Silver Tongues shop I broke the one thing of
-        value.
-      index: 0
-      pos: 1
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: He had something of value, yeah right. I'm sure he's just trying
-        to guilt trip you into buying something.
-      index: 0
-      pos: 0
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: Yeah, your right. It was probably nothi-
-      index: 0
-      pos: 1
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events:
-      - eventType: 4
-        spawnerGameObject: {fileID: 0}
-        shakeIndex: 3
-    - dialogue: '*RUMBLE*'
-      index: 0
-      pos: 2
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: What...What was that?
-      index: 0
-      pos: 1
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: What are those?
-      index: 0
-      pos: 1
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events: []
-    - dialogue: AHHH, RUN!
-      index: 0
-      pos: 0
-      minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
-      events:
-      - eventType: 2
-        spawnerGameObject: {fileID: 280023322}
-        shakeIndex: 0
-      - eventType: 0
-        spawnerGameObject: {fileID: 740812353}
-        shakeIndex: 0
-    curIndex: 0
-    requiredDialogues:
-    - VhHvm2e6eq
-    dialogueKey: 1CjiXnuceu
-  - dialogues:
     - dialogue: 'I thought I was a gonner, thank you. '
       index: 1
       pos: 0
@@ -9647,7 +9575,7 @@ MonoBehaviour:
       events: []
     - dialogue: What does it do?
       index: 5
-      pos: 0
+      pos: 1
       minTime: 2
       leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
@@ -9664,7 +9592,7 @@ MonoBehaviour:
     - dialogue: Perfect, let's put it to the test. Something tells me we'll need
         that protection.
       index: 0
-      pos: 0
+      pos: 1
       minTime: 2
       leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
