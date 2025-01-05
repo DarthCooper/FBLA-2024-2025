@@ -32,6 +32,12 @@ public class DialogueSetterData
     public Sprite leftSprite;
     public Sprite rightSprite;
 
+    [SerializeField] public EventsSetter[] events;
+}
+
+[Serializable]
+public class EventsSetter
+{
     public EventType eventType = EventType.NONE;
     public GameObject spawnerGameObject;
     public int shakeIndex;
@@ -74,28 +80,41 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                 dialogue.minTime = authoring.dialogues[i].dialogues[j].minTime;
                 dialogue.time = 0;
                 dialogue.pos = authoring.dialogues[i].dialogues[j].pos;
-                dialogue.eventType = authoring.dialogues[i].dialogues[j].eventType;
-                dialogue.cameraShakeIndex = authoring.dialogues[i].dialogues[j].shakeIndex;
-                switch (authoring.dialogues[i].dialogues[j].eventType)
+
+                var eventsData = builder.Allocate(ref dialogue.OnEndEvents, authoring.dialogues[i].dialogues[j].events.Length);
+                for (int k = 0; k < eventsData.Length; k++)
                 {
-                    case EventType.SPAWNENEMIES:
-                        spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].spawnerGameObject, TransformUsageFlags.Dynamic) } );
-                        dialogue.entityID = spawnerIndex;
-                        spawnerIndex++;
-                        break;
-                    case EventType.ActivateEntities:
-                        spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].spawnerGameObject, TransformUsageFlags.Dynamic) });
-                        dialogue.entityID = spawnerIndex;
-                        spawnerIndex++;
-                        break;
-                    default:
-                        dialogue.entityID = -1;
-                        break;
+                    ref Events events = ref eventsData[k];
+                    events.eventType = authoring.dialogues[i].dialogues[j].events[k].eventType;
+                    events.cameraShakeIndex = -1;
+                    switch (authoring.dialogues[i].dialogues[j].events[k].eventType)
+                    {
+                        case EventType.SPAWNENEMIES:
+                            spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].events[k].spawnerGameObject, TransformUsageFlags.Dynamic) } );
+                            events.entityID = spawnerIndex;
+                            spawnerIndex++;
+                            break;
+                        case EventType.ActivateEntities:
+                            spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].events[k].spawnerGameObject, TransformUsageFlags.Dynamic) });
+                            events.entityID = spawnerIndex;
+                            spawnerIndex++;
+                            break;
+                        case EventType.DeactivateEntities:
+                            spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].events[k].spawnerGameObject, TransformUsageFlags.Dynamic) });
+                            events.entityID = spawnerIndex;
+                            spawnerIndex++;
+                            break;
+                        case EventType.ShakeCamera:
+                            events.cameraShakeIndex = authoring.dialogues[i].dialogues[j].events[k].shakeIndex;
+                            break;
+                        default:
+                            events.entityID = -1;
+                            break;
+                    }
                 }
 
                 builder.AllocateString(ref dialogue.leftSpritePath, authoring.dialogues[i].dialogues[j].leftSprite.name);
                 builder.AllocateString(ref dialogue.rightSpritePath, authoring.dialogues[i].dialogues[j].rightSprite.name);
-
                 builder.AllocateString(ref dialogue.dialogue, authoring.dialogues[i].dialogues[j].dialogue);
             }
         }

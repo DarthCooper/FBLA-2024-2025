@@ -1,6 +1,7 @@
 using Unity.Entities;
 
 public struct InteractableTag : IComponentData { }
+public struct TriggerInteractableTag : IComponentData { }
 
 public struct InteractableTypeData : IComponentData
 {

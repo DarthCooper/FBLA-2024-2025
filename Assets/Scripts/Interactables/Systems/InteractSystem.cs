@@ -2,6 +2,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Physics.Stateful;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ public partial class InteractSystem : SystemBase
     {
         _ecbSystem = World.GetOrCreateSystemManaged<EntityCommandBufferSystem>();
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
+        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
 
         Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref PlayerInteractInput input, ref LocalToWorld transform) =>
         {
@@ -47,6 +49,37 @@ public partial class InteractSystem : SystemBase
                         continue;
                 }
                 break;
+            }
+        }).Run();
+
+        Entities.WithAll<TriggerInteractableTag>().WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref DynamicBuffer<StatefulTriggerEvent> triggerBuffer, ref InteractableTypeData interactableData) =>
+        {
+            for (int i = 0; i < triggerBuffer.Length; i++)
+            {
+                StatefulTriggerEvent triggerEvent = triggerBuffer[i];
+                Entity otherEntity = triggerEvent.GetOtherEntity(entity);
+                if(!otherEntity.Equals(player)) { continue; }
+                if (triggerEvent.State == StatefulEventState.Enter)
+                {
+                    if(EntityManager.HasComponent<PickUp>(entity)) { continue; }
+                    if(EntityManager.HasComponent<Speaking>(entity)) { continue; }
+                    InteractableType interactableType = GetInteractableType(entity);
+                    switch (interactableType)
+                    {
+                        case InteractableType.PICKUP:
+                            ecb.AddComponent<PickUp>(entityInQueryIndex, entity);
+                            break;
+                        case InteractableType.DIALOGUE:
+                            ecb.AddComponent<Speaking>(entityInQueryIndex, entity);
+                            ecb.AddComponent(entityInQueryIndex, player, new PlayerSpeaking
+                            {
+                                SpeakingTo = entity
+                            });
+                            break;
+                        default:
+                            continue;
+                    }
+                }
             }
         }).Run();
     }

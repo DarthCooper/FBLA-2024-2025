@@ -88,6 +88,15 @@ public partial class PlayerPathFinderSystem : SystemBase
                     Vector3 startPos = new Vector3(pathPositionBuffer[i].position.x, -0.7f, pathPositionBuffer[i].position.y);
                     convertedPathPositions.Add(startPos);
                 }
+                #if UNITY_EDITOR
+                for (int i = pathPositionBuffer.Length - 1; i > 0; i--)
+                {
+                    Vector3 startPos = new Vector3(pathPositionBuffer[i].position.x, 0, pathPositionBuffer[i].position.y);
+                    Vector3 endPos = new Vector3(pathPositionBuffer[i - 1].position.x, 0, pathPositionBuffer[i - 1].position.y);
+
+                    Debug.DrawLine(startPos, endPos, Color.green, 0.01f);
+                }
+                #endif
                 if (math.distance(playerTransform.Position, targetPosition) < 1f)
                 {
                     pathPositionBuffer.RemoveAt(pathFollow.pathIndex);

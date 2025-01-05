@@ -14,7 +14,8 @@ public enum CollisionLayer
     MeleeWeapon = 1 << 8,
     Projectile = 1 << 9,
     Stunned = 1 << 10,
-    None = 1 << 11,
+    EventTrigger = 1 << 11,
+    None = 1 << 12,
 }
 
 public class CollisionFilters
@@ -33,7 +34,7 @@ public class CollisionFilters
         filterCharacter = new CollisionFilter()
         {
             BelongsTo = (uint)(CollisionLayer.Character),
-            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
+            CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Interactable | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon | CollisionLayer.EventTrigger)
         },
         filterEnemy = new CollisionFilter()
         {
@@ -75,6 +76,11 @@ public class CollisionFilters
             BelongsTo = (uint)CollisionLayer.Stunned,
             CollidesWith = (uint)(CollisionLayer.Solid | CollisionLayer.Obstacle | CollisionLayer.Projectile | CollisionLayer.MeleeWeapon)
         },
+        filterEventTrigger = new CollisionFilter()
+        {
+            BelongsTo = (uint)CollisionLayer.EventTrigger,
+            CollidesWith = (uint)CollisionLayer.Character,
+        },
         filterNone = new CollisionFilter
         {
             BelongsTo = (uint)CollisionLayer.None,
@@ -107,6 +113,8 @@ public class CollisionFilters
                 return filterProjectileTrigger;
             case CollisionLayer.Stunned:
                 return filterStunned;
+            case CollisionLayer.EventTrigger:
+                return filterEventTrigger;
             case CollisionLayer.None:
                 return filterNone;
             default:

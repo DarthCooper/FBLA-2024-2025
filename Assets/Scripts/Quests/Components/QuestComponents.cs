@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Entities;
 
 public struct QuestComponents : IComponentData
@@ -15,6 +16,8 @@ public struct WinConditionElementData : IBufferElementData
 {
     public int QuestID;
 
+    public bool requireAll;
+
     public float maxTime;
     public float curTime;
 
@@ -27,6 +30,11 @@ public struct WinConditionElementData : IBufferElementData
     public Entity triggerEntity;
 
     public Entity interactEntity;
+
+    public int killsAdvance;
+    public int wavesAdvance;
+    public int timeAdvance;
+    public int interactAdvance;
 }
 
 public struct Quest

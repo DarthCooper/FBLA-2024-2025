@@ -17,6 +17,7 @@ public class QuestSetterData
 
     [Header("Only attach the corresponding value to the win Type")]
     public WinConditons winCondition;
+    public bool requireAll = true;
 
     [Header("Time Based")]
     public float maxTime;
@@ -33,6 +34,10 @@ public class QuestSetterData
     [Header("Interact Based")]
     public GameObject interactEntity;
 
+    [Header("QuestAdvances - Should be 1 unless a choice is being made")]
+    public int[] advances;
+
+    [Header("On End Event")]
     public EventType questEndEventType;
     public GameObject spawner;
     public int cameraIndex;
@@ -64,12 +69,17 @@ class QuestsAuthoringBaker : Baker<QuestsAuthoring>
             winConditions.Add(new WinConditionElementData
             {
                 QuestID = authoring.quests[i].QuestID,
+                requireAll = authoring.quests[i].requireAll,
                 maxTime = authoring.quests[i].maxTime,
                 curTime = authoring.quests[i].maxTime,
                 neededKills = authoring.quests[i].maxKills,
                 neededWaves = authoring.quests[i].maxWaves,
                 triggerEntity = GetEntity(authoring.quests[i].winTrigger, TransformUsageFlags.Dynamic),
                 interactEntity = GetEntity(authoring.quests[i].interactEntity, TransformUsageFlags.Dynamic),
+                killsAdvance = authoring.quests[i].advances[0],
+                wavesAdvance = authoring.quests[i].advances[1],
+                timeAdvance = authoring.quests[i].advances[2],
+                interactAdvance = authoring.quests[i].advances[3],
             });
 
             endEvent.Add(new QuestEndEvent

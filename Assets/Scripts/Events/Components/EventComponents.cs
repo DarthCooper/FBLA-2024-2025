@@ -2,6 +2,14 @@ using Unity.Entities;
 
 public struct EventManger : IComponentData { }
 
+public struct Events : IComponentData
+{
+    public EventType eventType;
+    public int entityID;
+
+    public int cameraShakeIndex;
+}
+
 public struct SpawnEnemiesEvent : IComponentData
 {
     public Entity spawnEntity;

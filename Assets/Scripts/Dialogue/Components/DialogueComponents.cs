@@ -41,10 +41,7 @@ public struct Dialogue
     public BlobString leftSpritePath;
     public BlobString rightSpritePath;
 
-    public EventType eventType;
-    public int entityID;
-
-    public int cameraShakeIndex;
+    public BlobArray<Events> OnEndEvents;
 }
 
 public struct IncrementDialogue : IComponentData { }

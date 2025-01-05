@@ -48,110 +48,203 @@ public partial class QuestSystem : SystemBase
                 }
             }
             Entity targetEntity = EntityManager.GetComponentData<QuestTargetEntity>(entity).Value;
+            bool requireAll = winCondition.requireAll;
             bool completed = true;
-            if (winCondition.neededKills > 0)
+            int advanceAmount = 1;
+            if(requireAll)
             {
-                if(curKills < winCondition.neededKills)
+                if (winCondition.neededKills > 0)
                 {
-                    completed = false;
-                }
-                string visual = format.Replace("{1}", curKills.ToString()).Replace("{2}", winCondition.neededKills.ToString());
-                QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
-                if(!targetEntity.Equals(Entity.Null))
-                {
-                    ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                    if(curKills < winCondition.neededKills)
                     {
-                        Value = Entity.Null,
-                    });
-                }
-            }
-            if (winCondition.neededWaves > 0)
-            {
-                if(curWaves < winCondition.neededWaves)
-                {
-                    completed = false;
-                }
-                string visual = format.Replace("{1}", curWaves.ToString()).Replace("{2}", winCondition.neededWaves.ToString());
-                QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
-                if (!targetEntity.Equals(Entity.Null))
-                {
-                    ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        completed = false;
+                    }
+                    string visual = format.Replace("{K}", curKills.ToString()).Replace("{MK}", winCondition.neededKills.ToString());
+                    QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
+                    if(!targetEntity.Equals(Entity.Null))
                     {
-                        Value = Entity.Null,
-                    });
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = Entity.Null,
+                        });
+                    }
                 }
-            }
-            if (winCondition.maxTime > 0)
-            {
-                if(winCondition.curTime > 0)
+                if (winCondition.neededWaves > 0)
                 {
+                    if(curWaves < winCondition.neededWaves)
+                    {
+                        completed = false;
+                    }
+                    string visual = format.Replace("{W}", curWaves.ToString()).Replace("{NW}", winCondition.neededWaves.ToString());
+                    QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
+                    if (!targetEntity.Equals(Entity.Null))
+                    {
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = Entity.Null,
+                        });
+                    }
+                }
+                if (winCondition.maxTime > 0)
+                {
+                    if(winCondition.curTime > 0)
+                    {
+                        winCondition.curTime -= SystemAPI.Time.DeltaTime;
+                        completed = false;
+                    }
+                    float time = winCondition.curTime;
+                    int minutes = Mathf.FloorToInt(time / 60F);
+                    int seconds = Mathf.FloorToInt(time - minutes * 60);
+
+                    string niceTime = string.Format("{0:00}:{1:00}", minutes, seconds);
+                    string visual = format.Replace("{T}", niceTime);
+                    QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
+
+                    if (!targetEntity.Equals(Entity.Null))
+                    {
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = Entity.Null,
+                        });
+                    }
+                }
+                if (!winCondition.triggerEntity.Equals(Entity.Null))
+                {
+                    LocalToWorld triggerTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.triggerEntity);
+                    LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
+                    float magnitude = (int)Manager.GetMagnitude(triggerTransform.Position - playerTransform.Position);
+                    if (magnitude >= 2)
+                    {
+                        completed = false;
+                    }
+                    string visual = format.Replace("{TD}", magnitude.ToString());
+                    QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
+                    if(!targetEntity.Equals(winCondition.triggerEntity))
+                    {
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = winCondition.triggerEntity
+                        });
+                    }
+                }
+                if (!winCondition.interactEntity.Equals(Entity.Null))
+                {
+                    if(!EntityManager.HasComponent<Speaking>(winCondition.interactEntity) && !EntityManager.HasComponent<PickUp>(winCondition.interactEntity)) 
+                    {
+                        completed = false;
+                    }
+
+                    LocalToWorld interactableTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.interactEntity);
+                    LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
+                    float magnitude = (int)Manager.GetMagnitude(interactableTransform.Position - playerTransform.Position);
+                    string visual = format.Replace("{ID}", magnitude.ToString());
+
+                    QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
+                    if(!targetEntity.Equals(winCondition.interactEntity))
+                    {
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = winCondition.interactEntity
+                        });
+                    }
+                }
+            }else
+            {
+                completed = false;
+                bool targetEntityExists = false;
+                string visual = format;
+                if (winCondition.neededKills > 0)
+                {
+                    if (curKills >= winCondition.neededKills)
+                    {
+                        completed = true;
+                        advanceAmount = winCondition.killsAdvance;
+                    }
+                    visual = visual.Replace("{K}", curKills.ToString()).Replace("{MK}", winCondition.neededKills.ToString());
+                }
+                if (winCondition.neededWaves > 0)
+                {
+                    if (curWaves >= winCondition.neededWaves)
+                    {
+                        completed = true;
+                        advanceAmount = winCondition.wavesAdvance;
+                    }
+                    visual = visual.Replace("{W}", curWaves.ToString()).Replace("{NW}", winCondition.neededWaves.ToString());
+                }
+                if (winCondition.maxTime > 0)
+                {
+                    if (winCondition.curTime <= 0)
+                    {
+                        completed = true;
+                        advanceAmount = winCondition.timeAdvance;
+                    }
                     winCondition.curTime -= SystemAPI.Time.DeltaTime;
-                    completed = false;
-                }
-                float time = winCondition.curTime;
-                int minutes = Mathf.FloorToInt(time / 60F);
-                int seconds = Mathf.FloorToInt(time - minutes * 60);
+                    float time = winCondition.curTime;
+                    int minutes = Mathf.FloorToInt(time / 60F);
+                    int seconds = Mathf.FloorToInt(time - minutes * 60);
 
-                string niceTime = string.Format("{0:00}:{1:00}", minutes, seconds);
-                string visual = format.Replace("{1}", niceTime);
+                    string niceTime = string.Format("{0:00}:{1:00}", minutes, seconds);
+                    visual = visual.Replace("{T}", niceTime);
+                }
+                if (!winCondition.triggerEntity.Equals(Entity.Null))
+                {
+                    LocalToWorld triggerTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.triggerEntity);
+                    LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
+                    float magnitude = (int)Manager.GetMagnitude(triggerTransform.Position - playerTransform.Position);
+                    if (magnitude <= 2)
+                    {
+                        completed = true;
+                    }
+                    visual = visual.Replace("{TD}", magnitude.ToString());
+                }
+                if (!winCondition.interactEntity.Equals(Entity.Null))
+                {
+                    if (EntityManager.HasComponent<Speaking>(winCondition.interactEntity) && EntityManager.HasComponent<PickUp>(winCondition.interactEntity))
+                    {
+                        completed = true;
+                        advanceAmount = winCondition.interactAdvance;
+                    }
+
+                    LocalToWorld interactableTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.interactEntity);
+                    LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
+                    float magnitude = (int)Manager.GetMagnitude(interactableTransform.Position - playerTransform.Position);
+                    visual = visual.Replace("{ID}", magnitude.ToString());
+
+                    targetEntityExists = true;
+                }
                 QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
 
-                if (!targetEntity.Equals(Entity.Null))
+                if (targetEntityExists)
                 {
-                    ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                    if (!targetEntity.Equals(winCondition.interactEntity))
                     {
-                        Value = Entity.Null,
-                    });
-                }
-            }
-            if (!winCondition.triggerEntity.Equals(Entity.Null))
-            {
-                LocalToWorld triggerTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.triggerEntity);
-                LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
-                float magnitude = Manager.GetMagnitude(triggerTransform.Position - playerTransform.Position);
-                if (magnitude >= 2)
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = winCondition.interactEntity
+                        });
+                    }
+                }else
                 {
-                    completed = false;
-                }
-                string visual = format.Replace("{1}", magnitude.ToString());
-                QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
-                if(!targetEntity.Equals(winCondition.triggerEntity))
-                {
-                    ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                    if (!targetEntity.Equals(Entity.Null))
                     {
-                        Value = winCondition.triggerEntity
-                    });
-                }
-            }
-            if (!winCondition.interactEntity.Equals(Entity.Null))
-            {
-                if(!EntityManager.HasComponent<Speaking>(winCondition.interactEntity) && !EntityManager.HasComponent<PickUp>(winCondition.interactEntity)) 
-                {
-                    completed = false;
-                }
-
-                LocalToWorld interactableTransform = EntityManager.GetComponentData<LocalToWorld>(winCondition.interactEntity);
-                LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
-                float magnitude = (int)Manager.GetMagnitude(interactableTransform.Position - playerTransform.Position);
-                string visual = format.Replace("{1}", magnitude.ToString());
-
-                QuestVisual?.Invoke(questName, visual, completed, winCondition.QuestID);
-                if(!targetEntity.Equals(winCondition.interactEntity))
-                {
-                    ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
-                    {
-                        Value = winCondition.interactEntity
-                    });
+                        ecb.SetComponent(entityInQueryIndex, entity, new QuestTargetEntity
+                        {
+                            Value = Entity.Null,
+                        });
+                    }
                 }
             }
 
             if (completed)
             {
-                quests.index++;
+                quests.index += advanceAmount;
                 questData.completed = true;
                 completedQuests.Add(questData.QuestId);
                 Debug.Log(quests.index);
                 OnEndQuest?.Invoke(questData.QuestId);
+
+                curKills = 0;
+                curWaves = 0;
 
                 QuestEndEvent questEvent = default;
                 foreach (QuestEndEvent eventData in eventBuffer)

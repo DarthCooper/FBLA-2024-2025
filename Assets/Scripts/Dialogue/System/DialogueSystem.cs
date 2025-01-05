@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Unity.Entities;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public partial class DialogueSystem : SystemBase
@@ -52,51 +53,51 @@ public partial class DialogueSystem : SystemBase
 
             if (dialogueArray.curIndex >= dialogueArray.dialogues.Length) { return; }
             ref Dialogue curDialogue = ref dialogueArray.dialogues[dialogueArray.curIndex];
-
             if (EntityManager.HasComponent<IncrementDialogue>(entity))
             {
-                if(curDialogue.time >= curDialogue.minTime)
+                if (curDialogue.time >= curDialogue.minTime)
                 {
-                    if (!eventManger.Equals(Entity.Null))
-                    {
-                        switch (curDialogue.eventType)
-                        {
-                            case EventType.SPAWNENEMIES:
-                                DynamicBuffer<DialogueSpawner> spawners = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
-                                {
-                                    spawnEntity = spawners[curDialogue.entityID].Spawner
-                                });
-                                break;
-                            case EventType.ActivateEntities:
-                                DynamicBuffer<DialogueSpawner> activators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                ecb.AddComponent(entityInQueryIndex, eventManger, new ActivateEntitiesEvent
-                                {
-                                    ActivateEntityHolder = activators[curDialogue.entityID].Spawner
-                                });
-                                break;
-                            case EventType.DeactivateEntities:
-                                DynamicBuffer<DialogueSpawner> deactivators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                ecb.AddComponent(entityInQueryIndex, eventManger, new DeActivateEntitiesEvent
-                                {
-                                    DeActivateEntityHolder = deactivators[curDialogue.entityID].Spawner
-                                });
-                                break;
-                            case EventType.ShakeCamera:
-                                ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
-                                {
-                                    index = curDialogue.cameraShakeIndex
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
                     dialogueArray.curIndex++;
-                    if(dialogueArray.curIndex >= dialogueArray.dialogues.Length)
+                    if (dialogueArray.curIndex >= dialogueArray.dialogues.Length)
                     {
                         OnTalkEnd?.Invoke();
+                        for (int i = 0; i < curDialogue.OnEndEvents.Length; i++) 
+                        {
+                            ref Events events = ref curDialogue.OnEndEvents[i];
+                            Debug.Log(events.eventType);
+                            switch (events.eventType)
+                            {
+                                case EventType.SPAWNENEMIES:
+                                    DynamicBuffer<DialogueSpawner> spawners = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
+                                    {
+                                        spawnEntity = spawners[events.entityID].Spawner
+                                    });
+                                    break;
+                                case EventType.ActivateEntities:
+                                    DynamicBuffer<DialogueSpawner> activators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ActivateEntitiesEvent
+                                    {
+                                        ActivateEntityHolder = activators[events.entityID].Spawner
+                                    });
+                                    break;
+                                case EventType.DeactivateEntities:
+                                    DynamicBuffer<DialogueSpawner> deactivators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new DeActivateEntitiesEvent
+                                    {
+                                        DeActivateEntityHolder = deactivators[events.entityID].Spawner
+                                    });
+                                    break;
+                                case EventType.ShakeCamera:
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
+                                    {
+                                        index = events.cameraShakeIndex
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
                         ecb.RemoveComponent<PlayerSpeaking>(entityInQueryIndex, playerEntity);
                         dialogues.curIndex++;
@@ -106,6 +107,7 @@ public partial class DialogueSystem : SystemBase
                 }
                 ecb.RemoveComponent<IncrementDialogue>(entityInQueryIndex, entity);
             }
+
 
             ref Dialogue dialogue = ref dialogueArray.dialogues[dialogueArray.curIndex];
 
