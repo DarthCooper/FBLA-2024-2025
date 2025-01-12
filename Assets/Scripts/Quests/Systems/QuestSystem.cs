@@ -199,7 +199,7 @@ public partial class QuestSystem : SystemBase
                 }
                 if (!winCondition.interactEntity.Equals(Entity.Null))
                 {
-                    if (EntityManager.HasComponent<Speaking>(winCondition.interactEntity) && EntityManager.HasComponent<PickUp>(winCondition.interactEntity))
+                    if (EntityManager.HasComponent<Speaking>(winCondition.interactEntity) || EntityManager.HasComponent<PickUp>(winCondition.interactEntity))
                     {
                         completed = true;
                         advanceAmount = winCondition.interactAdvance;
@@ -279,6 +279,12 @@ public partial class QuestSystem : SystemBase
                         ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
                         {
                             index = questEvent.cameraIndex
+                        });
+                        break;
+                    case EventType.ENDLEVEL:
+                        ecb.AddComponent(entityInQueryIndex, eventManger, new EndLevelEvent
+                        {
+                            levelIndex = questEvent.levelIndex
                         });
                         break;
                     default:

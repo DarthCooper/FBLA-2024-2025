@@ -56,9 +56,10 @@ partial class PathFollowSystem : SystemBase
                     Debug.DrawLine(startPos, endPos, Color.green, 0.01f);
                 }
                 #endif
-                if (math.distance(transform.Position, targetPosition) < 1f)
+                if (Manager.GetMagnitude(moveDir) < 1f)
                 {
                     //transform.Position = new float3(targetPosition.x, transform.Position.y, targetPosition.z);
+                    Debug.Log(Manager.GetMagnitude(moveDir));
                     pathPositionBuffer.RemoveAt(pathFollow.pathIndex);
                 }
             }

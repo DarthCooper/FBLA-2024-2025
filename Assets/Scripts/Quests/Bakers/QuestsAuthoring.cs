@@ -41,6 +41,7 @@ public class QuestSetterData
     public EventType questEndEventType;
     public GameObject spawner;
     public int cameraIndex;
+    public int levelIndex;
 }
 
 class QuestsAuthoringBaker : Baker<QuestsAuthoring>
@@ -88,6 +89,7 @@ class QuestsAuthoringBaker : Baker<QuestsAuthoring>
                 EventType = authoring.quests[i].questEndEventType,
                 spawner = GetEntity(authoring.quests[i].spawner, TransformUsageFlags.Dynamic),
                 cameraIndex = authoring.quests[i].cameraIndex,
+                levelIndex = authoring.quests[i].levelIndex,
             });
         }
 

@@ -8,6 +8,8 @@ public struct Events : IComponentData
     public int entityID;
 
     public int cameraShakeIndex;
+
+    public int levelIndex;
 }
 
 public struct SpawnEnemiesEvent : IComponentData
@@ -15,7 +17,10 @@ public struct SpawnEnemiesEvent : IComponentData
     public Entity spawnEntity;
 }
 
-public struct EndLevelEvent : IComponentData { }
+public struct EndLevelEvent : IComponentData 
+{
+    public int levelIndex;
+}
 
 public struct ActivateEntitiesEvent : IComponentData
 {
@@ -39,5 +44,6 @@ public enum EventType
     ActivateEntities,
     NONE,
     ShakeCamera,
-    DeactivateEntities
+    DeactivateEntities,
+    CHANGELEVEL
 }

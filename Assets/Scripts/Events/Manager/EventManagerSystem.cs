@@ -4,14 +4,16 @@ using UnityEngine;
 
 public partial class EventManagerSystem : SystemBase
 {
-    public Action OnEndLevel;
+    public Action<int> OnEndLevel;
 
     protected override void OnUpdate()
     {
         Entity eventManagerEntity = SystemAPI.GetSingletonEntity<EventManger>();
         if(EntityManager.HasComponent<EndLevelEvent>(eventManagerEntity))
         {
-            OnEndLevel?.Invoke();
+            EndLevelEvent spawnEvent = EntityManager.GetComponentData<EndLevelEvent>(eventManagerEntity);
+
+            OnEndLevel?.Invoke(spawnEvent.levelIndex);
             EntityManager.RemoveComponent<EndLevelEvent>(eventManagerEntity);
         }
         if(EntityManager.HasComponent<SpawnEnemiesEvent>(eventManagerEntity))

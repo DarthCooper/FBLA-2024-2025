@@ -3,10 +3,8 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 partial class PathFollowerSystem : SystemBase
 {
@@ -261,7 +259,7 @@ partial class PathFollowerSystem : SystemBase
 
         float cellSize = grid.GetCellSize();
 
-        grid.GetXY(pos + new float3(1, 0, 1) * cellSize * .5f, out int startX, out int startY);
+        grid.GetXY(pos * cellSize, out int startX, out int startY);
 
         if(!EntityManager.HasComponent<LocalTransform>(target.Value)) { return; }
         float3 targetPos = EntityManager.GetComponentData<LocalTransform>(target.Value).Position;

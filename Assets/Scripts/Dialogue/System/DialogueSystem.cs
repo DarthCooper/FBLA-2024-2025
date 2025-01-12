@@ -94,6 +94,12 @@ public partial class DialogueSystem : SystemBase
                                         index = events.cameraShakeIndex
                                     });
                                     break;
+                                case EventType.CHANGELEVEL:
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new EndLevelEvent
+                                    {
+                                        levelIndex = events.levelIndex
+                                    });
+                                    break;
                                 default:
                                     break;
                             }

@@ -51,6 +51,7 @@ public struct QuestEndEvent : IBufferElementData
     public EventType EventType;
     public Entity spawner;
     public int cameraIndex;
+    public int levelIndex;
 }
 
 public struct QuestTargetEntity : IComponentData

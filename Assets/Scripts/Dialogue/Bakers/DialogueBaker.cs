@@ -41,6 +41,7 @@ public class EventsSetter
     public EventType eventType = EventType.NONE;
     public GameObject spawnerGameObject;
     public int shakeIndex;
+    public int levelIndex;
 }
 
 class DialogueBakerBaker : Baker<DialogueBaker>
@@ -87,6 +88,7 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                     ref Events events = ref eventsData[k];
                     events.eventType = authoring.dialogues[i].dialogues[j].events[k].eventType;
                     events.cameraShakeIndex = -1;
+                    events.levelIndex = -1;
                     switch (authoring.dialogues[i].dialogues[j].events[k].eventType)
                     {
                         case EventType.SPAWNENEMIES:
@@ -106,6 +108,9 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                             break;
                         case EventType.ShakeCamera:
                             events.cameraShakeIndex = authoring.dialogues[i].dialogues[j].events[k].shakeIndex;
+                            break;
+                        case EventType.CHANGELEVEL:
+                            events.levelIndex = authoring.dialogues[i].dialogues[j].events[k].levelIndex;
                             break;
                         default:
                             events.entityID = -1;

@@ -1,19 +1,36 @@
 using TMPro;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
+    public static Manager instance;
+
+    public int frameRate = 60;
+
     public float timeInMatch;
     public TMP_Text timer;
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = frameRate;
+    }
+
+    public void Awake()
+    {
+        instance = this;
+
+        EventManagerSystem events = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<EventManagerSystem>();
+        events.OnEndLevel += EndLevel;
+    }
+
+    public void OnDisable()
+    {
+        if (World.DefaultGameObjectInjectionWorld == null) { return; }
+        EventManagerSystem events = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<EventManagerSystem>();
+        events.OnEndLevel -= EndLevel;
     }
 
     public void Update()
@@ -30,5 +47,11 @@ public class Manager : MonoBehaviour
     public static float GetMagnitude(float3 vector)
     {
         return Mathf.Sqrt(Mathf.Pow(vector.x, 2) + Mathf.Pow(vector.y, 2) + Mathf.Pow(vector.z, 2));
+    }
+
+    public void EndLevel(int index)
+    {
+        SceneManager.LoadScene(index, LoadSceneMode.Single);
+        Debug.Log(index);
     }
 }
