@@ -22004,7 +22004,7 @@ MonoBehaviour:
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
     - dialogue: 'In that case could I interest you in a legendary relic, one worn
-        by our great captain. The eypatch of Eternal night. '
+        by our great captain. The eyepatch of Eternal night. '
       index: 5
       pos: 0
       minTime: 2
@@ -22034,7 +22034,7 @@ MonoBehaviour:
       leftSprite: {fileID: 21300000, guid: f9b11202096b6814c9e1fbf8b82a266c, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
-    - dialogue: Behold...The Map of Infinte Buried Treasures, here take a look.
+    - dialogue: Behold...The Map of Inifinte Buried Treasures, here take a look.
       index: 9
       pos: 0
       minTime: 2
@@ -22057,7 +22057,7 @@ MonoBehaviour:
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
     - dialogue: Behold, a still beating kraken's heart, said to be from the one that
-        plagues our waters to this very day. Here hold it, feel the heart beat...
+        plagues our waters to this very day. Here hold it, feel the heartbeat...
       index: 12
       pos: 0
       minTime: 2
@@ -37444,7 +37444,7 @@ MonoBehaviour:
     - VhHvm2e6eq
     dialogueKey: 1CjiXnuceu
   - dialogues:
-    - dialogue: 'I thought I was a gonner, thank you. '
+    - dialogue: 'I thought I was a goner, thank you. '
       index: 1
       pos: 0
       minTime: 2
@@ -37483,7 +37483,7 @@ MonoBehaviour:
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
     - dialogue: It's a protection rune, it should protect our ship while we travel.
-        Needs the sea to form a sheild, so it won't help us on land, but should do
+        Needs the sea to form a shield, so it won't help us on land, but should do
         us a lot of good while at sea.
       index: 6
       pos: 0
@@ -37492,7 +37492,7 @@ MonoBehaviour:
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
     - dialogue: Perfect, let's put it to the test. Something tells me we'll need
-        that protection.
+        it.
       index: 0
       pos: 1
       minTime: 2

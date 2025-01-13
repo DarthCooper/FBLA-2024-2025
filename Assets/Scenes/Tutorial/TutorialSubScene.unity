@@ -23382,16 +23382,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogues:
   - dialogues:
-    - dialogue: Oh Thank god...I thought we lost ya. That was quite a nasty ship
-        wreck, what happened?
+    - dialogue: Oh Thank god...I thought we lost ya. That was quite a nasty shipwreck,
+        what happened?
       index: 0
       pos: 0
       minTime: 2
       leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
       rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
       events: []
-    - dialogue: I was tasked with finding our ole captains mystical eyepatch of eternal
-        night. It may have messed up my depth perception.
+    - dialogue: I was tasked with finding our ole captain's mystical eyepatch of
+        eternal night. It may have messed up my depth perception.
       index: 1
       pos: 1
       minTime: 2
@@ -25610,7 +25610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogues:
   - dialogues:
-    - dialogue: You're motor functions seem to be doing well...or at least good enough.
+    - dialogue: Your motor functions seem to be doing well...or at least good enough.
         Let's check your depth perception real quick, shoot these bottles.
       index: 0
       pos: 0
