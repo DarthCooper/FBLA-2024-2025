@@ -1193,6 +1193,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &842337586 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6398639744212170357, guid: 7d6af9ad0adb24a4b83cd6ef3c22f642, type: 3}
+  m_PrefabInstance: {fileID: 832179600}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &991728778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,6 +1605,7 @@ MonoBehaviour:
   frameRate: 60
   timeInMatch: 720
   timer: {fileID: 832179603}
+  fadeAnim: {fileID: 842337586}
 --- !u!4 &1197991701
 Transform:
   m_ObjectHideFlags: 0

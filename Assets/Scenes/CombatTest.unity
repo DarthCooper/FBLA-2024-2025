@@ -335,7 +335,7 @@ Transform:
   m_GameObject: {fileID: 105846933}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 9.7, y: 15, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -800,7 +800,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3041572, y: -0.000000014401368, z: 0.0000000045981308, w: 0.9526219}
-  m_LocalPosition: {x: 0, y: 5.66, z: -7.96}
+  m_LocalPosition: {x: 9.7, y: 5.66, z: 0.9399996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1033,7 +1033,7 @@ Transform:
   m_GameObject: {fileID: 663746948}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 9.7, y: 0, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1302,7 +1302,7 @@ Transform:
   m_GameObject: {fileID: 1296926095}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 9.7, y: 15, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1428,7 +1428,7 @@ Transform:
   m_GameObject: {fileID: 1323770585}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3041572, y: -0.000000014401369, z: 0.000000004598131, w: 0.9526219}
-  m_LocalPosition: {x: 0, y: 5.66, z: -7.96}
+  m_LocalPosition: {x: 9.7, y: 5.66, z: 0.9399996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1705,6 +1705,7 @@ MonoBehaviour:
   frameRate: 60
   timeInMatch: 720
   timer: {fileID: 37333912}
+  fadeAnim: {fileID: 7546553904817559258}
 --- !u!4 &1798855803
 Transform:
   m_ObjectHideFlags: 0
@@ -2077,6 +2078,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d6af9ad0adb24a4b83cd6ef3c22f642, type: 3}
+--- !u!95 &7546553904817559258 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6398639744212170357, guid: 7d6af9ad0adb24a4b83cd6ef3c22f642, type: 3}
+  m_PrefabInstance: {fileID: 7546553904817559257}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

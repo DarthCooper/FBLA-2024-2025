@@ -13,6 +13,8 @@ public class Manager : MonoBehaviour
     public float timeInMatch;
     public TMP_Text timer;
 
+    public Animator fadeAnim;
+
     public void Start()
     {
         Application.targetFrameRate = frameRate;
@@ -24,6 +26,8 @@ public class Manager : MonoBehaviour
 
         EventManagerSystem events = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<EventManagerSystem>();
         events.OnEndLevel += EndLevel;
+
+        fadeAnim.SetTrigger("FadeIn");
     }
 
     public void OnDisable()
@@ -51,6 +55,7 @@ public class Manager : MonoBehaviour
 
     public void EndLevel(int index)
     {
+        fadeAnim.SetTrigger("FadeOut");
         SceneManager.LoadScene(index, LoadSceneMode.Single);
         Debug.Log(index);
     }

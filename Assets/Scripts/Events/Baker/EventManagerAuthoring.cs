@@ -25,6 +25,9 @@ class EventManagerAuthoring : MonoBehaviour
                 case EventType.SPAWNENEMIES:
                     script.spawnerEntity = (GameObject)EditorGUILayout.ObjectField("Spawner Object", script.spawnerEntity, typeof(GameObject), true);
                     break;
+                case EventType.ActivateEntities:
+                    script.spawnerEntity = (GameObject)EditorGUILayout.ObjectField("Activation Object", script.spawnerEntity, typeof(GameObject), true);
+                    break;
                 case EventType.NONE:
                     DrawDefaultInspector(); 
                     break;
@@ -52,6 +55,12 @@ class EventManagerAuthoringBaker : Baker<EventManagerAuthoring>
                 AddComponent(entity, new SpawnEnemiesEvent
                 {
                     spawnEntity = GetEntity(authoring.spawnerEntity, TransformUsageFlags.Dynamic)
+                });
+                break;
+            case EventType.ActivateEntities:
+                AddComponent(entity, new ActivateEntitiesEvent
+                {
+                    ActivateEntityHolder = GetEntity(authoring.spawnerEntity, TransformUsageFlags.Dynamic)
                 });
                 break;
             case EventType.ENDLEVEL:
