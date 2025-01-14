@@ -70587,24 +70587,24 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events: []
     - dialogue: I was tasked with finding our ole captain's mystical eyepatch of
         eternal night. It may have messed up my depth perception.
       index: 1
       pos: 1
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events: []
     - dialogue: Kinda sounds like you brought that on yourself, but anyways let's
         just make sure that you're doing okay. Follow me.
       index: 2
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events:
       - eventType: 2
         spawnerGameObject: {fileID: 2069695736}
@@ -70620,8 +70620,8 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events:
       - eventType: 2
         spawnerGameObject: {fileID: 865517480}
@@ -70637,8 +70637,8 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events:
       - eventType: 2
         spawnerGameObject: {fileID: 865517480}
@@ -70648,8 +70648,8 @@ MonoBehaviour:
       index: 0
       pos: 1
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events:
       - eventType: 2
         spawnerGameObject: {fileID: 865517480}
@@ -77087,8 +77087,8 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events: []
     curIndex: 0
     requiredDialogues:
@@ -94498,8 +94498,8 @@ MonoBehaviour:
       index: 0
       pos: 0
       minTime: 2
-      leftSprite: {fileID: 21300000, guid: c9ab68ed31e2fa84a959c26f553855a7, type: 3}
-      rightSprite: {fileID: 21300000, guid: eafa9ec29964a4e4087f69bfedfd0b6c, type: 3}
+      leftSprite: {fileID: 21300000, guid: 6ef6954ca9b390f4ca55eb08aa318d20, type: 3}
+      rightSprite: {fileID: 21300000, guid: b06b4c1159acd97479ef238a598f6625, type: 3}
       events: []
     curIndex: 0
     requiredDialogues:

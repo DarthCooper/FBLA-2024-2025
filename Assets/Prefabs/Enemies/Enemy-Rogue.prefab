@@ -91,7 +91,7 @@ Transform:
   m_GameObject: {fileID: 1319369234418407438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.24, y: 0.8, z: 6.67}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -390,7 +390,7 @@ MonoBehaviour:
   maxRetreatDistance: 10
   minRetreatDistance: 5
   triggerDistance: 8
-  perpetualTarget: {fileID: 0}
+  alwaysFollowsPlayer: 0
 --- !u!114 &8834110152114957444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,7 +775,7 @@ MonoBehaviour:
     z: 0
   PositionInConnectedEntity:
     x: 0
-    y: -0.000000059604645
+    y: -0.000000059605
     z: -0.070365906
   MinDistance: 0
   MaxDistance: 1
