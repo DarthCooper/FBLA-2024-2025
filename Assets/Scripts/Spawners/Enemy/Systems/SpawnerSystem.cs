@@ -179,19 +179,18 @@ partial class SpawnerSystem : SystemBase
                                  enemy = enemyTypes.Fighter;
                                  break;
                             }
-                        ecb.Instantiate(entityInQueryIndex, enemy);
-                        ecb.SetComponent(entityInQueryIndex, enemy, new LocalTransform
+                        Entity spawnedEnemy = ecb.Instantiate(entityInQueryIndex, enemy);
+                        ecb.SetComponent(entityInQueryIndex, spawnedEnemy, new LocalTransform
                         {
                             Position = pos,
                             Rotation = Quaternion.identity,
                             Scale = 1
                         });
-                        ecb.SetComponent(entityInQueryIndex, enemy, new PathFollowTarget
+                        ecb.SetComponent(entityInQueryIndex, spawnedEnemy, new PathFollowTarget
                         {
                             Value = player
                         });
-
-                        ecb.AddComponent(entityInQueryIndex, enemy, new Stunned
+                        ecb.AddComponent(entityInQueryIndex, spawnedEnemy, new Stunned
                         {
                             Value = 1f
                         });

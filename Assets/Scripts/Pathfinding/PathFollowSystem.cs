@@ -59,7 +59,6 @@ partial class PathFollowSystem : SystemBase
                 if (Manager.GetMagnitude(moveDir) < 1f)
                 {
                     //transform.Position = new float3(targetPosition.x, transform.Position.y, targetPosition.z);
-                    Debug.Log(Manager.GetMagnitude(moveDir));
                     pathPositionBuffer.RemoveAt(pathFollow.pathIndex);
                 }
             }
