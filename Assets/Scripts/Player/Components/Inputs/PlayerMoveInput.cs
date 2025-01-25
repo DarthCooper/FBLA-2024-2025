@@ -36,3 +36,14 @@ public struct PlayerInteractInput : IComponentData
 {
     public bool Value;
 }
+
+public struct CurDir : IComponentData
+{
+    public Directions Value;
+}
+
+public enum Directions
+{
+    RIGHT,
+    LEFT
+}

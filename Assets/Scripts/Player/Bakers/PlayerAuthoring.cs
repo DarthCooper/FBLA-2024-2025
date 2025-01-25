@@ -61,5 +61,9 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         AddComponent<MouseWorldPos>(playerEntity);
         AddComponent<TargetEnemy>(playerEntity);
         AddComponent<Ally>(playerEntity);
+        AddComponent(playerEntity, new CurDir
+        {
+            Value = Directions.RIGHT
+        });
     }
 }
