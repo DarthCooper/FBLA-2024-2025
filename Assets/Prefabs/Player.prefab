@@ -134,83 +134,83 @@ MonoBehaviour:
   - gameObject: {fileID: 219618564388975731}
     time: 0.5
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   - gameObject: {fileID: 0}
-    time: 0.5
+    time: 0.25
   looping: 1
   startEnabled: 1
   staticMaterial: {fileID: 0}
@@ -398,8 +398,8 @@ MonoBehaviour:
     y: 0
     z: -0.9
   m_PrimitiveSize:
-    x: 0.28
-    y: 0.38180512
+    x: 0.415927
+    y: 1.2012174
     z: 1.7001891
   m_PrimitiveOrientation:
     Value:
@@ -409,12 +409,12 @@ MonoBehaviour:
     RotationOrder: 4
   m_Capsule:
     Height: 1.7001891
-    Radius: 0.19090256
+    Radius: 0.6006087
     Axis: 2
   m_Cylinder:
-    Height: 1.7001891
-    Radius: 0.19090256
-    Axis: 2
+    Height: 0.415927
+    Radius: 0.85009456
+    Axis: 0
   m_CylinderSideCount: 20
   m_SphereRadius: 0.85009456
   m_MinimumSkinnedVertexWeight: 0.1
@@ -574,7 +574,7 @@ MonoBehaviour:
     z: 0
   PositionInConnectedEntity:
     x: 0
-    y: -0.000000059604645
+    y: 0.2109999
     z: -0.070365906
   MinDistance: 0
   MaxDistance: 1
@@ -644,6 +644,7 @@ GameObject:
   - component: {fileID: 6431415088373350801}
   - component: {fileID: 90456802775415193}
   - component: {fileID: 4765877804392514816}
+  - component: {fileID: 2724589609678044302}
   m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
@@ -659,14 +660,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4781790525243677328}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.238, z: 0.029}
-  m_LocalScale: {x: 0.06883391, y: 0.16031, z: 0.11573581}
+  m_LocalRotation: {x: -0.00000008587434, y: 0.7071067, z: 0.7071069, w: -0.000000088053774}
+  m_LocalPosition: {x: 0.030555725, y: 0.238, z: 0.029000282}
+  m_LocalScale: {x: -0.06883391, y: 0.16031, z: 0.11573581}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6921212135674800518}
   m_Father: {fileID: 124878725553098553}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
 --- !u!33 &90456802775415193
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -698,7 +699,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2fb200c4399bd8c48a3df9e8d2956089, type: 2}
+  - {fileID: 2100000, guid: 0e2d1cce0b06f7e418b705e350b138e0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -720,6 +721,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2724589609678044302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781790525243677328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54da558fff0956b44889991b6d6d75c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leader: {fileID: 6038929878484416733}
 --- !u!1 &6038929878484416733
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,6 +745,7 @@ GameObject:
   - component: {fileID: 6399787104948842476}
   - component: {fileID: 4883536433633562294}
   - component: {fileID: 8829048829472563986}
+  - component: {fileID: 5281766896477497299}
   m_Layer: 0
   m_Name: Front
   m_TagString: Untagged
@@ -807,6 +822,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5281766896477497299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038929878484416733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6f6735ea768ff48a82eb734e3a0cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationFrames:
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  - gameObject: {fileID: 0}
+    time: 1
+  looping: 0
+  startEnabled: 0
+  staticMaterial: {fileID: 0}
 --- !u!1 &6265678260477319867
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +882,7 @@ Transform:
   m_GameObject: {fileID: 6265678260477319867}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.211, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -862,6 +911,7 @@ MonoBehaviour:
   stunTime: 4
   stuns: 1
   dashDist: 5
+  animController: {fileID: 6038929878484416733}
 --- !u!1 &7037422675004602328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,7 +1095,7 @@ GameObject:
   - component: {fileID: 6921212135674800518}
   - component: {fileID: 2001500010869644801}
   - component: {fileID: 5005981103870007482}
-  - component: {fileID: 2673867054941932063}
+  - component: {fileID: 3363471445881471628}
   m_Layer: 0
   m_Name: Legs
   m_TagString: Untagged
@@ -1061,13 +1111,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8376887135390353169}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.6199986, y: -0.070897214, z: 4.950003}
-  m_LocalScale: {x: -0.9647861, y: 0.53047216, z: 0.5304322}
+  m_LocalRotation: {x: -0.00000008940697, y: -0.000000055516356, z: 0.0000000019738522, w: 1}
+  m_LocalPosition: {x: 0.6199966, y: -0.07090057, z: -4.950002}
+  m_LocalScale: {x: 0.9647861, y: 0.53047216, z: 0.5304322}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6431415088373350801}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 180, y: 180, z: 180}
 --- !u!33 &2001500010869644801
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1121,7 +1171,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2673867054941932063
+--- !u!114 &3363471445881471628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1130,93 +1180,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8376887135390353169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f6f6735ea768ff48a82eb734e3a0cfe, type: 3}
+  m_Script: {fileID: 11500000, guid: 54da558fff0956b44889991b6d6d75c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationFrames:
-  - gameObject: {fileID: 8376887135390353169}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  - gameObject: {fileID: 0}
-    time: 0.5
-  looping: 1
-  startEnabled: 1
-  staticMaterial: {fileID: 0}
+  leader: {fileID: 219618564388975731}
 --- !u!1 &9185191735185370972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1526,3 +1493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationController: {fileID: 219618564388975731}
+  flipViaDir: 1
+  graphics:
+  - {fileID: 2501882164261493700}

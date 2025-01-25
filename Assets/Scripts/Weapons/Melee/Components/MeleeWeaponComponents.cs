@@ -61,3 +61,8 @@ public struct MeleeDashDist : IComponentData
 {
     public float Value;
 }
+
+public struct MeleeWeaponAnim : IComponentData
+{
+    public Entity entity;
+}

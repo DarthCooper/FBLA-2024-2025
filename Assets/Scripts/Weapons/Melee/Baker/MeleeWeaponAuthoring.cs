@@ -13,6 +13,8 @@ class MeleeWeaponAuthoring : MonoBehaviour
     public float stunTime;
     public bool stuns;
     public float dashDist = 5f;
+
+    public GameObject animController;
 }
 
 class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
@@ -62,6 +64,10 @@ class MeleeWeaponAuthoringBaker : Baker<MeleeWeaponAuthoring>
         AddComponent(entity, new MeleeDashDist
         {
             Value = authoring.dashDist
+        });
+        AddComponent(entity, new MeleeWeaponAnim
+        {
+            entity = GetEntity(authoring.animController, TransformUsageFlags.Dynamic)
         });
     }
 }

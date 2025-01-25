@@ -48,13 +48,11 @@ public partial class MaterialAnimationSystem : SystemBase
                 i++;
                 if(i >= animationFrames.Length)
                 {
-                    if(animationData.looping)
-                    {
-                        i = 0;
-                    }else
+                    if(!animationData.looping)
                     {
                         playing.Value = false;
                     }
+                    i = 0;
                 }
                 frame.time = frame.maxTime;
                 animationData.index = i;
