@@ -42,5 +42,11 @@ public partial class EventManagerSystem : SystemBase
             CameraManagers.Instance.Impulse(EntityManager.GetComponentData<ShakeCameraEvent>(eventManagerEntity).index);
             EntityManager.RemoveComponent<ShakeCameraEvent>(eventManagerEntity);
         }
+        if(EntityManager.HasComponent<ChoiceEvent>(eventManagerEntity))
+        {
+            ChoiceEvent choiceEvent = EntityManager.GetComponentData<ChoiceEvent>(eventManagerEntity);
+            EntityManager.AddComponent<MakeChoice>(choiceEvent.entity);
+            EntityManager.RemoveComponent<ChoiceEvent>(eventManagerEntity);
+        }
     }
 }

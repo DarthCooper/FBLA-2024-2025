@@ -78,15 +78,6 @@ partial struct MeleeWeaponSystem : ISystem
                         Value = CollisionFilters.filterNone
                     });
 
-                    MeleeWeaponAnim animController = state.EntityManager.GetComponentData<MeleeWeaponAnim>(entity);
-                    if (!animController.entity.Equals(Entity.Null))
-                    {
-                        ecb.SetComponent(animController.entity, new Playing
-                        {
-                            Value = false
-                        });
-                    }
-
                     meshLookup.SetComponentEnabled(sword, false);
                     hits.Clear();
                     DynamicBuffer<AnimatorControllerParameterComponent> allParams = state.EntityManager.GetBuffer<AnimatorControllerParameterComponent>(anim.Value);

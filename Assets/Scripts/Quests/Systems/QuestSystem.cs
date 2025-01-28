@@ -28,7 +28,7 @@ public partial class QuestSystem : SystemBase
 
         Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
         SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManger);
-        Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref QuestComponents questsData, ref DynamicBuffer<WinConditionElementData> winBuffer, ref DynamicBuffer<QuestEndEvent> eventBuffer) =>
+        Entities.WithoutBurst().WithNone<AdvanceQuest>().ForEach((Entity entity, int entityInQueryIndex, ref QuestComponents questsData, ref DynamicBuffer<WinConditionElementData> winBuffer, ref DynamicBuffer<QuestEndEvent> eventBuffer) =>
         {
             ref Quests quests = ref questsData.Quests.Value;
             int i = quests.index;
@@ -293,6 +293,75 @@ public partial class QuestSystem : SystemBase
                 return;
             }
 
+        }).Run();
+        Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref AdvanceQuest advance, ref QuestComponents questsData, ref DynamicBuffer<QuestEndEvent> eventBuffer) =>
+        {
+            if(advance.completed) { return; }
+            advance.completed = true;
+            ref Quests quests = ref questsData.Quests.Value;
+            int i = quests.index;
+            if (i >= quests.Blobs.Length) { return; }
+            ref Quest questData = ref quests.Blobs[i];
+            if (questData.completed || completedQuests.Contains(questData.QuestId)) { return; }
+            string format = questData.QuestVisual.ToString();
+            string questName = questData.QuestName.ToString();
+            Entity targetEntity = EntityManager.GetComponentData<QuestTargetEntity>(entity).Value;
+
+            quests.index += advance.Value;
+            questData.completed = true;
+            completedQuests.Add(questData.QuestId);
+            Debug.Log(quests.index);
+            OnEndQuest?.Invoke(questData.QuestId);
+
+            curKills = 0;
+            curWaves = 0;
+
+            QuestEndEvent questEvent = default;
+            foreach (QuestEndEvent eventData in eventBuffer)
+            {
+                if (eventData.QuestID == questData.QuestId)
+                {
+                    questEvent = eventData;
+                    break;
+                }
+            }
+            switch (questEvent.EventType)
+            {
+                case EventType.SPAWNENEMIES:
+                    ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
+                    {
+                        spawnEntity = questEvent.spawner
+                    });
+                    break;
+                case EventType.ActivateEntities:
+                    ecb.AddComponent(entityInQueryIndex, eventManger, new ActivateEntitiesEvent
+                    {
+                        ActivateEntityHolder = questEvent.spawner
+                    });
+                    break;
+                case EventType.DeactivateEntities:
+                    ecb.AddComponent(entityInQueryIndex, eventManger, new DeActivateEntitiesEvent
+                    {
+                        DeActivateEntityHolder = questEvent.spawner
+                    });
+                    break;
+                case EventType.ShakeCamera:
+                    ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
+                    {
+                        index = questEvent.cameraIndex
+                    });
+                    break;
+                case EventType.ENDLEVEL:
+                    ecb.AddComponent(entityInQueryIndex, eventManger, new EndLevelEvent
+                    {
+                        levelIndex = questEvent.levelIndex
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            ecb.RemoveComponent<AdvanceQuest>(entityInQueryIndex, entity);
         }).Run();
     }
 }

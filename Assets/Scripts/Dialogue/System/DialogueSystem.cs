@@ -99,6 +99,13 @@ public partial class DialogueSystem : SystemBase
                                         levelIndex = events.levelIndex
                                     });
                                     break;
+                                case EventType.CHOICE:
+                                    DynamicBuffer<DialogueSpawner> choices = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ChoiceEvent
+                                    {
+                                        entity = choices[events.entityID].Spawner
+                                    });
+                                    break;
                                 default:
                                     break;
                             }

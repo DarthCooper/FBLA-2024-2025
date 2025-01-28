@@ -12,5 +12,9 @@ class EnemyAuthoringBaker : Baker<EnemyAuthoring>
     {
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent<EnemyTag>(entity);
+        AddComponent(entity, new CurDir
+        {
+            Value = Directions.RIGHT
+        });
     }
 }

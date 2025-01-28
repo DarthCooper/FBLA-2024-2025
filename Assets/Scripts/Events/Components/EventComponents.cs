@@ -37,6 +37,11 @@ public struct ShakeCameraEvent : IComponentData
     public int index;
 }
 
+public struct ChoiceEvent : IComponentData
+{
+    public Entity entity;
+}
+
 public enum EventType
 {
     SPAWNENEMIES,
@@ -45,5 +50,6 @@ public enum EventType
     NONE,
     ShakeCamera,
     DeactivateEntities,
-    CHANGELEVEL
+    CHANGELEVEL,
+    CHOICE,
 }

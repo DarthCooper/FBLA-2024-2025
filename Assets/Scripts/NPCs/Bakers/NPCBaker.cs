@@ -13,6 +13,10 @@ class NPCBakerBaker : Baker<NPCBaker>
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent<NPCTag>(entity);
         AddComponent<Ally>(entity);
+        AddComponent(entity, new CurDir
+        {
+            Value = Directions.RIGHT
+        });
         if(authoring.startActive)
         {
             AddComponent<Active>(entity);

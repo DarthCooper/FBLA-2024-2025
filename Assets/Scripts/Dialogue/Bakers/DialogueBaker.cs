@@ -112,6 +112,11 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                         case EventType.CHANGELEVEL:
                             events.levelIndex = authoring.dialogues[i].dialogues[j].events[k].levelIndex;
                             break;
+                        case EventType.CHOICE:
+                            spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].events[k].spawnerGameObject, TransformUsageFlags.Dynamic) });
+                            events.entityID = spawnerIndex;
+                            spawnerIndex++;
+                            break;
                         default:
                             events.entityID = -1;
                             break;

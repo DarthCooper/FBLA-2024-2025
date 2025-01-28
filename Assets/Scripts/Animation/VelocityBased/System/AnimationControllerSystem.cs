@@ -23,7 +23,7 @@ public partial class AnimationControllerSystem : SystemBase
             bool playing = false;
             if(animationsPlaying.HasComponent(controller.Value)) { playing = animationsPlaying[controller.Value].Value; }
 
-            if(flip.Value && graphics.Length > 0)
+            if(flip.Value && graphics.Length > 0 && Manager.GetMagnitude(velocity.Linear) > 1)
             {
                 float xVel = velocity.Linear.x;
                 switch (dir.Value)

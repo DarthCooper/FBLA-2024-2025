@@ -58,3 +58,9 @@ public struct QuestTargetEntity : IComponentData
 {
     public Entity Value;
 }
+
+public struct AdvanceQuest : IComponentData
+{
+    public int Value;
+    public bool completed;
+}
