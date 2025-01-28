@@ -106,6 +106,13 @@ public partial class DialogueSystem : SystemBase
                                         entity = choices[events.entityID].Spawner
                                     });
                                     break;
+                                case EventType.POPUP:
+                                    DynamicBuffer<DialogueSpawner> popUps = SystemAPI.GetBuffer<DialogueSpawner>(entity);
+                                    ecb.AddComponent(entityInQueryIndex, eventManger, new PopUpEvent
+                                    {
+                                        entity = popUps[events.entityID].Spawner
+                                    });
+                                    break;
                                 default:
                                     break;
                             }

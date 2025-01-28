@@ -28,6 +28,9 @@ class EventManagerAuthoring : MonoBehaviour
                 case EventType.ActivateEntities:
                     script.spawnerEntity = (GameObject)EditorGUILayout.ObjectField("Activation Object", script.spawnerEntity, typeof(GameObject), true);
                     break;
+                case EventType.POPUP:
+                    script.spawnerEntity = (GameObject)EditorGUILayout.ObjectField("PopUp Object", script.spawnerEntity, typeof (GameObject), true); 
+                    break;
                 case EventType.NONE:
                     DrawDefaultInspector(); 
                     break;
@@ -64,6 +67,12 @@ class EventManagerAuthoringBaker : Baker<EventManagerAuthoring>
                 });
                 break;
             case EventType.ENDLEVEL:
+                break;
+            case EventType.POPUP:
+                AddComponent(entity, new PopUpEvent
+                {
+                    entity = GetEntity(authoring.spawnerEntity, TransformUsageFlags.Dynamic),
+                });
                 break;
         }
     }

@@ -41,6 +41,13 @@ public class ScreenSpaceUIController : MonoBehaviour
     public Button choice1Button;
     public Button choice2Button;
 
+    [Header("PopUps")]
+    public GameObject PopUpPanel;
+    public TMP_Text popUpTitle;
+    public TMP_Text popUpDescription;
+    public GameObject continueMessage;
+    public Image popUpImage;
+
     private void Start()
     {
         commandBufferSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<EntityCommandBufferSystem>();
@@ -64,6 +71,10 @@ public class ScreenSpaceUIController : MonoBehaviour
 
         ChoiceSystem choiceSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<ChoiceSystem>();
         choiceSystem.OnShowChoice += DisplayChoice;
+
+        PopUpSystem popUpSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PopUpSystem>();
+        popUpSystem.OnDisplayPopUp += DisplayPopUP;
+        popUpSystem.ClosePopUp += HidePopUp;
     }
 
     private void OnDisable()
@@ -248,6 +259,36 @@ public class ScreenSpaceUIController : MonoBehaviour
         ecb.AddComponent<Button2Pressed>(entity);
 
         choicePanel.SetActive(false);
+    }
+
+    public void DisplayPopUP(string title, string description, float time, float maxTime, bool pauseGame)
+    {
+        if(!PopUpPanel.activeSelf)
+        {
+            PopUpPanel.SetActive(true);
+        }
+
+        popUpTitle.text = title;
+        popUpDescription.text = description;
+
+        popUpImage.fillAmount = time / maxTime;
+
+        if (pauseGame)
+        {
+            Time.timeScale = 0;
+        }
+
+        if(time <= 0)
+        {
+            continueMessage.SetActive(true);
+        }
+    }
+
+    public void HidePopUp()
+    {
+        PopUpPanel.SetActive(false);
+        continueMessage.SetActive(false);
+        Time.timeScale = 1;
     }
 }
 

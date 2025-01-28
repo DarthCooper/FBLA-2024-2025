@@ -117,6 +117,11 @@ class DialogueBakerBaker : Baker<DialogueBaker>
                             events.entityID = spawnerIndex;
                             spawnerIndex++;
                             break;
+                        case EventType.POPUP:
+                            spawners.Add(new DialogueSpawner { Spawner = GetEntity(authoring.dialogues[i].dialogues[j].events[k].spawnerGameObject, TransformUsageFlags.Dynamic) });
+                            events.entityID = spawnerIndex;
+                            spawnerIndex++;
+                            break;
                         default:
                             events.entityID = -1;
                             break;

@@ -42,6 +42,11 @@ public struct ChoiceEvent : IComponentData
     public Entity entity;
 }
 
+public struct PopUpEvent : IComponentData
+{
+    public Entity entity;
+}
+
 public enum EventType
 {
     SPAWNENEMIES,
@@ -52,4 +57,5 @@ public enum EventType
     DeactivateEntities,
     CHANGELEVEL,
     CHOICE,
+    POPUP,
 }

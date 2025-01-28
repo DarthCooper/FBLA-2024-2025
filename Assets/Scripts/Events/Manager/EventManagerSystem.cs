@@ -48,5 +48,11 @@ public partial class EventManagerSystem : SystemBase
             EntityManager.AddComponent<MakeChoice>(choiceEvent.entity);
             EntityManager.RemoveComponent<ChoiceEvent>(eventManagerEntity);
         }
+        if(EntityManager.HasComponent<PopUpEvent>(eventManagerEntity))
+        {
+            PopUpEvent popUpEvent = EntityManager.GetComponentData<PopUpEvent>(eventManagerEntity);
+            EntityManager.AddComponent<DisplayPopUp>(popUpEvent.entity);
+            EntityManager.RemoveComponent<PopUpEvent>(eventManagerEntity);
+        }
     }
 }
