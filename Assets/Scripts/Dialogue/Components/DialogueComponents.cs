@@ -24,6 +24,8 @@ public struct DialogueArray
     public int curIndex;
 
     public BlobArray<BlobString> requiredDialogues;
+    public BlobArray<int> requiredQuests;
+
     public BlobString key;
 }
 

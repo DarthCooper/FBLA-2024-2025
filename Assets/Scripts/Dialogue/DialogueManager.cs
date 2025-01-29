@@ -15,3 +15,18 @@ public class DialogueManager
     }
 }
 
+public class QuestManager
+{
+    public static List<int> completedQuests = new List<int>();
+
+    public static void CompleteQuest(int id)
+    {
+        completedQuests.Add(id);
+    }
+
+    public static bool QuestComplete(int id)
+    {
+        return completedQuests.Contains(id);
+    }
+}
+

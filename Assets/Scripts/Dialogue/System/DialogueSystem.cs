@@ -44,6 +44,11 @@ public partial class DialogueSystem : SystemBase
                 ref BlobString requiredKey = ref dialogueArray.requiredDialogues[i];
                 allCompleted = DialogueManager.DialogueComplete(requiredKey.ToString());
             }
+            for (int i = 0; i < dialogueArray.requiredQuests.Length; i++)
+            {
+                ref int id = ref dialogueArray.requiredQuests[i];
+                allCompleted = QuestManager.QuestComplete(id);
+            }
             if (!allCompleted) {
                 ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
                 ecb.RemoveComponent<PlayerSpeaking>(entityInQueryIndex, playerEntity);

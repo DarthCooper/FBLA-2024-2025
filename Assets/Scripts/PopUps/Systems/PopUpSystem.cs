@@ -32,12 +32,16 @@ public partial class PopUpSystem : SystemBase
 
             data.time -= SystemAPI.Time.fixedDeltaTime;
 
-            if(EntityManager.HasComponent<EndPopUp>(entity) && data.time <= 0)
+            if(EntityManager.HasComponent<EndPopUp>(entity))
             {
+                if(data.time > 0)
+                {
+                    EntityManager.RemoveComponent<EndPopUp>(entity);
+                    return;
+                }
                 ClosePopUp?.Invoke();
                 array.index++;
 
-                bool nextPopUp = false;
                 for (int j = 0; j < data.events.Length; j++)
                 {
                     ref Events events = ref data.events[j];
@@ -89,7 +93,6 @@ public partial class PopUpSystem : SystemBase
                             {
                                 entity = popUps[events.entityID].Spawner
                             });
-                            nextPopUp = true;
                             break;
                         default:
                             break;

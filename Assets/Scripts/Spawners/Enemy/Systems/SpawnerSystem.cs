@@ -149,8 +149,6 @@ partial class SpawnerSystem : SystemBase
                         z = data.random.NextFloat(-data.radius, data.radius)
                     };
 
-                    Debug.Log($"original : {data.pos}. New : {pos}");
-
                     ref BlobArray<Enemies> enemies = ref data.enemies;
 
                     if (enemies.Length > 0)

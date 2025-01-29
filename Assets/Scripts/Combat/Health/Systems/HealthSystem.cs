@@ -33,11 +33,11 @@ partial struct HealthSystem : ISystem
 
 
         int kills = 0;
-        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DestroyEntity>().WithEntityAccess())
+        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithEntityAccess())
         {
             ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
 
-            ecb.AddComponent<DestroyEntity>(entity);
+            ecb.AddComponent<DisableEntireEntity>(entity);
 
             kills += 1;
         }

@@ -15,7 +15,9 @@ public class ScreenSpaceUIController : MonoBehaviour
 
     [Header("Combat")]
     public Image meleeDelayVisual;
+    public Image meleeBackground;
     public Image rangedDelayVisual;
+    public Image rangedBackground;
 
     [Header("Dialogue")]
     public GameObject dialogueHolder;
@@ -103,11 +105,13 @@ public class ScreenSpaceUIController : MonoBehaviour
     public void ShowMeleeDelay(float delay, float maxDelay)
     {
         meleeDelayVisual.fillAmount = delay / maxDelay;
+        meleeBackground.fillAmount = delay / maxDelay;
     }
 
     public void ShowRangeDelay(float delay, float maxDelay)
     {
         rangedDelayVisual.fillAmount = delay / maxDelay;
+        rangedBackground.fillAmount = delay / maxDelay;
     }
 
     public void ShowDialogue(string message, DialoguePos pos, int index, string leftSpritePath, string rightSpritePath)

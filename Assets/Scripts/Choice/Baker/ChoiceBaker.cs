@@ -73,7 +73,7 @@ class ChoiceBakerBaker : Baker<ChoiceBaker>
         }
 
         builder.AllocateString(ref data.button2Description, authoring.button2Text);
-        data.button1progress = authoring.button1Progress;
+        data.button2progress = authoring.button2Progress;
 
         spawnerIndex = 0;
 

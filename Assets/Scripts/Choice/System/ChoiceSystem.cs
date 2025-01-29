@@ -90,7 +90,7 @@ public partial class ChoiceSystem : SystemBase
             {
                 ecb.AddComponent(questEntity.Value, new AdvanceQuest
                 {
-                    Value = data.button1progress
+                    Value = data.button2progress
                 });
 
                 for (int i = 0; i < data.button1Events.Length; i++)
@@ -137,7 +137,7 @@ public partial class ChoiceSystem : SystemBase
                     }
                 }
 
-                ecb.RemoveComponent<Button1Pressed>(entity);
+                ecb.RemoveComponent<Button2Pressed>(entity);
             }
         }).Run();
     }

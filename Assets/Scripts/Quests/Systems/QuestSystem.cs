@@ -236,6 +236,7 @@ public partial class QuestSystem : SystemBase
 
             if (completed)
             {
+                QuestManager.CompleteQuest(quests.index);
                 quests.index += advanceAmount;
                 questData.completed = true;
                 completedQuests.Add(questData.QuestId);
@@ -296,71 +297,31 @@ public partial class QuestSystem : SystemBase
         }).Run();
         Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref AdvanceQuest advance, ref QuestComponents questsData, ref DynamicBuffer<QuestEndEvent> eventBuffer) =>
         {
-            if(advance.completed) { return; }
-            advance.completed = true;
+            if (advance.completed) { return; }
+
             ref Quests quests = ref questsData.Quests.Value;
-            int i = quests.index;
-            if (i >= quests.Blobs.Length) { return; }
-            ref Quest questData = ref quests.Blobs[i];
-            if (questData.completed || completedQuests.Contains(questData.QuestId)) { return; }
-            string format = questData.QuestVisual.ToString();
-            string questName = questData.QuestName.ToString();
-            Entity targetEntity = EntityManager.GetComponentData<QuestTargetEntity>(entity).Value;
-
-            quests.index += advance.Value;
-            questData.completed = true;
-            completedQuests.Add(questData.QuestId);
-            Debug.Log(quests.index);
-            OnEndQuest?.Invoke(questData.QuestId);
-
-            curKills = 0;
-            curWaves = 0;
-
-            QuestEndEvent questEvent = default;
-            foreach (QuestEndEvent eventData in eventBuffer)
+            Debug.Log(quests.index + "" + advance.Value);
+            for(int i = quests.index; i < advance.Value; i ++)
             {
-                if (eventData.QuestID == questData.QuestId)
-                {
-                    questEvent = eventData;
-                    break;
-                }
-            }
-            switch (questEvent.EventType)
-            {
-                case EventType.SPAWNENEMIES:
-                    ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
-                    {
-                        spawnEntity = questEvent.spawner
-                    });
-                    break;
-                case EventType.ActivateEntities:
-                    ecb.AddComponent(entityInQueryIndex, eventManger, new ActivateEntitiesEvent
-                    {
-                        ActivateEntityHolder = questEvent.spawner
-                    });
-                    break;
-                case EventType.DeactivateEntities:
-                    ecb.AddComponent(entityInQueryIndex, eventManger, new DeActivateEntitiesEvent
-                    {
-                        DeActivateEntityHolder = questEvent.spawner
-                    });
-                    break;
-                case EventType.ShakeCamera:
-                    ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
-                    {
-                        index = questEvent.cameraIndex
-                    });
-                    break;
-                case EventType.ENDLEVEL:
-                    ecb.AddComponent(entityInQueryIndex, eventManger, new EndLevelEvent
-                    {
-                        levelIndex = questEvent.levelIndex
-                    });
-                    break;
-                default:
-                    break;
-            }
+                if (i >= quests.Blobs.Length) { return; }
+                ref Quest questData = ref quests.Blobs[i];
+                if (questData.completed || completedQuests.Contains(questData.QuestId)) { return; }
+                string format = questData.QuestVisual.ToString();
+                string questName = questData.QuestName.ToString();
+                Entity targetEntity = EntityManager.GetComponentData<QuestTargetEntity>(entity).Value;
 
+                questData.completed = true;
+                completedQuests.Add(questData.QuestId);
+                QuestManager.CompleteQuest(questData.QuestId);
+                Debug.Log(quests.index);
+
+                curKills = 0;
+                curWaves = 0;
+                advance.completed = true;
+
+                OnEndQuest?.Invoke(questData.QuestId);
+            }
+            quests.index = advance.Value;
             ecb.RemoveComponent<AdvanceQuest>(entityInQueryIndex, entity);
         }).Run();
     }

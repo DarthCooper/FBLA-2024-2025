@@ -16,6 +16,7 @@ public class DialogueSetterArrays
     public int curIndex;
 
     public string[] requiredDialogues;
+    public int[] requiredQuests;
     public string dialogueKey;
 }
 
@@ -71,6 +72,16 @@ class DialogueBakerBaker : Baker<DialogueBaker>
             for (int j = 0; j < requiredDialogueData.Length; j++)
             {
                 builder.AllocateString(ref requiredDialogueData[j], authoring.dialogues[i].requiredDialogues[j]);
+            }
+
+            if (authoring.dialogues[i].requiredQuests.Length > 0)
+            {
+                var requiredQuestData = builder.Allocate(ref data.requiredQuests, authoring.dialogues[i].requiredQuests.Length);
+                for (int j = 0; j < requiredQuestData.Length; j++)
+                {
+                    ref int id = ref requiredQuestData[j];
+                    id = authoring.dialogues[i].requiredQuests[j];
+                }
             }
 
             var dialogueData = builder.Allocate(ref data.dialogues, authoring.dialogues[i].dialogues.Length);
