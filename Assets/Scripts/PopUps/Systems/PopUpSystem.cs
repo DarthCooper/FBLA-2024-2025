@@ -26,6 +26,7 @@ public partial class PopUpSystem : SystemBase
             ref PopUpArray array = ref popUp.blob.Value;
             int i = array.index;
 
+            if(i >= array.blobs.Length) { return; }
             ref PopUpData data = ref array.blobs[i];
 
             OnDisplayPopUp?.Invoke(data.title.ToString(), data.description.ToString(), data.time, data.maxTime, data.pauseGame);
