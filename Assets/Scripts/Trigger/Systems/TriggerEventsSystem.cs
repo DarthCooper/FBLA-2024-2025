@@ -1,6 +1,5 @@
 using Unity.Entities;
 using Unity.Physics.Stateful;
-using UnityEditorInternal;
 using UnityEngine;
 
 public partial class TriggerEventsSystem : SystemBase

@@ -1,6 +1,5 @@
 using System;
 using Unity.Entities;
-using UnityEditorInternal;
 using UnityEngine;
 
 public partial class PopUpSystem : SystemBase
