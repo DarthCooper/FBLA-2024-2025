@@ -19,37 +19,37 @@ public partial class InteractSystem : SystemBase
     {
         _ecbSystem = World.GetOrCreateSystemManaged<EntityCommandBufferSystem>();
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity player);
 
         Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref PlayerInteractInput input, ref LocalToWorld transform) =>
-        {
+        {   
+            if(player.Equals(Entity.Null)) { return; }
             if(!input.Value) { return; }
             NativeList<Entity> closestEntities = GetClosest<InteractableTag>(transform.Position, 3f);
             Entity closestInteractable = Entity.Null;
-            for(int i = 0; i < closestEntities.Length; i++)
+            if(closestEntities.Length <= 0) { return; }
+            int i = 0;
+            if(EntityManager.HasComponent<PickUp>(closestEntities[i])) { return; }
+            if (EntityManager.HasComponent<Speaking>(closestEntities[i])) { return; }
+            if(EntityManager.HasComponent<PlayerSpeaking>(entity)) { return; }
+            InteractableType interactableType = GetInteractableType(closestEntities[i]);
+            switch (interactableType)
             {
-                if(EntityManager.HasComponent<PickUp>(closestEntities[i])) { continue; }
-                if (EntityManager.HasComponent<Speaking>(closestEntities[i])) { continue; }
-                InteractableType interactableType = GetInteractableType(closestEntities[i]);
-                switch (interactableType)
-                {
-                    case InteractableType.PICKUP:
-                        ecb.AddComponent<PickUp>(entityInQueryIndex, closestEntities[i]);
-                        break;
-                    case InteractableType.DIALOGUE:
-                        ecb.AddComponent<Speaking>(entityInQueryIndex, closestEntities[i]);
-                        ecb.AddComponent(entityInQueryIndex, entity, new PlayerSpeaking
-                        {
-                            SpeakingTo = closestEntities[i]
-                        });
-                        break;
-                    case InteractableType.TRIGGER:
-                        continue;
-                    case InteractableType.NONE:
-                        continue;
+                case InteractableType.PICKUP:
+                    ecb.AddComponent<PickUp>(entityInQueryIndex, closestEntities[i]);
+                    break;
+                case InteractableType.DIALOGUE:
+                    ecb.AddComponent<Speaking>(entityInQueryIndex, closestEntities[i]);
+                    ecb.AddComponent(entityInQueryIndex, entity, new PlayerSpeaking
+                    {
+                        SpeakingTo = closestEntities[i]
+                    });
+                    break;
+                case InteractableType.TRIGGER:
+                    break;
+                case InteractableType.NONE:
+                    break;
                 }
-                break;
-            }
         }).Run();
 
         Entities.WithAll<TriggerInteractableTag>().WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref DynamicBuffer<StatefulTriggerEvent> triggerBuffer, ref InteractableTypeData interactableData) =>

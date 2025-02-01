@@ -223,7 +223,19 @@ public class ScreenSpaceUIController : MonoBehaviour
         choice1Button.onClick.RemoveAllListeners();
         choice2Button.onClick.RemoveAllListeners();
 
+        if(choicePanel == null)
+        {
+            choicePanel = GameObject.Find("PlayerUI").transform.Find("PlayerCanvas").Find("ChoiceMenu").gameObject;
+        }
+
         choicePanel.SetActive(true);
+
+        if(choice1Button == null || choice2Button == null)
+        {
+            choice1Button = choicePanel.transform.Find("Choice1Button").GetComponent<Button>();
+            choice2Button = choicePanel.transform.Find("Choice2Button").GetComponent<Button>();
+        }
+
         choice1Button.GetComponentInChildren<TMP_Text>().text = choice1text;
         choice1Button.onClick.AddListener(Button1Clicked);
 

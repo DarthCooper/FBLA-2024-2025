@@ -37,9 +37,11 @@ class ChoiceBakerBaker : Baker<ChoiceBaker>
 
         int spawnerIndex = 0;
 
-        for (int i = 0; i < authoring.button1Events.Length; i++)
+        var button1Array = builder.Allocate(ref data.button1Events, authoring.button1Events.Length);
+
+        for (int i = 0; i < button1Array.Length; i++)
         {
-            ref Events events = ref data.button1Events[i];
+            ref Events events = ref button1Array[i];
             events.eventType = authoring.button1Events[i].eventType;
             events.cameraShakeIndex = -1;
             events.levelIndex = -1;
@@ -77,9 +79,11 @@ class ChoiceBakerBaker : Baker<ChoiceBaker>
 
         spawnerIndex = 0;
 
-        for (int i = 0; i < authoring.button2Events.Length; i++)
+        var button2Array = builder.Allocate(ref data.button2Events, authoring.button2Events.Length);
+
+        for (int i = 0; i < button2Array.Length; i++)
         {
-            ref Events events = ref data.button2Events[i];
+            ref Events events = ref button2Array[i];
             events.eventType = authoring.button2Events[i].eventType;
             events.cameraShakeIndex = -1;
             events.levelIndex = -1;

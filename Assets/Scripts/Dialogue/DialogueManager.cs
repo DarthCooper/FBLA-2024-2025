@@ -13,6 +13,11 @@ public class DialogueManager
     {
         return completedDialogues.Contains(dialogueKey);
     }
+
+    public static void ResetDialogue()
+    {
+        completedDialogues = new List<string>();
+    }
 }
 
 public class QuestManager
@@ -28,5 +33,11 @@ public class QuestManager
     {
         return completedQuests.Contains(id);
     }
+
+    public static void ResetQuests()
+    {
+        completedQuests = new List<int>();
+    }
+
 }
 

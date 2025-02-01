@@ -61,6 +61,8 @@ partial class SpawnerSystem : SystemBase
 
                 for(int j = 0; j < data.amountPerSpawn; j++)
                 {
+                    data.random = Unity.Mathematics.Random.CreateFromIndex((uint)math.pow(j, j * i));
+
                     float3 pos = data.pos + new float3
                     {
                         x = data.random.NextFloat(-data.radius, data.radius), 
@@ -142,6 +144,8 @@ partial class SpawnerSystem : SystemBase
 
                 for (int k = 0; k < data.amountPerSpawn; k++)
                 {
+                    data.random = Unity.Mathematics.Random.CreateFromIndex((uint)math.pow(i, math.pow(j, k)));
+
                     float3 pos = data.pos + new float3
                     {
                         x = data.random.NextFloat(-data.radius, data.radius),

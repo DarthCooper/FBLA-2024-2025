@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 partial struct NPCActivationSystem : ISystem
 {
@@ -45,12 +46,14 @@ partial struct NPCActivationSystem : ISystem
         {
             foreach (var npc in npcBuffer)
             {
-                if(state.EntityManager.HasComponent<Active>(npc.entity))
+                Debug.Log("DeActivate");
+                if (state.EntityManager.HasComponent<Active>(npc.entity))
                 {
                     ecb.RemoveComponent<Active>(npc.entity);
                 }
                 ecb.AddComponent<DeActive>(npc.entity);
             }
+            ecb.RemoveComponent<CanDeActivate>(entity);
         }
         ecb.Playback(state.EntityManager);
     }

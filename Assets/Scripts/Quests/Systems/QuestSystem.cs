@@ -26,10 +26,13 @@ public partial class QuestSystem : SystemBase
     {
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity player);
         SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManger);
         Entities.WithoutBurst().WithNone<AdvanceQuest>().ForEach((Entity entity, int entityInQueryIndex, ref QuestComponents questsData, ref DynamicBuffer<WinConditionElementData> winBuffer, ref DynamicBuffer<QuestEndEvent> eventBuffer) =>
         {
+            if(eventManger.Equals(Entity.Null)) { return; }
+            if (player.Equals(Entity.Null)) { return; }
+
             ref Quests quests = ref questsData.Quests.Value;
             int i = quests.index;
             if(i >= quests.Blobs.Length) { return; }

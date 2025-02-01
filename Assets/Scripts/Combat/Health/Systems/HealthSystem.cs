@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEditor;
+using UnityEngine;
 
 partial struct HealthSystem : ISystem
 {
@@ -40,6 +41,8 @@ partial struct HealthSystem : ISystem
             ecb.AddComponent<DisableEntireEntity>(entity);
 
             kills += 1;
+
+            PlayerPrefs.SetInt("Kills", PlayerPrefs.GetInt("Kills", 0) + kills);
         }
 
         QuestSystem questSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
