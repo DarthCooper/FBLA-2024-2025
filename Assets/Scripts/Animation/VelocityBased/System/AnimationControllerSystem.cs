@@ -81,6 +81,6 @@ public partial class AnimationControllerSystem : SystemBase
                     Value = false
                 });
             }
-        }).Schedule();
+        }).Run();
     }
 }

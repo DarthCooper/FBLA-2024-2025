@@ -44,8 +44,6 @@ public class Manager : MonoBehaviour
 
     public void Update()
     {
-        print(SceneManager.GetActiveScene().name + assets.Length + gameObject.name);
-
         timeInMatch -= Time.deltaTime;
         int minutes = Mathf.FloorToInt(timeInMatch / 60F);
         int seconds = Mathf.FloorToInt(timeInMatch - minutes * 60);

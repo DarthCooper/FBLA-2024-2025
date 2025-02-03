@@ -23,24 +23,19 @@ public partial class HealthSystem : SystemBase
     {
         EntityCommandBuffer ecb = _ecbSystem.CreateCommandBuffer();
 
-        NativeList<Entity> killedEntities = new NativeList<Entity>(Allocator.Persistent);
+        NativeList<int> killedEntities = new NativeList<int>(Allocator.TempJob);
 
-        int kills = 0;
         foreach ((Health health, MaxHealth maxHealth, Entity entity) in SystemAPI.Query<Health, MaxHealth>().WithNone<Dead>().WithEntityAccess())
         {
 
             if(health.Value <= 0)
             {
-                if(killedEntities.Contains(entity)) { continue; }
-
-                kills += 1;
                 CameraManagers.Instance.Impulse(0);
                 ecb.AddComponent<Dead>(entity);
                 ecb.RemoveComponent<Health>(entity);
-
-                killedEntities.Add(entity);
+                OnEnemyDeath?.Invoke(SystemAPI.GetComponent<LocalTransform>(entity).Position);
             }
-            if(health.Value > maxHealth.Value)
+            if (health.Value > maxHealth.Value)
             {
                 ecb.SetComponent(entity, new Health
                 {
@@ -49,18 +44,24 @@ public partial class HealthSystem : SystemBase
             }
         }
 
-
-        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithAll<EnemyTag>().WithEntityAccess())
+        Entities.WithAll<EnemyTag>().WithStructuralChanges().ForEach((Dead dead, DynamicBuffer<Child> children, Entity entity) =>
         {
             ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
 
-            ecb.AddComponent<DisableEntireEntity>(entity);
-            ecb.RemoveComponent<EnemyTag>(entity);
-            OnEnemyDeath?.Invoke(SystemAPI.GetComponent<LocalTransform>(entity).Position);
-        }
+            if(killedEntities.Contains(entity.Index))
+            {
+                return;
+            }
 
-        QuestSystem questSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
-        questSystem.curKills += kills;
-        Debug.Log("Kills: " + questSystem.curKills);
+            killedEntities.Add(entity.Index);
+
+            Debug.Log(killedEntities.Length + "" + entity.Index);
+
+            QuestSystem questSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
+            questSystem.curKills++;
+
+            ecb.AddComponent<DisableEntireEntity>(entity);
+            EntityManager.RemoveComponent<EnemyTag>(entity);
+        }).Run();
     }
 }

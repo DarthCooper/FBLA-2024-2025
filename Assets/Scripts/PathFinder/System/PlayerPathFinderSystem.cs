@@ -37,7 +37,9 @@ public partial class PlayerPathFinderSystem : SystemBase
 
             if(questTarget.Equals(Entity.Null)) { HidePathFinder?.Invoke(); return; }
             LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
+            if (questTarget.Equals(Entity.Null)) { HidePathFinder?.Invoke(); return; }
             LocalToWorld targetTransform = EntityManager.GetComponentData<LocalToWorld>(questTarget);
+            if (questTarget.Equals(Entity.Null)) { HidePathFinder?.Invoke(); return; }
 
             float3 pos = new float3 { x = playerTransform.Position.x, y = playerTransform.Position.z, z = 0 };
             Grid<GridNode> grid = GridSystem.instance.grid;

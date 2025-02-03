@@ -28,6 +28,12 @@ public class SceneECSManager : MonoBehaviour
     public void DestroyEntities(Scene scene)
     {
         Destroy(GameObject.FindFirstObjectByType<ScreenSpaceUIController>());
+
+        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        foreach(Entity entity in entityManager.GetAllEntities())
+        {
+            entityManager.DestroyEntity(entity);
+        }
     }
 
     public void ClearECSData()
