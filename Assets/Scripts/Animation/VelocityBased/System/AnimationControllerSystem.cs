@@ -14,9 +14,10 @@ public partial class AnimationControllerSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
         ComponentLookup<Playing> animationsPlaying = SystemAPI.GetComponentLookup<Playing>();
         ComponentLookup<LocalTransform> transforms = SystemAPI.GetComponentLookup<LocalTransform>();
+
+        EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
         Entities.WithAll<VelocityAnimationController>().ForEach((Entity entity, int entityInQueryIndex, ref AnimationController controller, ref FlipViaDir flip, ref DynamicBuffer<AnimationGraphics> graphics, ref CurDir dir, ref PhysicsVelocity velocity) =>
         {

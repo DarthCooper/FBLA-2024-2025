@@ -44,10 +44,12 @@ partial class SpawnerSystem : SystemBase
     {
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity player);
 
         Entities.WithAll<CanSpawn>().WithAll<InfiniteTimeSpawner>().ForEach((Entity entity, int entityInQueryIndex, ref EnemyTypes enemyTypes, ref Spawners spawner) =>
         {
+            if(player.Equals(Entity.Null)) { return; }
+
             ref SpawnerArrays spawnArrays = ref spawner.BlobAssetReference.Value;
             for (int i = 0; i < spawnArrays.blob.Length; i++)
             {

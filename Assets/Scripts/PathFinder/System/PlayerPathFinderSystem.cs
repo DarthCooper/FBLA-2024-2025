@@ -21,11 +21,20 @@ public partial class PlayerPathFinderSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
-        Entity questTarget = SystemAPI.GetSingleton<QuestTargetEntity>().Value;
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity player);
+        bool found = SystemAPI.TryGetSingleton<QuestTargetEntity>(out QuestTargetEntity questTargetEntity);
         EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
         Entities.WithAll<PathFinderTag>().WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref DynamicBuffer<PathPosition> pathPositionBuffer, ref PathFollow pathFollow) =>
         {
+            Entity questTarget = Entity.Null;
+            if (found)
+            {
+                questTarget = questTargetEntity.Value;
+            }else
+            {
+                return;
+            }
+
             if(questTarget.Equals(Entity.Null)) { HidePathFinder?.Invoke(); return; }
             LocalToWorld playerTransform = EntityManager.GetComponentData<LocalToWorld>(player);
             LocalToWorld targetTransform = EntityManager.GetComponentData<LocalToWorld>(questTarget);

@@ -8,7 +8,8 @@ public partial class EventManagerSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        Entity eventManagerEntity = SystemAPI.GetSingletonEntity<EventManger>();
+        SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManagerEntity);
+        if(eventManagerEntity.Equals(Entity.Null) || !SystemAPI.Exists(eventManagerEntity)) { return; }
         if(EntityManager.HasComponent<EndLevelEvent>(eventManagerEntity))
         {
             EndLevelEvent spawnEvent = EntityManager.GetComponentData<EndLevelEvent>(eventManagerEntity);

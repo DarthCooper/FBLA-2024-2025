@@ -7,7 +7,8 @@ public partial class PlayerSyncSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        Entity playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity playerEntity);
+        if(playerEntity.Equals(Entity.Null)) { return; }
         LocalToWorld playerTransform = SystemAPI.GetComponent<LocalToWorld>(playerEntity);
 
         var playerGameObject = PlayerSyncSingleton.Instance;

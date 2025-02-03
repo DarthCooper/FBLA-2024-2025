@@ -15,11 +15,13 @@ public partial class TriggerEventsSystem : SystemBase
     {
         var ecb = _ecbSystem.CreateCommandBuffer();
 
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out Entity player);
         SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManger);
 
         Entities.WithoutBurst().ForEach((Entity entity, int entityInQueryIndex, ref TriggerEvents data, ref DynamicBuffer<StatefulTriggerEvent> triggerBuffer) =>
         {
+            if(player.Equals(Entity.Null)) { return; }
+
             for (int i = 0; i < triggerBuffer.Length; i++)
             {
                 StatefulTriggerEvent triggerEvent = triggerBuffer[i];

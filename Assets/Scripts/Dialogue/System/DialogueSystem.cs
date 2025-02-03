@@ -21,25 +21,28 @@ public partial class DialogueSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        EntityCommandBuffer.ParallelWriter ecb = _ecbSystem.CreateCommandBuffer().AsParallelWriter();
 
-        playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+        SystemAPI.TryGetSingletonEntity<PlayerTag>(out playerEntity);
+        if (playerEntity.Equals(Entity.Null)) { return; }
+
+        EntityCommandBuffer ecb = _ecbSystem.CreateCommandBuffer();
 
         SystemAPI.TryGetSingletonEntity<EventManger>(out Entity eventManger);
+        if (eventManger.Equals(Entity.Null)) { return; }
 
         Entities.WithoutBurst().WithAll<Speaking>().ForEach((Entity entity, int entityInQueryIndex, ref DialogueData data) =>
         {
             if (!EntityManager.HasComponent<PlayerSpeaking>(playerEntity))
             {
-                ecb.AddComponent(entityInQueryIndex, playerEntity, new PlayerSpeaking { SpeakingTo = entity });
+                ecb.AddComponent(playerEntity, new PlayerSpeaking { SpeakingTo = entity });
                 return;
             }
 
             ref Dialogues dialogues = ref data.Blob.Value;
             if (dialogues.curIndex >= dialogues.Value.Length) {
-                ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
-                ecb.RemoveComponent<InteractableTag>(entityInQueryIndex, entity);
-                ecb.RemoveComponent<PlayerSpeaking>(entityInQueryIndex, playerEntity);
+                ecb.RemoveComponent<Speaking>(entity);
+                ecb.RemoveComponent<InteractableTag>(entity);
+                ecb.RemoveComponent<PlayerSpeaking>(playerEntity);
                 return; 
             }
             ref DialogueArray dialogueArray = ref dialogues.Value[dialogues.curIndex];
@@ -56,8 +59,8 @@ public partial class DialogueSystem : SystemBase
                 allCompleted = QuestManager.QuestComplete(id);
             }
             if (!allCompleted) {
-                ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
-                ecb.RemoveComponent<PlayerSpeaking>(entityInQueryIndex, playerEntity);
+                ecb.RemoveComponent<Speaking>(entity);
+                ecb.RemoveComponent<PlayerSpeaking>(playerEntity);
                 return; 
             }
 
@@ -79,47 +82,47 @@ public partial class DialogueSystem : SystemBase
                             {
                                 case EventType.SPAWNENEMIES:
                                     DynamicBuffer<DialogueSpawner> spawners = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new SpawnEnemiesEvent
+                                    ecb.AddComponent(eventManger, new SpawnEnemiesEvent
                                     {
                                         spawnEntity = spawners[events.entityID].Spawner
                                     });
                                     break;
                                 case EventType.ActivateEntities:
                                     DynamicBuffer<DialogueSpawner> activators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ActivateEntitiesEvent
+                                    ecb.AddComponent(eventManger, new ActivateEntitiesEvent
                                     {
                                         ActivateEntityHolder = activators[events.entityID].Spawner
                                     });
                                     break;
                                 case EventType.DeactivateEntities:
                                     DynamicBuffer<DialogueSpawner> deactivators = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new DeActivateEntitiesEvent
+                                    ecb.AddComponent(eventManger, new DeActivateEntitiesEvent
                                     {
                                         DeActivateEntityHolder = deactivators[events.entityID].Spawner
                                     });
                                     break;
                                 case EventType.ShakeCamera:
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ShakeCameraEvent
+                                    ecb.AddComponent(eventManger, new ShakeCameraEvent
                                     {
                                         index = events.cameraShakeIndex
                                     });
                                     break;
                                 case EventType.CHANGELEVEL:
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new EndLevelEvent
+                                    ecb.AddComponent(eventManger, new EndLevelEvent
                                     {
                                         levelIndex = events.levelIndex
                                     });
                                     break;
                                 case EventType.CHOICE:
                                     DynamicBuffer<DialogueSpawner> choices = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new ChoiceEvent
+                                    ecb.AddComponent(eventManger, new ChoiceEvent
                                     {
                                         entity = choices[events.entityID].Spawner
                                     });
                                     break;
                                 case EventType.POPUP:
                                     DynamicBuffer<DialogueSpawner> popUps = SystemAPI.GetBuffer<DialogueSpawner>(entity);
-                                    ecb.AddComponent(entityInQueryIndex, eventManger, new PopUpEvent
+                                    ecb.AddComponent(eventManger, new PopUpEvent
                                     {
                                         entity = popUps[events.entityID].Spawner
                                     });
@@ -128,14 +131,14 @@ public partial class DialogueSystem : SystemBase
                                     break;
                             }
                         }
-                        ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
-                        ecb.RemoveComponent<PlayerSpeaking>(entityInQueryIndex, playerEntity);
+                        ecb.RemoveComponent<Speaking>(entity);
+                        ecb.RemoveComponent<PlayerSpeaking>(playerEntity);
                         dialogues.curIndex++;
                         DialogueManager.CompleteDialogue(dialogueArray.key.ToString());
                         return;
                     }
                 }
-                ecb.RemoveComponent<IncrementDialogue>(entityInQueryIndex, entity);
+                ecb.RemoveComponent<IncrementDialogue>(entity);
             }
 
 
@@ -157,7 +160,7 @@ public partial class DialogueSystem : SystemBase
         {
             if(playerSpeaking.SpeakingTo.Equals(Entity.Null)) { return; }
             if(!jumpInput.Value && !fireInput.Value) { return; }
-            ecb.AddComponent<IncrementDialogue>(entityInQueryIndex, playerSpeaking.SpeakingTo);
+            ecb.AddComponent<IncrementDialogue>(playerSpeaking.SpeakingTo);
         }).Schedule();
     }
 }
