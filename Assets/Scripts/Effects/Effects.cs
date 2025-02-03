@@ -21,6 +21,8 @@ public class Effects : MonoBehaviour
 
     public LineRenderer pathFinder;
 
+    public GameObject EnemyDeathParticles;
+
     // Update is called once per frame
     void OnEnable()
     {
@@ -34,6 +36,9 @@ public class Effects : MonoBehaviour
         PlayerPathFinderSystem pathFinderSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerPathFinderSystem>();
         pathFinderSystem.OnPathFind += MovePathFinder;
         pathFinderSystem.HidePathFinder += DisablePathFinder;
+
+        HealthSystem healthSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<HealthSystem>();
+        healthSystem.OnEnemyDeath += EnemyDeath;
     }
 
     private void OnDisable()
@@ -49,6 +54,14 @@ public class Effects : MonoBehaviour
         PlayerPathFinderSystem pathFinderSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<PlayerPathFinderSystem>();
         pathFinderSystem.OnPathFind -= MovePathFinder;
         pathFinderSystem.HidePathFinder -= DisablePathFinder;
+
+        HealthSystem healthSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<HealthSystem>();
+        healthSystem.OnEnemyDeath -= EnemyDeath;
+    }
+
+    private void EnemyDeath(float3 pos)
+    {
+        Instantiate(EnemyDeathParticles, pos, Quaternion.identity);
     }
 
     private void MoveBulletTrail(float3 pos, Entity entity)

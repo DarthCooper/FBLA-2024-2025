@@ -29,6 +29,12 @@ public partial class DialogueSystem : SystemBase
 
         Entities.WithoutBurst().WithAll<Speaking>().ForEach((Entity entity, int entityInQueryIndex, ref DialogueData data) =>
         {
+            if (!EntityManager.HasComponent<PlayerSpeaking>(playerEntity))
+            {
+                ecb.AddComponent(entityInQueryIndex, playerEntity, new PlayerSpeaking { SpeakingTo = entity });
+                return;
+            }
+
             ref Dialogues dialogues = ref data.Blob.Value;
             if (dialogues.curIndex >= dialogues.Value.Length) {
                 ecb.RemoveComponent<Speaking>(entityInQueryIndex, entity);
