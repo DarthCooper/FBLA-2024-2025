@@ -23,12 +23,22 @@ public partial class HealthSystem : SystemBase
     {
         EntityCommandBuffer ecb = _ecbSystem.CreateCommandBuffer();
 
+        NativeList<Entity> killedEntities = new NativeList<Entity>(Allocator.Persistent);
+
+        int kills = 0;
         foreach ((Health health, MaxHealth maxHealth, Entity entity) in SystemAPI.Query<Health, MaxHealth>().WithNone<Dead>().WithEntityAccess())
         {
+
             if(health.Value <= 0)
             {
+                if(killedEntities.Contains(entity)) { continue; }
+
+                kills += 1;
                 CameraManagers.Instance.Impulse(0);
                 ecb.AddComponent<Dead>(entity);
+                ecb.RemoveComponent<Health>(entity);
+
+                killedEntities.Add(entity);
             }
             if(health.Value > maxHealth.Value)
             {
@@ -40,20 +50,17 @@ public partial class HealthSystem : SystemBase
         }
 
 
-        int kills = 0;
-        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithEntityAccess())
+        foreach((Dead dead, DynamicBuffer<Child> children, Entity entity) in SystemAPI.Query<Dead, DynamicBuffer<Child>>().WithNone<DisableEntireEntity>().WithAll<EnemyTag>().WithEntityAccess())
         {
             ComponentLookup<MaterialMeshInfo> meshLookup = SystemAPI.GetComponentLookup<MaterialMeshInfo>();
 
             ecb.AddComponent<DisableEntireEntity>(entity);
+            ecb.RemoveComponent<EnemyTag>(entity);
             OnEnemyDeath?.Invoke(SystemAPI.GetComponent<LocalTransform>(entity).Position);
-
-            kills += 1;
-
-            PlayerPrefs.SetInt("Kills", PlayerPrefs.GetInt("Kills", 0) + kills);
         }
 
         QuestSystem questSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<QuestSystem>();
-        questSystem.curKills = questSystem.curKills + kills;
+        questSystem.curKills += kills;
+        Debug.Log("Kills: " + questSystem.curKills);
     }
 }
