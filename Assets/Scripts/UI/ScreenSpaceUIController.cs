@@ -226,11 +226,13 @@ public class ScreenSpaceUIController : MonoBehaviour
         if(choicePanel == null)
         {
             choicePanel = GameObject.Find("PlayerUI").transform.Find("PlayerCanvas").Find("ChoiceMenu").gameObject;
+            choiceDescription = choicePanel.transform.Find("Explanation").GetComponent<TMP_Text>();
         }
 
         choicePanel.SetActive(true);
+        choiceDescription.text = description;
 
-        if(choice1Button == null || choice2Button == null)
+        if (choice1Button == null || choice2Button == null)
         {
             choice1Button = choicePanel.transform.Find("Choice1Button").GetComponent<Button>();
             choice2Button = choicePanel.transform.Find("Choice2Button").GetComponent<Button>();

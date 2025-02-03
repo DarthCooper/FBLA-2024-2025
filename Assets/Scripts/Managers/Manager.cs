@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using Unity.Collections;
 using Unity.Entities;
@@ -72,6 +73,18 @@ public class Manager : MonoBehaviour
         ecb.AddComponent<UnloadCurScene>(newLevel);
 
         fadeAnim.SetTrigger("FadeOut");
+
+        if(index == 0)
+        {
+            StartCoroutine(LoadMainMenu());
+        }
+
         //SceneManager.LoadScene(index, LoadSceneMode.Single);
+    }
+
+    public IEnumerator LoadMainMenu()
+    {
+        yield return new WaitForSeconds(13f);
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }
